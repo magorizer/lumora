@@ -1,0 +1,68 @@
+.page-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 16px 112px;
+}
+
+.intro {
+  margin-bottom: 28px;
+
+  h1 {
+    margin: 6px 0 8px;
+    font-size: 34px;
+    letter-spacing: -0.03em;
+  }
+
+  p:not(.eyebrow) {
+    color: var(--app-text-muted);
+    max-width: 600px;
+  }
+}
+
+.eyebrow {
+  color: var(--ion-color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pattern-card {
+  margin: 0 0 14px;
+  border: 1px solid var(--app-border);
+  border-radius: 20px;
+  box-shadow: none;
+  background: var(--app-surface);
+
+  h2 {
+    margin: 14px 0 8px;
+    font-size: 21px;
+  }
+
+  p {
+    margin: 0 0 12px;
+    color: var(--app-text-muted);
+  }
+}
+
+.pattern-topline,
+.pattern-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pattern-actions { margin-top: 18px; }
+
+.pattern-skeleton {
+  height: 180px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 64px 12px;
+  color: var(--app-text-muted);
+}

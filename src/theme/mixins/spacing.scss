@@ -1,0 +1,92 @@
+$globalSpacing: 0.25rem;
+$globalSpacingSteps: 30;
+
+@mixin generate-spacing-utilities {
+  @for $spacingIndex from 0 through $globalSpacingSteps {
+    $spacingValue: $spacingIndex * $globalSpacing;
+
+    .m-#{$spacingIndex} {
+      margin: $spacingValue;
+    }
+
+    .mt-#{$spacingIndex} {
+      margin-top: $spacingValue;
+    }
+
+    .mr-#{$spacingIndex} {
+      margin-right: $spacingValue;
+    }
+
+    .mb-#{$spacingIndex} {
+      margin-bottom: $spacingValue;
+    }
+
+    .ml-#{$spacingIndex} {
+      margin-left: $spacingValue;
+    }
+
+    .mx-#{$spacingIndex} {
+      margin-left: $spacingValue;
+      margin-right: $spacingValue;
+    }
+
+    .my-#{$spacingIndex} {
+      margin-top: $spacingValue;
+      margin-bottom: $spacingValue;
+    }
+
+    .p-#{$spacingIndex} {
+      padding: $spacingValue;
+    }
+
+    .pt-#{$spacingIndex} {
+      padding-top: $spacingValue;
+    }
+
+    .pr-#{$spacingIndex} {
+      padding-right: $spacingValue;
+    }
+
+    .pb-#{$spacingIndex} {
+      padding-bottom: $spacingValue;
+    }
+
+    .pl-#{$spacingIndex} {
+      padding-left: $spacingValue;
+    }
+
+    .gap-#{$spacingIndex} {
+      gap: $spacingValue;
+    }
+
+    .px-#{$spacingIndex} {
+      padding-left: $spacingValue;
+      padding-right: $spacingValue;
+    }
+
+    .py-#{$spacingIndex} {
+      padding-top: $spacingValue;
+      padding-bottom: $spacingValue;
+    }
+  }
+
+  .ml-auto {
+    margin-left: auto;
+  }
+
+  .mr-auto {
+    margin-right: auto;
+  }
+
+  .mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
+@include generate-spacing-utilities;

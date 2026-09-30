@@ -1,0 +1,13 @@
+$globalFontSizeBase: 16px;
+$globalFontSizeMin: 7;
+$globalFontSizeMax: 50;
+
+@mixin generate-font-size-utilities {
+  @for $fontSizeIndex from $globalFontSizeMin through $globalFontSizeMax {
+    .font-#{$fontSizeIndex} {
+      font-size: calc($fontSizeIndex / 16) * 1rem;
+    }
+  }
+}
+
+@include generate-font-size-utilities;

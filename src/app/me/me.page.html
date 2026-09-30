@@ -1,0 +1,130 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Me</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page-shell">
+    <section class="profile-head">
+      <div class="avatar">{{ initial() }}</div>
+      <div>
+        <p class="eyebrow">Your space</p>
+        <h1>{{ userService.user()?.name || clerk.user()?.firstName || 'Lumora' }}</h1>
+        <p>{{ userService.user()?.email || clerk.user()?.primaryEmailAddress?.emailAddress }}</p>
+      </div>
+    </section>
+
+    @if (error()) { <ion-note color="danger" class="error-note">{{ error() }}</ion-note> }
+
+    @if (loading()) {
+      <div class="loading-state"><ion-spinner /></div>
+    } @else {
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Personal memory</p>
+            <h2>Things worth keeping</h2>
+          </div>
+          <ion-button size="small" fill="outline" (click)="showMemoryEditor = !showMemoryEditor"><ion-icon slot="start" name="add-outline" />Add</ion-button>
+        </div>
+        <p class="section-copy">You decide what Lumora remembers. Nothing is extracted automatically.</p>
+
+        @if (showMemoryEditor) {
+          <ion-card class="editor-card">
+            <ion-card-content>
+              <ion-item lines="none" class="field-card">
+                <ion-select label="Category" labelPlacement="stacked" [(ngModel)]="newMemoryCategory">
+                  <ion-select-option value="insight">Insight</ion-select-option>
+                  <ion-select-option value="value">Value</ion-select-option>
+                  <ion-select-option value="person">Person</ion-select-option>
+                  <ion-select-option value="preference">Preference</ion-select-option>
+                  <ion-select-option value="resource">Resource</ion-select-option>
+                  <ion-select-option value="context">Context</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item lines="none" class="field-card"><ion-input label="Title" labelPlacement="stacked" placeholder="Optional" [(ngModel)]="newMemoryTitle" /></ion-item>
+              <ion-item lines="none" class="field-card"><ion-textarea label="Remember this" labelPlacement="stacked" autoGrow="true" [(ngModel)]="newMemoryContent" /></ion-item>
+              <ion-button (click)="addMemory()">Save memory</ion-button>
+            </ion-card-content>
+          </ion-card>
+        }
+
+        <div class="memory-grid">
+          @for (memory of memories(); track memory.id) {
+            <ion-card class="memory-card" [class.pinned]="memory.is_pinned">
+              <ion-card-content>
+                <div class="memory-topline">
+                  <ion-chip>{{ memory.category }}</ion-chip>
+                  <div>
+                    <ion-button size="small" fill="clear" [color]="memory.is_pinned ? 'primary' : 'medium'" (click)="togglePin(memory)"><ion-icon name="pin-outline" /></ion-button>
+                    <ion-button size="small" fill="clear" color="medium" (click)="deleteMemory(memory)"><ion-icon name="trash-outline" /></ion-button>
+                  </div>
+                </div>
+                @if (editingMemoryId === memory.id) {
+                  <ion-item lines="none" class="field-card"><ion-input label="Title" labelPlacement="stacked" [(ngModel)]="editMemoryTitle" /></ion-item>
+                  <ion-item lines="none" class="field-card"><ion-textarea label="Memory" labelPlacement="stacked" autoGrow="true" [(ngModel)]="editMemoryContent" /></ion-item>
+                  <div class="edit-actions"><ion-button size="small" (click)="saveMemoryEdit(memory)">Save</ion-button><ion-button size="small" fill="clear" color="medium" (click)="editingMemoryId = null">Cancel</ion-button></div>
+                } @else {
+                  @if (memory.title) { <h3>{{ memory.title }}</h3> }
+                  <p>{{ memory.content }}</p>
+                  <ion-button size="small" fill="clear" (click)="startEditMemory(memory)">Edit</ion-button>
+                }
+              </ion-card-content>
+            </ion-card>
+          }
+        </div>
+      </section>
+
+      <section class="section-block">
+        <p class="eyebrow">History</p>
+        <h2>Recent check-ins</h2>
+        <div class="history-list">
+          @for (checkin of checkins().slice(0, 10); track checkin.id) {
+            <div class="history-row">
+              <div>
+                <strong>{{ checkin.checkin_date }}</strong>
+                <span>{{ moodLabel(checkin.mood) }}</span>
+              </div>
+              <div class="history-actions">
+                <strong>{{ checkin.energy }}/5</strong>
+                <ion-button size="small" fill="clear" color="medium" (click)="deleteCheckin(checkin)"><ion-icon name="trash-outline" /></ion-button>
+              </div>
+            </div>
+          } @empty {
+            <p class="section-copy">No check-ins yet.</p>
+          }
+        </div>
+      </section>
+
+      <section class="section-block">
+        <p class="eyebrow">Weekly reviews</p>
+        <h2>What the weeks looked like</h2>
+        @for (review of reviews().slice(0, 6); track review.id) {
+          <ion-card class="review-card">
+            <ion-card-content>
+              <div class="review-heading">
+                <strong>Week of {{ review.week_start }}</strong>
+                <span>{{ review.summary.checkin_count }}/7 check-ins</span>
+              </div>
+              <p>Average energy: {{ review.summary.average_energy ?? '–' }}/5 · {{ review.summary.actions_completed }} actions completed</p>
+              @if (entries(review.summary.energizers).length > 0) {
+                <div class="mini-tags">
+                  @for (entry of entries(review.summary.energizers); track entry[0]) { <ion-chip>{{ entry[0] }} · {{ entry[1] }}×</ion-chip> }
+                </div>
+              }
+            </ion-card-content>
+          </ion-card>
+        }
+      </section>
+
+      <section class="privacy-card">
+        <h2>Privacy & boundaries</h2>
+        <p>Lumora is a self-reflection tool. It does not diagnose conditions and is not a replacement for psychotherapy, medical care, or emergency support.</p>
+        <p>You can inspect and delete memories and check-in data from your account.</p>
+      </section>
+
+      <ion-button expand="block" fill="outline" color="medium" clerkSignOutButton>Sign out</ion-button>
+    }
+  </div>
+</ion-content>

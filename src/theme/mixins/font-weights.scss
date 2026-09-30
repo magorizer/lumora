@@ -1,0 +1,15 @@
+$globalFontWeightMin: 100;
+$globalFontWeightMax: 900;
+$globalFontWeightStep: 100;
+
+@mixin generate-font-weight-utilities {
+  @for $fontWeightValue from $globalFontWeightMin through $globalFontWeightMax {
+    @if $fontWeightValue % $globalFontWeightStep == 0 {
+      .fw-#{$fontWeightValue} {
+        font-weight: $fontWeightValue;
+      }
+    }
+  }
+}
+
+@include generate-font-weight-utilities;

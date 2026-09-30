@@ -1,0 +1,53 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Patterns</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page-shell">
+    <section class="intro">
+      <p class="eyebrow">Observations, not labels</p>
+      <h1>What keeps showing up?</h1>
+      <p>Lumora looks only at your structured check-ins, goals, and actions. A pattern is a hypothesis you can confirm or dismiss.</p>
+    </section>
+
+    @if (loading()) {
+      @for (item of [1, 2, 3]; track item) {
+        <ion-skeleton-text [animated]="true" class="pattern-skeleton" />
+      }
+    } @else if (error()) {
+      <div class="empty-state">
+        <p>{{ error() }}</p>
+        <ion-button (click)="load()"><ion-icon slot="start" name="refresh-outline" />Try again</ion-button>
+      </div>
+    } @else if (patterns().length === 0) {
+      <div class="empty-state">
+        <h2>Nothing strong enough yet.</h2>
+        <p>A few check-ins are usually needed before a useful pattern can emerge.</p>
+      </div>
+    } @else {
+      @for (pattern of patterns(); track pattern.id) {
+        <ion-card class="pattern-card">
+          <ion-card-content>
+            <div class="pattern-topline">
+              <ion-badge color="light">{{ pattern.confidence }}% evidence</ion-badge>
+              @if (pattern.status === 'confirmed') { <ion-badge color="success">Confirmed by you</ion-badge> }
+            </div>
+            <h2>{{ pattern.title }}</h2>
+            <p>{{ pattern.summary }}</p>
+            <ion-note>Based on repeated entries in your own data. This is not a diagnosis or a causal claim.</ion-note>
+            <div class="pattern-actions">
+              <ion-button size="small" fill="outline" color="success" (click)="updateStatus(pattern, 'confirmed')">
+                <ion-icon slot="start" name="checkmark-outline" />This fits
+              </ion-button>
+              <ion-button size="small" fill="clear" color="medium" (click)="updateStatus(pattern, 'dismissed')">
+                <ion-icon slot="start" name="close-outline" />Not useful
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    }
+  </div>
+</ion-content>

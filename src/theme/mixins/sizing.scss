@@ -1,0 +1,24 @@
+$globalSizeMin: 0;
+$globalSizeMax: 100;
+
+@mixin generate-sizing-utilities {
+  @for $sizeIndex from $globalSizeMin through $globalSizeMax {
+    .w-#{$sizeIndex} {
+      width: #{$sizeIndex}px;
+    }
+
+    .h-#{$sizeIndex} {
+      height: #{$sizeIndex}px;
+    }
+  }
+}
+
+@include generate-sizing-utilities;
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}

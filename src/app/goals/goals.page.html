@@ -1,0 +1,98 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Goals</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page-shell">
+    <section class="intro-row">
+      <div>
+        <p class="eyebrow">1–3 active</p>
+        <h1>Keep the horizon small.</h1>
+        <p>Goals give your check-ins direction. Actions make the next step concrete.</p>
+      </div>
+      @if (activeGoals().length < 3) {
+        <ion-button fill="outline" (click)="showNewGoal = !showNewGoal"><ion-icon slot="start" name="add-outline" />New goal</ion-button>
+      }
+    </section>
+
+    @if (showNewGoal) {
+      <ion-card class="editor-card">
+        <ion-card-content>
+          <h2>New goal</h2>
+          <ion-item lines="none" class="field-card"><ion-input label="Title" labelPlacement="stacked" [(ngModel)]="newGoalTitle" maxlength="160" /></ion-item>
+          <ion-item lines="none" class="field-card"><ion-input label="Why it matters" labelPlacement="stacked" [(ngModel)]="newGoalWhy" maxlength="1000" /></ion-item>
+          <ion-item lines="none" class="field-card">
+            <ion-select label="Life area" labelPlacement="stacked" placeholder="Optional" [(ngModel)]="newGoalAreaId">
+              @for (area of lifeAreas(); track area.id) { <ion-select-option [value]="area.id">{{ area.name }}</ion-select-option> }
+            </ion-select>
+          </ion-item>
+          <ion-button [disabled]="saving()" (click)="createGoal()">@if (saving()) { <ion-spinner /> } @else { Create goal }</ion-button>
+        </ion-card-content>
+      </ion-card>
+    }
+
+    @if (error()) { <ion-note color="danger" class="error-note">{{ error() }}</ion-note> }
+
+    @if (loading()) {
+      <div class="loading-state"><ion-spinner /></div>
+    } @else if (activeGoals().length === 0) {
+      <div class="empty-state"><h2>No active goals.</h2><p>Create one thing you would genuinely like to move toward.</p></div>
+    } @else {
+      @for (goal of activeGoals(); track goal.id) {
+        <ion-card class="goal-card">
+          <ion-card-content>
+            <div class="goal-heading">
+              <div class="goal-main">
+                @if (goal.life_area) { <ion-chip>{{ goal.life_area.name }}</ion-chip> }
+                @if (editingGoalId === goal.id) {
+                  <ion-item lines="none" class="field-card"><ion-input label="Title" labelPlacement="stacked" [(ngModel)]="editGoalTitle" /></ion-item>
+                  <ion-item lines="none" class="field-card"><ion-input label="Why it matters" labelPlacement="stacked" [(ngModel)]="editGoalWhy" /></ion-item>
+                  <div class="edit-actions"><ion-button size="small" (click)="saveGoalEdit(goal)">Save</ion-button><ion-button size="small" fill="clear" color="medium" (click)="editingGoalId = null">Cancel</ion-button></div>
+                } @else {
+                  <h2>{{ goal.title }}</h2>
+                  @if (goal.why) { <p>{{ goal.why }}</p> }
+                  <ion-button size="small" fill="clear" (click)="startGoalEdit(goal)">Edit</ion-button>
+                }
+              </div>
+              <ion-button size="small" fill="clear" color="medium" (click)="archiveGoal(goal)"><ion-icon name="archive-outline" /></ion-button>
+            </div>
+
+            <div class="progress-row">
+              <span>Progress</span><strong>{{ goal.progress }}%</strong>
+            </div>
+            <div class="progress-choices">
+              @for (value of [0, 25, 50, 75, 100]; track value) {
+                <button type="button" [class.selected]="goal.progress === value" (click)="updateProgress(goal, value)">{{ value }}</button>
+              }
+            </div>
+
+            <div class="actions-block">
+              <h3>Next steps</h3>
+              @for (action of goalActions(goal.id); track action.id) {
+                <button type="button" class="action-row" [class.done]="action.status === 'completed'" (click)="toggleAction(action)">
+                  <ion-icon [name]="action.status === 'completed' ? 'checkmark-circle-outline' : 'ellipse-outline'" />
+                  <span>{{ action.title }}</span>
+                </button>
+              }
+              <div class="action-add">
+                <ion-input fill="outline" placeholder="One small next step" [(ngModel)]="actionDrafts[goal.id]" />
+                <ion-button fill="clear" (click)="addAction(goal)"><ion-icon name="add-outline" /></ion-button>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    }
+
+    @if (completedGoals().length > 0) {
+      <section class="past-goals">
+        <h2>Past goals</h2>
+        @for (goal of completedGoals(); track goal.id) {
+          <div class="past-goal"><span>{{ goal.title }}</span><small>{{ goal.status }}</small></div>
+        }
+      </section>
+    }
+  </div>
+</ion-content>

@@ -1,0 +1,12 @@
+$globalLineHeightMin: 10;
+$globalLineHeightMax: 30;
+
+@mixin generate-line-height-utilities {
+  @for $lineHeightIndex from $globalLineHeightMin through $globalLineHeightMax {
+    .lh-#{$lineHeightIndex} {
+      line-height: $lineHeightIndex * 0.1;
+    }
+  }
+}
+
+@include generate-line-height-utilities;

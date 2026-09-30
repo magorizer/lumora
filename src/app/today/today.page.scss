@@ -1,0 +1,158 @@
+.page-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 16px 112px;
+}
+
+.hero {
+  padding: 20px 4px 28px;
+
+  h1 {
+    margin: 6px 0 8px;
+    font-size: 34px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  p:not(.eyebrow) {
+    max-width: 560px;
+    color: var(--app-text-muted);
+    margin-bottom: 20px;
+  }
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--ion-color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.surface-card {
+  margin: 0 0 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 20px;
+  box-shadow: none;
+  background: var(--app-surface);
+}
+
+.weekly-card {
+  margin-bottom: 28px;
+}
+
+.section-block {
+  margin-top: 28px;
+}
+
+.section-heading,
+.goal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-heading {
+  margin-bottom: 12px;
+
+  h2 {
+    margin: 4px 0 0;
+    font-size: 22px;
+  }
+}
+
+.goal-row {
+  h3,
+  p {
+    margin: 0;
+  }
+
+  p {
+    margin-top: 4px;
+    color: var(--app-text-muted);
+  }
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+
+  div {
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--app-page-bg);
+  }
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    font-size: 22px;
+  }
+
+  span {
+    color: var(--app-text-muted);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+}
+
+.soft-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--app-primary-soft);
+}
+
+.surface-list {
+  border: 1px solid var(--app-border);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--app-surface);
+}
+
+.muted {
+  color: var(--app-text-muted);
+}
+
+.empty-state {
+  padding: 72px 16px;
+  text-align: center;
+}
+
+.hero-skeleton,
+.card-skeleton {
+  display: block;
+  border-radius: 20px;
+}
+
+.hero-skeleton { height: 180px; }
+.card-skeleton { height: 220px; margin-top: 20px; }
+
+@media (max-width: 420px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.weekly-focus {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--app-border);
+
+  strong { display: block; margin-bottom: 10px; }
+}
+
+.focus-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

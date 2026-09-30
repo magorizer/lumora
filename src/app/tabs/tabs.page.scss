@@ -1,0 +1,16 @@
+.lumora-tab-bar {
+  --background: var(--app-surface);
+  border-top: 1px solid var(--app-border);
+  min-height: 72px;
+  padding-bottom: env(safe-area-inset-bottom);
+
+  ion-tab-button {
+    --color: var(--app-text-muted);
+    --color-selected: var(--ion-color-primary);
+    font-size: 11px;
+  }
+
+  .checkin-tab ion-icon {
+    font-size: 34px;
+  }
+}

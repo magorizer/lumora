@@ -1,0 +1,92 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Daily check-in</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="checkin-shell">
+    @if (loading()) {
+      <div class="loading-state"><ion-spinner /></div>
+    } @else {
+      <section class="intro">
+        <p class="eyebrow">Two minutes</p>
+        <h1>Notice what is here.</h1>
+        <p>No score, no streak. Just a small, honest snapshot.</p>
+      </section>
+
+      <section class="block">
+        <h2>How are you right now?</h2>
+        <div class="mood-grid">
+          @for (option of moods; track option.value) {
+            <button type="button" class="mood-button" [class.selected]="mood === option.value" (click)="setMood(option.value)">
+              <span>{{ option.symbol }}</span>
+              <strong>{{ option.label }}</strong>
+            </button>
+          }
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Energy</h2>
+        <div class="energy-row">
+          @for (value of [1, 2, 3, 4, 5]; track value) {
+            <button type="button" [class.selected]="energy === value" (click)="setEnergy(value)">{{ value }}</button>
+          }
+        </div>
+        <p class="scale-label"><span>empty</span><span>full</span></p>
+      </section>
+
+      <section class="block">
+        <h2>What has your attention?</h2>
+        <div class="chip-grid">
+          @for (area of lifeAreas(); track area.id) {
+            <ion-chip [outline]="!selectedAreaIds.includes(area.id)" [color]="selectedAreaIds.includes(area.id) ? 'primary' : undefined" (click)="toggleArea(area.id)">
+              @if (selectedAreaIds.includes(area.id)) { <ion-icon name="checkmark-outline" /> }
+              <ion-label>{{ area.name }}</ion-label>
+            </ion-chip>
+          }
+        </div>
+      </section>
+
+      @if (goals().length > 0) {
+        <section class="block">
+          <h2>Is this connected to a goal?</h2>
+          <div class="chip-grid">
+            @for (goal of goals(); track goal.id) {
+              <ion-chip [outline]="!selectedGoalIds.includes(goal.id)" [color]="selectedGoalIds.includes(goal.id) ? 'secondary' : undefined" (click)="toggleGoal(goal.id)">
+                <ion-label>{{ goal.title }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        </section>
+      }
+
+      <section class="block two-fields">
+        <label>
+          <span>What gave you energy?</span>
+          <ion-input fill="outline" placeholder="exercise, own project…" [(ngModel)]="energizersText" />
+          <small>Separate repeated things with commas.</small>
+        </label>
+        <label>
+          <span>What drained you?</span>
+          <ion-input fill="outline" placeholder="urgent work, poor sleep…" [(ngModel)]="drainersText" />
+          <small>Simple words make patterns easier to spot.</small>
+        </label>
+      </section>
+
+      <section class="block">
+        <label>
+          <span>Anything else?</span>
+          <ion-textarea fill="outline" autoGrow="true" rows="4" maxlength="5000" placeholder="A thought, context, or something you do not want to lose…" [(ngModel)]="note" />
+        </label>
+      </section>
+
+      @if (error()) { <ion-note color="danger" class="error-note">{{ error() }}</ion-note> }
+
+      <ion-button expand="block" size="large" [disabled]="saving()" (click)="save()">
+        @if (saving()) { <ion-spinner name="crescent" /> } @else { Save check-in }
+      </ion-button>
+    }
+  </div>
+</ion-content>

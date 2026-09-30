@@ -1,0 +1,15 @@
+<ion-content [fullscreen]="true">
+  <div class="auth-shell">
+    <div class="auth-brand">
+      <span class="brand-mark">L</span>
+      <div><strong>Lumora</strong><small>Your personal operating system</small></div>
+    </div>
+    <div class="auth-copy">
+      <h1>Welcome back.</h1>
+      <p>A quiet place to notice patterns, remember what matters, and choose the next step.</p>
+    </div>
+    <div class="clerk-responsive-container">
+      <clerk-sign-in [props]="{ routing: 'path', path: '/sign-in', signUpUrl: '/sign-up', fallbackRedirectUrl: '/app/today' }" />
+    </div>
+  </div>
+</ion-content>

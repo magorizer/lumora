@@ -1,0 +1,38 @@
+.auth-shell {
+  min-height: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 48px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+
+  div { display: flex; flex-direction: column; }
+  strong { font-size: 20px; }
+  small { color: var(--app-text-muted); }
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  font-weight: 800;
+}
+
+.auth-copy {
+  margin-bottom: 22px;
+
+  h1 { margin: 0 0 8px; font-size: 34px; letter-spacing: -0.03em; }
+  p { margin: 0; color: var(--app-text-muted); }
+}

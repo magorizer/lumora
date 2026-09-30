@@ -1,0 +1,28 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom" class="lumora-tab-bar">
+    <ion-tab-button tab="today" [routerLink]="['/app/today']">
+      <ion-icon name="home-outline" />
+      <ion-label>Today</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="patterns" [routerLink]="['/app/patterns']">
+      <ion-icon name="compass-outline" />
+      <ion-label>Patterns</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="check-in" [routerLink]="['/app/check-in']" class="checkin-tab">
+      <ion-icon name="add-circle-outline" />
+      <ion-label>Check-in</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="goals" [routerLink]="['/app/goals']">
+      <ion-icon name="flag-outline" />
+      <ion-label>Goals</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="me" [routerLink]="['/app/me']">
+      <ion-icon name="person-circle-outline" />
+      <ion-label>Me</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

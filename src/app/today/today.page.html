@@ -1,0 +1,136 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Lumora</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page-shell">
+    @if (loading()) {
+      <ion-skeleton-text [animated]="true" class="hero-skeleton" />
+      <ion-skeleton-text [animated]="true" class="card-skeleton" />
+    } @else if (error()) {
+      <section class="empty-state">
+        <h2>Something went quiet.</h2>
+        <p>{{ error() }}</p>
+        <ion-button (click)="load()">
+          <ion-icon slot="start" name="refresh-outline" />
+          Try again
+        </ion-button>
+      </section>
+    } @else if (dashboard(); as d) {
+      <section class="hero">
+        <p class="eyebrow">Today</p>
+        @if (d.today_checkin) {
+          <h1>You checked in.</h1>
+          <p>{{ moodLabel(d.today_checkin.mood) }} · energy {{ d.today_checkin.energy }}/5</p>
+          <ion-button fill="outline" [routerLink]="['/app/check-in']">Update check-in</ion-button>
+        } @else {
+          <h1>What is happening inside?</h1>
+          <p>A couple of minutes is enough. Notice first, then decide what deserves attention.</p>
+          <ion-button [routerLink]="['/app/check-in']">
+            Check in now
+            <ion-icon slot="end" name="arrow-forward-outline" />
+          </ion-button>
+        }
+      </section>
+
+      @if (d.weekly_review?.summary; as review) {
+        <ion-card class="surface-card weekly-card">
+          <ion-card-content>
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">This week</p>
+                <h2>Your signal, not a score</h2>
+              </div>
+              <ion-badge>{{ review.checkin_count }}/7 check-ins</ion-badge>
+            </div>
+            <div class="metric-grid">
+              <div>
+                <strong>{{ review.average_energy ?? '–' }}</strong>
+                <span>avg. energy</span>
+              </div>
+              <div>
+                <strong>{{ review.actions_completed }}</strong>
+                <span>actions done</span>
+              </div>
+              <div>
+                <strong>{{ review.patterns.length }}</strong>
+                <span>patterns noticed</span>
+              </div>
+            </div>
+            @if (review.patterns.length > 0) {
+              <div class="soft-note">
+                <ion-icon name="leaf-outline" />
+                <span>{{ review.patterns[0].summary }}</span>
+              </div>
+            }
+            @if (d.active_goals.length > 0) {
+              <div class="weekly-focus">
+                <strong>Choose one focus for this week</strong>
+                <div class="focus-choices">
+                  @for (goal of d.active_goals; track goal.id) {
+                    <ion-button size="small" [fill]="d.weekly_review.focus_goal_id === goal.id ? 'solid' : 'outline'" (click)="setWeeklyFocus(d.weekly_review.id, goal.id)">{{ goal.title }}</ion-button>
+                  }
+                </div>
+              </div>
+            }
+          </ion-card-content>
+        </ion-card>
+      }
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Focus</p>
+            <h2>Active goals</h2>
+          </div>
+          <ion-button fill="clear" size="small" [routerLink]="['/app/goals']">All goals</ion-button>
+        </div>
+
+        @if (d.active_goals.length === 0) {
+          <p class="muted">No active goals yet.</p>
+        } @else {
+          @for (goal of d.active_goals; track goal.id) {
+            <ion-card class="surface-card goal-card">
+              <ion-card-content>
+                <div class="goal-row">
+                  <div>
+                    <h3>{{ goal.title }}</h3>
+                    @if (goal.life_area) { <p>{{ goal.life_area.name }}</p> }
+                  </div>
+                  <strong>{{ goal.progress }}%</strong>
+                </div>
+                <ion-progress-bar [value]="goal.progress / 100" />
+              </ion-card-content>
+            </ion-card>
+          }
+        }
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Next</p>
+            <h2>Small actions</h2>
+          </div>
+        </div>
+        @if (d.open_actions.length === 0) {
+          <p class="muted">Nothing queued. Give one goal a small next step.</p>
+        } @else {
+          <ion-list class="surface-list">
+            @for (action of d.open_actions; track action.id) {
+              <ion-item lines="full">
+                <ion-icon slot="start" name="checkmark-circle-outline" />
+                <ion-label>
+                  <h3>{{ action.title }}</h3>
+                  @if (action.goal) { <p>{{ action.goal.title }}</p> }
+                </ion-label>
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </section>
+    }
+  </div>
+</ion-content>
