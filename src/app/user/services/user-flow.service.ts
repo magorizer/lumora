@@ -9,6 +9,8 @@ export interface UserAnswers {
   longTermGoal: string;
   situation: string;
   obstacles: string[];
+  meditatedBefore: '' | 'yes' | 'no';
+  meditationExperience: '' | 'beginner' | 'advanced' | 'zen';
   weeklyTime: string;
   formats: string[];
   pace: string;
@@ -31,6 +33,8 @@ const initialAnswers: UserAnswers = {
   longTermGoal: 'belső egyensúly',
   situation: 'már elindultam',
   obstacles: ['halogatás'],
+  meditatedBefore: '',
+  meditationExperience: '',
   weeklyTime: '1 óra',
   formats: ['videó', 'vezetett gyakorlat', 'meditáció'],
   pace: 'kiegyensúlyozott',

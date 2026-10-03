@@ -52,6 +52,7 @@ export class AppShellComponent implements OnInit {
     { label: 'Csomagok', path: '/packages', icon: '▦' },
     { label: 'Előadók', path: '/presenters', icon: '◎' },
     { label: 'Mai program', path: '/week', icon: '◫' },
+    { label: 'Értesítések', path: '/notifications', icon: '◉' },
   ];
 
   readonly creatorMenu: MenuItem[] = [

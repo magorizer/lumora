@@ -1,29 +1,96 @@
 <section class="screen screen-step-2">
-            <div class="eyebrow">Adaptív kérdőív</div>
-            <h1>Hol tartasz most?</h1>
-            <p class="lead">Pár rövid kérdés, hogy jobban megértsünk.</p>
+  <div class="eyebrow">Adaptív kérdőív</div>
+  <h1>Hol tartasz most?</h1>
+  <p class="lead">Pár rövid kérdés, hogy jobban megértsünk.</p>
 
-            <div class="card">
-              <h2>Jelenlegi helyzet</h2>
-              <div class="option-grid">
-                @for (item of ui.situationOptions; track item) {
-                  <button class="option" [class.selected]="flow.answers().situation === item" (click)="flow.patch({ situation: item })">{{ item }}</button>
-                }
-              </div>
-            </div>
+  <div class="card">
+    <h2>Jelenlegi helyzet</h2>
+    <div class="option-grid">
+      @for (item of ui.situationOptions; track item) {
+        <button class="option" [class.selected]="flow.answers().situation === item" (click)="flow.patch({ situation: item })">{{ item }}</button>
+      }
+    </div>
+  </div>
 
-            <div class="card">
-              <h2>Mi akadályoz leginkább?</h2>
-              <p class="hint">Többet is kijelölhetsz.</p>
-              <div class="option-grid">
-                @for (item of ui.obstacleOptions; track item) {
-                  <button class="option" [class.selected]="flow.answers().obstacles.includes(item)" (click)="flow.toggleObstacle(item)">{{ item }}</button>
-                }
-              </div>
-            </div>
+  <div class="card">
+    <h2>Meditáltál már?</h2>
+    <div class="radio-grid">
+      <label class="radio-option" [class.selected]="flow.answers().meditatedBefore === 'no'">
+        <input
+          type="radio"
+          name="meditated-before"
+          value="no"
+          [checked]="flow.answers().meditatedBefore === 'no'"
+          (change)="setMeditatedBefore('no')"
+        >
+        <span>Nem</span>
+      </label>
 
-            <div class="action-row">
-              <button class="secondary-action" (click)="ui.goStep(1)">← Vissza</button>
-              <button class="primary-action" (click)="ui.goStep(3)">Tovább <span>→</span></button>
-            </div>
-          </section>
+      <label class="radio-option" [class.selected]="flow.answers().meditatedBefore === 'yes'">
+        <input
+          type="radio"
+          name="meditated-before"
+          value="yes"
+          [checked]="flow.answers().meditatedBefore === 'yes'"
+          (change)="setMeditatedBefore('yes')"
+        >
+        <span>Igen</span>
+      </label>
+    </div>
+
+    @if (flow.answers().meditatedBefore === 'yes') {
+      <div class="conditional-radio-block">
+        <p class="hint">Melyik illik rád leginkább?</p>
+        <div class="radio-grid three">
+          <label class="radio-option" [class.selected]="flow.answers().meditationExperience === 'beginner'">
+            <input
+              type="radio"
+              name="meditation-experience"
+              value="beginner"
+              [checked]="flow.answers().meditationExperience === 'beginner'"
+              (change)="flow.patch({ meditationExperience: 'beginner' })"
+            >
+            <span>Kezdő</span>
+          </label>
+
+          <label class="radio-option" [class.selected]="flow.answers().meditationExperience === 'advanced'">
+            <input
+              type="radio"
+              name="meditation-experience"
+              value="advanced"
+              [checked]="flow.answers().meditationExperience === 'advanced'"
+              (change)="flow.patch({ meditationExperience: 'advanced' })"
+            >
+            <span>Haladó</span>
+          </label>
+
+          <label class="radio-option" [class.selected]="flow.answers().meditationExperience === 'zen'">
+            <input
+              type="radio"
+              name="meditation-experience"
+              value="zen"
+              [checked]="flow.answers().meditationExperience === 'zen'"
+              (change)="flow.patch({ meditationExperience: 'zen' })"
+            >
+            <span>Zen</span>
+          </label>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="card">
+    <h2>Mi akadályoz leginkább?</h2>
+    <p class="hint">Többet is kijelölhetsz.</p>
+    <div class="option-grid">
+      @for (item of ui.obstacleOptions; track item) {
+        <button class="option" [class.selected]="flow.answers().obstacles.includes(item)" (click)="flow.toggleObstacle(item)">{{ item }}</button>
+      }
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="secondary-action" (click)="ui.goStep(1)">← Vissza</button>
+    <button class="primary-action" (click)="ui.goStep(3)">Tovább <span>→</span></button>
+  </div>
+</section>

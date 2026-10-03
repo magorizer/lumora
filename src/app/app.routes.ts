@@ -40,6 +40,7 @@ export const routes: Routes = [
       { path: 'presenters/:slug', loadComponent: () => import('./presenters/presenter-detail.page').then((m) => m.PresenterDetailPage), data: { layout: 'user', progressMode: 'none' } },
       { path: 'events', loadComponent: () => import('./static/events.page').then((m) => m.EventsPage), data: { layout: 'user', progressMode: 'none' } },
       { path: 'professional-help', loadComponent: () => import('./static/professional-help.page').then((m) => m.ProfessionalHelpPage), data: { layout: 'user', progressMode: 'none' } },
+      { path: 'notifications', loadComponent: () => import('./notifications/notifications.page').then((m) => m.NotificationsPage), data: { layout: 'user', progressMode: 'none' } },
 
       { path: 'goals', loadComponent: () => import('./user/pages/goals.page').then((m) => m.GoalsPage), data: onboarding(1) },
       { path: 'questionnaire/situation', loadComponent: () => import('./user/pages/questionnaire-situation.page').then((m) => m.QuestionnaireSituationPage), data: onboarding(2) },

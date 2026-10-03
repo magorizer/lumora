@@ -1,0 +1,171 @@
+/* Notification settings and radio-style onboarding controls */
+
+.notification-window-card,
+.notification-card {
+  margin-bottom: 16px;
+  padding: 20px;
+  border: 1px solid var(--portalumi-border);
+  border-radius: 24px;
+  background: var(--portalumi-surface);
+  box-shadow: var(--portalumi-card-shadow);
+}
+
+.notification-window-copy {
+  margin: 0;
+  color: var(--portalumi-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.hour-input {
+  width: 58px;
+  margin: 0 5px;
+  padding: 7px 8px;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 10px;
+  color: var(--portalumi-ink);
+  background: var(--portalumi-page-soft);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.notification-info {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  color: var(--portalumi-muted);
+  background: var(--portalumi-gold-soft);
+}
+
+.notification-info > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--portalumi-on-gold);
+  background: var(--portalumi-gold-deep);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 800;
+}
+
+.notification-info p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.notification-list {
+  display: grid;
+  gap: 12px;
+}
+
+.notification-card {
+  margin-bottom: 0;
+}
+
+.notification-card-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.notification-card textarea {
+  width: 100%;
+  min-height: 86px;
+  padding: 13px 14px;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 14px;
+  outline: 0;
+  color: var(--portalumi-ink);
+  background: var(--portalumi-page-soft);
+  font: inherit;
+  resize: vertical;
+}
+
+.notification-card textarea:focus,
+.hour-input:focus {
+  border-color: var(--portalumi-gold);
+  box-shadow: 0 0 0 3px var(--portalumi-focus-ring);
+}
+
+.notification-delete {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--portalumi-muted);
+  background: var(--portalumi-page-soft);
+  font-size: 20px;
+}
+
+.empty-notification-state {
+  text-align: center;
+}
+
+.radio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.radio-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.radio-option {
+  display: flex;
+  min-height: 52px;
+  padding: 12px 14px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 16px;
+  color: var(--portalumi-ink-soft);
+  background: rgba(255, 255, 255, 0.42);
+  cursor: pointer;
+}
+
+.radio-option.selected {
+  border-color: var(--portalumi-gold);
+  color: var(--portalumi-gold-deep);
+  background: var(--portalumi-gold-soft);
+}
+
+.radio-option input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--portalumi-gold-deep);
+}
+
+.radio-option span {
+  font-weight: 700;
+}
+
+.conditional-radio-block {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--portalumi-border);
+}
+
+@media (max-width: 560px) {
+  .notification-window-copy {
+    font-size: 19px;
+  }
+
+  .radio-grid.three {
+    grid-template-columns: 1fr;
+  }
+}
