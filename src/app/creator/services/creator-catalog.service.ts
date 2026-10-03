@@ -14,6 +14,7 @@ interface CreatorDraft {
   totalDuration: string;
   bestTime: string;
   format: string;
+  requiresSequentialOrder: 'yes' | 'no';
   lessonReflection: 'off' | 'optional' | 'recommended';
   lessonReflectionPrompt: string;
   checkpointCadence: 'off' | 'biweekly' | 'monthly';
@@ -47,6 +48,7 @@ export class CreatorCatalogService {
     totalDuration: '45 perc',
     bestTime: 'napközben',
     format: 'videó, hanganyag, gyakorlat',
+    requiresSequentialOrder: 'yes',
     lessonReflection: 'optional',
     lessonReflectionPrompt: 'Mi volt ebből most a legfontosabb felismerésed?',
     checkpointCadence: 'biweekly',
@@ -63,6 +65,7 @@ export class CreatorCatalogService {
     this.courses.set(catalog.courses.map((course) => ({
       ...course,
       status: course.status ?? 'published',
+      requiresSequentialOrder: course.requiresSequentialOrder ?? true,
     })));
 
     this.selectedInstructorId.set(catalog.instructors[0]?.id ?? '');
@@ -154,6 +157,20 @@ export class CreatorCatalogService {
     );
 
     this.saveMessage.set('Kurzus módosítva a demóban.');
+  }
+
+  setSequentialOrder(required: boolean): void {
+    const selectedId = this.selectedCourseId();
+
+    this.courses.update((courses) =>
+      courses.map((course) =>
+        course.id === selectedId
+          ? { ...course, requiresSequentialOrder: required }
+          : course,
+      ),
+    );
+
+    this.saveMessage.set(required ? 'Kötelező sorrend beállítva.' : 'Moduláris kurzus beállítva.');
   }
 
   updateRecommendation(
@@ -277,6 +294,7 @@ export class CreatorCatalogService {
       level: d.level,
       totalDuration: d.totalDuration,
       bestTime: d.bestTime,
+      requiresSequentialOrder: d.requiresSequentialOrder === 'yes',
       status: 'draft',
       recommendation: {
         goals: d.goals.split(',').map((x) => x.trim()).filter(Boolean),
