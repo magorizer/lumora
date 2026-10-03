@@ -29,6 +29,10 @@
         <div><small>Időtartam</small><strong>{{ course.totalDuration }}</strong></div>
         <div><small>Napszak</small><strong>{{ course.bestTime }}</strong></div>
         <div><small>Tartalmak</small><strong>{{ course.units.length }}</strong></div>
+        <div>
+          <small>Felépítés</small>
+          <strong>{{ course.requiresSequentialOrder === false ? 'Moduláris' : 'Időrendi sorrend' }}</strong>
+        </div>
       </div>
     </div>
 
@@ -145,6 +149,39 @@
             Időtartam
             <input [value]="course.totalDuration" (input)="creator.updateCourse('totalDuration', $event)">
           </label>
+
+          <div class="sheet-field-group">
+            <span class="sheet-section-label">Kötelező időrendi sorrendben hallgatás</span>
+
+            <div class="radio-grid">
+              <label class="radio-option" [class.selected]="course.requiresSequentialOrder !== false">
+                <input
+                  type="radio"
+                  name="course-sequential-order"
+                  value="yes"
+                  [checked]="course.requiresSequentialOrder !== false"
+                  (change)="creator.setSequentialOrder(true)"
+                >
+                <span>Igen</span>
+              </label>
+
+              <label class="radio-option" [class.selected]="course.requiresSequentialOrder === false">
+                <input
+                  type="radio"
+                  name="course-sequential-order"
+                  value="no"
+                  [checked]="course.requiresSequentialOrder === false"
+                  (change)="creator.setSequentialOrder(false)"
+                >
+                <span>Nem</span>
+              </label>
+            </div>
+
+            <p class="sheet-note">
+              Felépítés:
+              <strong>{{ course.requiresSequentialOrder === false ? 'Moduláris' : 'Kötelező sorrend' }}</strong>
+            </p>
+          </div>
 
           <label>
             Ajánlott napszak

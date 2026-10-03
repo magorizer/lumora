@@ -75,7 +75,8 @@
           "type": "video",
           "duration": "18 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": true
     },
     {
       "id": "perceptual-positions",
@@ -114,7 +115,8 @@
           "type": "audio",
           "duration": "8 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": true
     },
     {
       "id": "nlp-evening-meditation",
@@ -153,7 +155,8 @@
           "type": "meditation",
           "duration": "8 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": true
     },
     {
       "id": "morning-focus-5",
@@ -192,7 +195,8 @@
           "type": "audio",
           "duration": "5 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": false
     },
     {
       "id": "focus-energy",
@@ -231,7 +235,8 @@
           "type": "exercise",
           "duration": "15 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": true
     },
     {
       "id": "stress-reset",
@@ -270,7 +275,8 @@
           "type": "audio",
           "duration": "7 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": false
     },
     {
       "id": "confidence-in-action",
@@ -309,7 +315,8 @@
           "type": "exercise",
           "duration": "10 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": true
     },
     {
       "id": "boundaries-assertiveness",
@@ -348,7 +355,8 @@
           "type": "exercise",
           "duration": "12 perc"
         }
-      ]
+      ],
+      "requiresSequentialOrder": true
     },
     {
       "id": "micro-habits",
@@ -387,7 +395,8 @@
           "type": "exercise",
           "duration": "2 perc / nap"
         }
-      ]
+      ],
+      "requiresSequentialOrder": true
     }
   ]
 }

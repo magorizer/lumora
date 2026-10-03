@@ -31,6 +31,40 @@
             Leírás
             <textarea rows="3" [value]="creator.draft().description" (input)="creator.updateDraft('description',$event)"></textarea>
           </label>
+
+          <div class="full sheet-field-group">
+            <span class="sheet-section-label">Kötelező időrendi sorrendben hallgatás</span>
+
+            <div class="radio-grid">
+              <label class="radio-option" [class.selected]="creator.draft().requiresSequentialOrder === 'yes'">
+                <input
+                  type="radio"
+                  name="new-course-sequential-order"
+                  value="yes"
+                  [checked]="creator.draft().requiresSequentialOrder === 'yes'"
+                  (change)="creator.updateDraft('requiresSequentialOrder',$event)"
+                >
+                <span>Igen</span>
+              </label>
+
+              <label class="radio-option" [class.selected]="creator.draft().requiresSequentialOrder === 'no'">
+                <input
+                  type="radio"
+                  name="new-course-sequential-order"
+                  value="no"
+                  [checked]="creator.draft().requiresSequentialOrder === 'no'"
+                  (change)="creator.updateDraft('requiresSequentialOrder',$event)"
+                >
+                <span>Nem</span>
+              </label>
+            </div>
+
+            <p class="creator-help">
+              {{ creator.draft().requiresSequentialOrder === 'no'
+                ? 'Moduláris: a leckék önállóan is hallgathatók.'
+                : 'Kötelező sorrend: a leckék egymásra épülnek.' }}
+            </p>
+          </div>
         </div>
       </div>
     </div>

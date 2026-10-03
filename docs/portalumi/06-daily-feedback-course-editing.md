@@ -55,3 +55,26 @@ Ajánlási metaadatok:
 - előfeltételek
 
 A napi feedback jelenleg termékszintű szabály, ezért nem creator által állítható cadence.
+
+
+## Kurzus felépítése
+
+Minden kurzusnál külön beállítás:
+
+Kötelező időrendi sorrendben hallgatás:
+- Igen
+- Nem
+
+Ha Igen:
+- a leckék egymásra épülnek
+- a usernek a kurzus sorrendjét kell követnie
+- a felület "Kötelező sorrend" / "Időrendi sorrend" jelzést mutat
+
+Ha Nem:
+- a kurzus "Moduláris"
+- a leckék önállóan is használhatók
+- a későbbi recommendation engine egyes modulokat is könnyebben választhat belőle
+
+Technikai mező:
+
+requiresSequentialOrder: boolean
