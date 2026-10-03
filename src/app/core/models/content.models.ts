@@ -104,6 +104,7 @@ export interface Course {
   level: string;
   totalDuration: string;
   bestTime: string;
+  requiresSequentialOrder?: boolean;
   units: CourseUnit[];
   status?: 'published' | 'draft';
   recommendation?: RecommendationMetadata;
