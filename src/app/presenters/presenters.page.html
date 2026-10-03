@@ -1,0 +1,19 @@
+<section class="screen directory-screen">
+  <div class="eyebrow">Előadók</div>
+  <h1>Akiktől a programok érkeznek</h1>
+  <p class="lead">Kattints egy előadóra, és nézd meg a hozzá tartozó felépített programokat és kurzusokat.</p>
+
+  <div class="presenter-grid">
+    @for (presenter of directory.presenters(); track presenter.slug) {
+      <button class="presenter-card" type="button" (click)="open(presenter.slug)">
+        <span class="presenter-avatar-large">{{ presenter.name.charAt(0) }}</span>
+        <span class="presenter-card-copy">
+          <strong>{{ presenter.name }}</strong>
+          <small>{{ presenter.specialty }}</small>
+          <span>{{ presenter.sequenceCount }} program · {{ presenter.courseCount }} kurzus</span>
+        </span>
+        <span class="home-card-arrow">→</span>
+      </button>
+    }
+  </div>
+</section>

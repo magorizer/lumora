@@ -2,7 +2,17 @@
 
 Dátum: 2026-10-03
 
-Ez a dokumentum rögzíti a jelenlegi portaLumi demo állapotát és azokat a termékdöntéseket, amelyeket a valódi implementáció során meg szeretnénk tartani.
+Ez a dokumentum rögzíti a portaLumi korábbi demo állapotát és azokat a termékdöntéseket, amelyeket a valódi implementáció során meg szeretnénk tartani.
+
+## Aktuális modellre vonatkozó megjegyzés
+
+A programmodell és a user navigáció azóta tovább lett pontosítva. A jelenlegi irányt a következő dokumentumok írják le:
+
+- 02-v1-architecture.md
+- 04-program-templates.md
+- 05-home-navigation.md
+
+A régi, kötelező program_week alapú modellt ne tekintsük aktuális implementációs alapnak.
 
 ## Termékirány
 

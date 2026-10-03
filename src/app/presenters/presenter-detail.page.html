@@ -1,0 +1,81 @@
+<section class="screen directory-screen">
+  @if (presenter(); as person) {
+    <button class="creator-back-link" type="button" (click)="back()">← Előadók</button>
+
+    <div class="presenter-detail-hero">
+      <span class="presenter-avatar-large">{{ person.name.charAt(0) }}</span>
+      <div>
+        <span class="eyebrow">Előadó</span>
+        <h1>{{ person.name }}</h1>
+        <p>{{ person.bio }}</p>
+        <small>{{ person.specialty }}</small>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Programjai</h2>
+      @if (directory.sequencesFor(person.name).length) {
+        <div class="directory-list">
+          @for (sequence of directory.sequencesFor(person.name); track sequence.id) {
+            <button class="directory-card compact-directory-card" type="button" (click)="preview.set(sequence)">
+              <span class="directory-icon">{{ sequence.period === 'morning' ? '☀' : '☾' }}</span>
+              <span class="directory-copy">
+                <strong>{{ sequence.title }}</strong>
+                <small>{{ sequence.sessions.length }} alkalom · {{ sequence.period === 'morning' ? 'reggel' : 'este' }}</small>
+              </span>
+              <span class="home-card-arrow">→</span>
+            </button>
+          }
+        </div>
+      } @else {
+        <p class="hint">Ehhez az előadóhoz a demóban még nincs külön felépített program.</p>
+      }
+    </div>
+
+    <div class="card">
+      <h2>Kurzusai</h2>
+      @if (directory.coursesFor(person.name).length) {
+        <div class="directory-list">
+          @for (course of directory.coursesFor(person.name); track course.id) {
+            <div class="directory-card compact-directory-card static-directory-card">
+              <span class="directory-icon">▶</span>
+              <span class="directory-copy">
+                <strong>{{ course.title }}</strong>
+                <small>{{ course.category }} · {{ course.totalDuration }}</small>
+              </span>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="hint">Ehhez az előadóhoz a demóban még nincs külön kurzusprofil.</p>
+      }
+    </div>
+  }
+</section>
+
+@if (preview(); as sequence) {
+  <div class="bottom-sheet-backdrop" (click)="preview.set(null)">
+    <section class="bottom-sheet" (click)="$event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <div>
+          <span class="eyebrow">{{ sequence.creatorName }}</span>
+          <h2>{{ sequence.title }}</h2>
+        </div>
+        <button class="sheet-close" type="button" (click)="preview.set(null)">×</button>
+      </div>
+      <p>{{ sequence.description }}</p>
+      <div class="sequence-list mt-4">
+        @for (session of sequence.sessions; track session.position) {
+          <div class="sequence-row">
+            <span class="sequence-number">{{ session.position }}</span>
+            <div>
+              <strong>{{ session.title }}</strong>
+              <small>{{ session.duration }} · {{ session.type }}</small>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+}

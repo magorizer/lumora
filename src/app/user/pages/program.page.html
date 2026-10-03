@@ -1,9 +1,18 @@
 <section class="screen program-template-picker">
-  <div class="eyebrow">Kész programok</div>
-  <h1>Válassz egy felépített programot.</h1>
+  <div class="eyebrow">Csomagok</div>
+  <h1>Válassz egy kész programcsomagot.</h1>
   <p class="lead">
     A demóban most három, előre megtervezett 3 hónapos program érhető el. A belső sorrend szakmailag rögzített.
   </p>
+
+  <div class="custom-program-card">
+    <div>
+      <span class="hero-kicker">Custom program</span>
+      <h2>Állítsuk össze neked</h2>
+      <p>Végigvezetünk a céljaidon, helyzeteden, preferenciáidon és a rendelkezésre álló napokon.</p>
+    </div>
+    <button class="secondary-action" type="button" (click)="custom()">Kérdőív indítása →</button>
+  </div>
 
   <div class="program-template-grid">
     @for (template of programs.templates(); track template.id) {

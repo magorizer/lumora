@@ -48,6 +48,7 @@ export class ProgramCustomizePage implements OnInit {
   }
 
   start(): void {
+    this.programs.startProgram();
     void this.router.navigateByUrl('/week');
   }
 }

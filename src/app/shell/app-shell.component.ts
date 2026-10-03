@@ -4,6 +4,7 @@ import { IonContent } from '@ionic/angular';
 import { filter } from 'rxjs';
 
 import { AuthService } from '../core/auth/auth.service';
+import { ProgramTemplateService } from '../core/data/program-template.service';
 import { PortalumiRole } from '../core/models/content.models';
 
 interface MenuItem { label: string; path: string; icon: string; }
@@ -30,6 +31,7 @@ export class AppShellComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   readonly auth = inject(AuthService);
+  readonly programs = inject(ProgramTemplateService);
   readonly menuOpen = signal(false);
   readonly layout = signal<'user' | 'creator' | 'profile'>('user');
   readonly progressMode = signal<ProgressMode>('onboarding');
@@ -45,10 +47,11 @@ export class AppShellComponent implements OnInit {
   );
 
   readonly userMenu: MenuItem[] = [
-    { label: 'Programom', path: '/program', icon: '◇' },
+    { label: 'Főoldal', path: '/home', icon: '⌂' },
+    { label: 'Programok', path: '/programs', icon: '◇' },
+    { label: 'Csomagok', path: '/packages', icon: '▦' },
+    { label: 'Előadók', path: '/presenters', icon: '◎' },
     { label: 'Mai program', path: '/week', icon: '◫' },
-    { label: 'Lecke', path: '/lesson', icon: '▶' },
-    { label: 'Haladás / review', path: '/review', icon: '↗' },
   ];
 
   readonly creatorMenu: MenuItem[] = [
@@ -64,7 +67,7 @@ export class AppShellComponent implements OnInit {
   );
 
   async ngOnInit(): Promise<void> {
-    await this.auth.load();
+    await Promise.all([this.auth.load(), this.programs.load()]);
     this.syncRoute();
     this.scheduleScrollToTop();
 
@@ -85,7 +88,7 @@ export class AppShellComponent implements OnInit {
 
     this.auth.setActiveRole(next);
     this.closeMenu();
-    void this.router.navigateByUrl(next === 'content_creator' ? '/creator/dashboard' : '/program');
+    void this.router.navigateByUrl(next === 'content_creator' ? '/creator/dashboard' : '/home');
   }
 
   isActive(path: string): boolean {
@@ -117,8 +120,17 @@ export class AppShellComponent implements OnInit {
     const fallback = this.progressFromUrl();
 
     this.layout.set((data['layout'] as 'user' | 'creator' | 'profile') ?? this.layoutFromUrl());
-    this.progressMode.set((data['progressMode'] as ProgressMode) ?? fallback.mode);
-    this.progressCurrent.set(typeof data['progressCurrent'] === 'number' ? data['progressCurrent'] as number : fallback.current);
+    const mode = (data['progressMode'] as ProgressMode) ?? fallback.mode;
+    const path = this.router.url.split('?')[0];
+
+    this.progressMode.set(mode);
+
+    if (mode === 'program' && !['/review', '/next-cycle'].includes(path)) {
+      this.progressCurrent.set(this.programs.currentPosition());
+    } else {
+      this.progressCurrent.set(typeof data['progressCurrent'] === 'number' ? data['progressCurrent'] as number : fallback.current);
+    }
+
     this.progressTotal.set(typeof data['progressTotal'] === 'number' ? data['progressTotal'] as number : fallback.total);
   }
 
@@ -143,7 +155,7 @@ export class AppShellComponent implements OnInit {
       return { mode: 'onboarding', current: onboarding[path], total: 5 };
     }
 
-    if (['/program', '/program/customize', '/program-adjustment', '/week', '/lesson', '/feedback'].includes(path)) {
+    if (['/program/customize', '/program-adjustment', '/week', '/lesson', '/feedback'].includes(path)) {
       return { mode: 'program', current: 1, total: 12 };
     }
 

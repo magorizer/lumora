@@ -1,0 +1,49 @@
+<section class="screen directory-screen">
+  <div class="eyebrow">Programok</div>
+  <h1>Minden elérhető program</h1>
+  <p class="lead">Ezek önálló, sorrendben felépített programok. Egy csomag ezekből kombinálhat reggeli és esti tracket.</p>
+
+  <div class="directory-list">
+    @for (sequence of programs.sequences(); track sequence.id) {
+      <button class="directory-card" type="button" (click)="preview.set(sequence)">
+        <span class="directory-icon">{{ sequence.period === 'morning' ? '☀' : '☾' }}</span>
+        <span class="directory-copy">
+          <span class="day-time">{{ sequence.period === 'morning' ? 'Reggeli program' : 'Esti program' }}</span>
+          <strong>{{ sequence.title }}</strong>
+          <small>{{ sequence.creatorName }} · {{ sequence.sessions.length }} alkalom</small>
+          <p>{{ sequence.description }}</p>
+        </span>
+        <span class="home-card-arrow">→</span>
+      </button>
+    }
+  </div>
+</section>
+
+@if (preview(); as sequence) {
+  <div class="bottom-sheet-backdrop" (click)="preview.set(null)">
+    <section class="bottom-sheet" (click)="$event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <div>
+          <span class="eyebrow">{{ sequence.creatorName }}</span>
+          <h2>{{ sequence.title }}</h2>
+        </div>
+        <button class="sheet-close" type="button" (click)="preview.set(null)">×</button>
+      </div>
+
+      <p>{{ sequence.description }}</p>
+
+      <div class="sequence-list mt-4">
+        @for (session of sequence.sessions; track session.position) {
+          <div class="sequence-row">
+            <span class="sequence-number">{{ session.position }}</span>
+            <div>
+              <strong>{{ session.title }}</strong>
+              <small>{{ session.duration }} · {{ session.type }}</small>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+}

@@ -22,4 +22,9 @@ export class ProgramPage implements OnInit {
     this.programs.selectTemplate(id);
     void this.router.navigateByUrl('/program/customize');
   }
+
+  custom(): void {
+    this.programs.clearUserProgram();
+    void this.router.navigateByUrl('/goals');
+  }
 }

@@ -1,0 +1,98 @@
+<section class="screen home-screen">
+  <div class="home-welcome">
+    <span class="eyebrow">portaLumi</span>
+    <h1>Merre induljunk?</h1>
+    <p class="lead">Programok, csomagok, előadók és a saját fejlődési utad egy helyen.</p>
+  </div>
+
+  <button class="home-feature-card home-feature-primary" type="button" (click)="openMyProgram()">
+    <span class="home-card-icon">◇</span>
+    <span class="home-card-copy">
+      <span class="home-card-kicker">
+        {{ programs.selectedTemplate() ? 'Saját programom' : 'Custom program' }}
+      </span>
+      <strong>
+        {{ programs.selectedTemplate()?.title || 'Állítsunk össze neked egy programot' }}
+      </strong>
+      <small>
+        @if (programs.started()) {
+          Folytasd ott, ahol abbahagytad.
+        } @else if (programs.selectedTemplate()) {
+          A program megvan, még finomhangolhatod a napokat és a trackeket.
+        } @else {
+          Végigvezetünk a céljaidon és a preferenciáidon.
+        }
+      </small>
+
+      @if (programs.started()) {
+        <span class="home-progress-meta">{{ programs.currentPosition() }} / 12</span>
+        <span class="home-progress-track">
+          <span [style.width.%]="programs.currentPosition() / 12 * 100"></span>
+        </span>
+      }
+    </span>
+    <span class="home-card-arrow">→</span>
+  </button>
+
+  <div class="home-grid">
+    <button class="home-feature-card" type="button" (click)="go('/programs')">
+      <span class="home-card-icon">◫</span>
+      <span class="home-card-copy">
+        <span class="home-card-kicker">Programok</span>
+        <strong>Minden elérhető program</strong>
+        <small>Önálló, felépített reggeli és esti sorozatok.</small>
+      </span>
+      <span class="home-card-arrow">→</span>
+    </button>
+
+    <button class="home-feature-card" type="button" (click)="go('/packages')">
+      <span class="home-card-icon">▦</span>
+      <span class="home-card-copy">
+        <span class="home-card-kicker">Csomagok</span>
+        <strong>Előre összeállított utak</strong>
+        <small>Több programból felépített kész csomagok, plusz custom opció.</small>
+      </span>
+      <span class="home-card-arrow">→</span>
+    </button>
+
+    <button class="home-feature-card" type="button" (click)="go('/presenters')">
+      <span class="home-card-icon">◎</span>
+      <span class="home-card-copy">
+        <span class="home-card-kicker">Előadók</span>
+        <strong>Ismerd meg a képzőket</strong>
+        <small>Nézd meg, milyen programok és kurzusok tartoznak hozzájuk.</small>
+      </span>
+      <span class="home-card-arrow">→</span>
+    </button>
+
+    <button class="home-feature-card" type="button" (click)="go('/events')">
+      <span class="home-card-icon">◌</span>
+      <span class="home-card-copy">
+        <span class="home-card-kicker">Események</span>
+        <strong>Workshopok és találkozók</strong>
+        <small>A későbbi események helye.</small>
+      </span>
+      <span class="home-card-arrow">→</span>
+    </button>
+
+    <button class="home-feature-card" type="button" (click)="go('/professional-help')">
+      <span class="home-card-icon">✦</span>
+      <span class="home-card-copy">
+        <span class="home-card-kicker">Profi segítség</span>
+        <strong>Személyes szakmai támogatás</strong>
+        <small>Később szakemberek és 1:1 lehetőségek kerülhetnek ide.</small>
+      </span>
+      <span class="home-card-arrow">→</span>
+    </button>
+
+    <button class="home-feature-card home-feature-disabled" type="button" disabled>
+      <span class="home-card-icon">✎</span>
+      <span class="home-card-copy">
+        <span class="home-card-kicker">Hírek <em>V3</em></span>
+        <strong>Előadói hírek és tartalmak</strong>
+        <small>Rövid posztok, új tartalmak és fontos frissítések későbbi verzióban.</small>
+      </span>
+      <span class="home-card-arrow">↗</span>
+    </button>
+  </div>
+</section>

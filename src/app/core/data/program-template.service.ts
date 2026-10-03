@@ -14,6 +14,8 @@ interface SavedProgramSelection {
   morningSequenceId: string | null;
   eveningSequenceId: string | null;
   selectedDays: ProgramDay[];
+  started: boolean;
+  currentPosition: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -28,6 +30,8 @@ export class ProgramTemplateService {
   readonly morningSequenceId = signal<string | null>(null);
   readonly eveningSequenceId = signal<string | null>(null);
   readonly selectedDays = signal<ProgramDay[]>(['monday', 'wednesday', 'friday', 'sunday']);
+  readonly started = signal(false);
+  readonly currentPosition = signal(1);
 
   readonly selectedTemplate = computed(() =>
     this.templates().find((item) => item.id === this.selectedTemplateId()) ?? null,
@@ -51,10 +55,6 @@ export class ProgramTemplateService {
     this.templates.set(data.templates);
     this.sequences.set(data.sequences);
     this.restoreSelection();
-
-    if (!this.selectedTemplateId() && data.templates[0]) {
-      this.selectTemplate(data.templates[0].id);
-    }
   }
 
   selectTemplate(id: string): void {
@@ -64,6 +64,8 @@ export class ProgramTemplateService {
     this.selectedTemplateId.set(template.id);
     this.morningSequenceId.set(template.morningSequenceId);
     this.eveningSequenceId.set(template.eveningSequenceId);
+    this.started.set(false);
+    this.currentPosition.set(1);
     this.persistSelection();
   }
 
@@ -124,6 +126,27 @@ export class ProgramTemplateService {
     return this.sequences().find((item) => item.id === id) ?? null;
   }
 
+  startProgram(): void {
+    if (!this.selectedTemplate()) return;
+    this.started.set(true);
+    if (this.currentPosition() < 1) this.currentPosition.set(1);
+    this.persistSelection();
+  }
+
+  setCurrentPosition(position: number): void {
+    this.currentPosition.set(Math.min(12, Math.max(1, position)));
+    this.persistSelection();
+  }
+
+  clearUserProgram(): void {
+    this.selectedTemplateId.set(null);
+    this.morningSequenceId.set(null);
+    this.eveningSequenceId.set(null);
+    this.started.set(false);
+    this.currentPosition.set(1);
+    sessionStorage.removeItem(this.storageKey);
+  }
+
   createTemplate(): ProgramTemplate | null {
     const morning = this.availableSequences('morning')[0];
     const evening = this.availableSequences('evening')[0];
@@ -162,6 +185,10 @@ export class ProgramTemplateService {
       if (Array.isArray(saved.selectedDays) && saved.selectedDays.length) {
         this.selectedDays.set(saved.selectedDays);
       }
+      this.started.set(Boolean(saved.started));
+      if (Number.isFinite(saved.currentPosition)) {
+        this.currentPosition.set(Math.min(12, Math.max(1, Number(saved.currentPosition))));
+      }
     } catch {
       sessionStorage.removeItem(this.storageKey);
     }
@@ -173,6 +200,8 @@ export class ProgramTemplateService {
       morningSequenceId: this.morningSequenceId(),
       eveningSequenceId: this.eveningSequenceId(),
       selectedDays: this.selectedDays(),
+      started: this.started(),
+      currentPosition: this.currentPosition(),
     };
     sessionStorage.setItem(this.storageKey, JSON.stringify(data));
   }
