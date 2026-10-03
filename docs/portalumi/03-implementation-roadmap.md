@@ -203,3 +203,20 @@ A demo program-template változtatások után:
 6. creator courses DB migráció
 
 Ezután jön a sequences + program templates DB réteg.
+
+
+## Későbbi ötlet — Kurzusok egyesítése
+
+Nem része a mostani implementációnak.
+
+Későbbi verzióban legyen lehetőség két meglévő kurzus egyesítésére.
+
+Első koncepció:
+- creator kiválaszt két saját kurzust
+- a rendszer új, kombinált kurzust hoz létre
+- az eredeti kurzusok megmaradnak
+- a creator az új kurzus címét, metaadatait és felépítését külön szerkesztheti
+- az egyesített kurzusnál külön el kell dönteni, hogy kötelező sorrendű vagy moduláris
+- ütköző / duplikált leckéket az editor mutassa meg, ne olvassza össze automatikusan
+
+Ezt a valódi DB-s kurzusmodell stabilizálása után érdemes megvalósítani.
