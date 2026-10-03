@@ -2,120 +2,62 @@
 
 Dátum: 2026-10-03
 
-## Cél
+## Alapelv
 
-A demo UI megtartása mellett átállni valódi, perzisztens adatokra.
+A demo UI-t nem írjuk újra. A most kialakított domain-modellt fokozatosan kötjük valódi Laravel API-hoz és adatbázishoz.
 
-Első körben nem építünk teljes klasszikus autentikációt.
+Frontend:
+- Ionic
+- Angular
+- Capacitor
 
-Nem kell:
-- e-mail
-- jelszó
-- jelszó-visszaállítás
-- OAuth
+Backend:
+- Laravel
+- PHP
+- MySQL / MariaDB
 
-A felhasználó számára az első verzióban elég egy név / username.
+Média:
+- első körben Laravel Storage
+- később S3-kompatibilis storage
 
-A háttérben azonban kell egy biztonságos azonosító, hogy az adatok ne csak a username alapján legyenek elérhetők.
+## Auth
 
-## Javasolt belépési modell v0
+A saját username + device-token rendszer helyett a jelenlegi preferált irány Clerk, hogy ne építsünk saját autentikációs rendszert.
 
-Első indítás:
+Első körben jelszó nélküli belépést érdemes használni:
+- email kód / magic link
+- vagy Google / Apple
 
-1. a felhasználó megad egy username-et
-2. frontend: POST /api/users/bootstrap
-3. Laravel létrehoz egy user rekordot
-4. Laravel generál egy véletlen device/session tokent
-5. a frontend eltárolja a tokent localStorage-ben
-6. minden API kérés Bearer tokennel megy
-
-Példa:
-
-Authorization: Bearer <device-token>
-
-A token nyers formában csak a kliensen legyen.
-
-Az adatbázisban csak hash kerüljön eltárolásra.
-
-Ez nem klasszikus account login, de már valódi user-szeparációt ad.
-
-Később ugyanahhoz a userhez hozzáadható:
-
-- email
-- password_hash
-- Apple / Google login
-- több eszköz
-
-Anélkül, hogy a user adatait migrálni kellene.
-
-## Backend
-
-Laravel maradjon a backend.
-
-Javasolt szerkezet:
-
-laravel/
-- app/Models
-- app/Http/Controllers/Api
-- app/Http/Requests
-- app/Services
-- app/Policies
-- database/migrations
-- database/seeders
-- routes/api.php
-
-Az API legyen verziózott:
-
-/api/v1/...
-
-## Adatbázis
-
-MySQL vagy MariaDB.
+A portaLumi adatbázisban ettől függetlenül saját user rekord marad:
 
 ### users
-
 - id UUID
-- username
-- email nullable
-- password nullable
+- clerk_user_id unique
+- display_name
 - status
 - created_at
 - updated_at
 
-A username kezdetben lehet display name jellegű. Ne ez legyen az autentikációs kulcs.
-
-### user_sessions
-
-- id UUID
-- user_id
-- token_hash
-- device_name nullable
-- last_seen_at
-- expires_at nullable
-- created_at
+A Clerk kezeli az identitást. A portaLumi kezeli a termékadatokat és szerepköröket.
 
 ### roles
-
 - id
 - code
 
-Kezdeti értékek:
-
+Kezdeti szerepek:
 - user
 - content_creator
 
 ### user_roles
-
 - user_id
 - role_id
 
-Azért pivot tábla, mert ugyanaz a user több szerepet is kaphat.
+Ugyanaz a személy lehet user és content_creator is.
 
-## Content creator adatmodell
+## Creator és tartalom
 
 ### creator_profiles
-
-- id
+- id UUID
 - user_id
 - display_name
 - bio
@@ -125,7 +67,6 @@ Azért pivot tábla, mert ugyanaz a user több szerepet is kaphat.
 - updated_at
 
 ### courses
-
 - id UUID
 - creator_id
 - title
@@ -143,12 +84,7 @@ Azért pivot tábla, mert ugyanaz a user több szerepet is kaphat.
 - created_at
 - updated_at
 
-A JSON mezők az első verzióban szándékosan egyszerűek.
-
-Később, ha ténylegesen szükséges SQL-ben keresni / súlyozni őket, normalizálhatók külön tag táblákba.
-
 ### course_units
-
 - id UUID
 - course_id
 - position
@@ -167,97 +103,144 @@ Később, ha ténylegesen szükséges SQL-ben keresni / súlyozni őket, normali
 - updated_at
 
 Típusok:
-
 - video
 - audio
 - exercise
 - meditation
 
-## Felhasználói onboarding adatok
+## Felépített tartalmi sorozatok
 
-### user_profiles
+A program nem random leckék halmaza.
 
-- user_id
-- main_goal
-- long_term_goal
-- situation
-- obstacles JSON
-- weekly_time
-- preferred_formats JSON
-- pace
+Egy képző összeállíthat egy szakmailag felépített, sorrendben rögzített sorozatot. A user ennek belső sorrendjét nem cserélgeti.
+
+### content_sequences
+- id UUID
+- creator_id
+- title
+- description
+- period morning / evening
+- status draft / published
 - created_at
 - updated_at
 
-A profil később bővíthető új mezőkkel úgy, hogy a kérdőív nem feltétlenül egyetlen fix sémához kötődik.
-
-## Program adatmodell
-
-### programs
-
+### content_sequence_items
 - id UUID
-- user_id
-- title
-- status draft / active / completed
-- duration_weeks
-- current_week
-- generated_from JSON
-- started_at nullable
-- completed_at nullable
-- created_at
-- updated_at
-
-### program_weeks
-
-- id UUID
-- program_id
-- week_number
-- title
-- focus
-- position
-
-### program_items
-
-- id UUID
-- program_week_id
+- sequence_id
 - course_unit_id nullable
-- type
-- title
-- time_of_day
-- cadence nullable
 - position
+- title
+- type
+- duration_minutes nullable
 - metadata JSON nullable
 
-time_of_day:
+A position sorrend szakmai része a sorozatnak.
 
-- morning
-- daytime
-- evening
+## Előre definiált programcsomagok
 
-## Progress és reflexió
+A creator teljes sorozatokból állít össze felhasználóknak választható programot.
 
-### user_unit_progress
+Példa:
+- reggeli sorozat
+- esti sorozat
 
-- id
+### program_templates
+- id UUID
+- creator_id nullable
+- title
+- subtitle
+- description
+- status draft / published
+- created_at
+- updated_at
+
+### program_template_tracks
+- id UUID
+- program_template_id
+- period morning / evening
+- sequence_id
+
+A program template nem tartalmaz week struktúrát.
+
+## User program
+
+Amikor a user kiválaszt egy kész programot, abból saját program-példány készül.
+
+### user_programs
+- id UUID
 - user_id
-- program_item_id
+- program_template_id nullable
+- title
+- status draft / active / completed
+- start_date nullable
+- end_date nullable
+- current_position
+- created_at
+- updated_at
+
+Nincs duration_weeks mező. Ha kell végdátum, end_date tárolható.
+
+### user_program_tracks
+- id UUID
+- user_program_id
+- period morning / evening
+- sequence_id
+
+A user a teljes reggeli vagy esti tracket lecserélheti egy másik teljes, felépített sorozatra.
+
+Az egyes sorozatok belső sorrendjét nem változtatja.
+
+### user_program_days
+- id UUID
+- user_program_id
+- day_of_week
+
+Értékek:
+- monday
+- tuesday
+- wednesday
+- thursday
+- friday
+- saturday
+- sunday
+
+A hétvége nincs automatikusan kizárva.
+
+A user onboardingban kiválasztja:
+"Mely napokon szeretnél foglalkozni a programmal?"
+
+Nem kell külön megkérdezni, hány alkalom fér bele hetente. A kiválasztott napok ezt már kifejezik.
+
+## Progress
+
+A progress nem "program week" alapú.
+
+### user_sequence_progress
+- id UUID
+- user_id
+- user_program_id
+- sequence_id
+- sequence_item_id
 - status pending / completed / skipped
 - response_text nullable
 - completed_at nullable
 
-### reflections
+A UI a program pozícióit tetszőlegesen csoportosíthatja hetekbe vagy dátumokba, de ez prezentációs kérdés, nem a domain modell gerince.
 
-- id
+## Reflexió és check-in
+
+### reflections
+- id UUID
 - user_id
-- program_item_id nullable
-- program_id nullable
+- user_program_id
+- sequence_item_id nullable
 - text
 - created_at
 
 ### checkins
-
-- id
+- id UUID
 - user_id
-- program_id
+- user_program_id
 - period_key
 - rating nullable
 - difficulty nullable
@@ -266,10 +249,9 @@ time_of_day:
 - created_at
 
 ### affirmations
-
-- id
+- id UUID
 - user_id
-- program_id nullable
+- user_program_id nullable
 - text
 - accepted_at nullable
 - audio_path nullable
@@ -277,103 +259,51 @@ time_of_day:
 - active
 - created_at
 
-## Médiafájlok
+## Média
 
 Első körben:
-
-Laravel Storage
-
-Példa:
 
 storage/app/public/
 - courses/{course-id}/units/{unit-id}/media/
 - courses/{course-id}/units/{unit-id}/covers/
 - users/{user-id}/affirmations/
 
-Adatbázisba relatív path kerüljön, ne teljes domain URL.
+Adatbázisba relatív path kerüljön, ne fix domain URL.
 
-Később ugyanaz a Laravel Storage API átállítható S3-kompatibilis storage-ra.
+## Frontend repository réteg
 
-## Frontend adat-hozzáférés
+A mostani repository absztrakciók maradnak.
 
-A jelenlegi repository interfészeket megtartjuk.
+- CourseRepository
+- ProgramTemplateRepository
+- UserRepository
+- CreatorRepository
 
-Példa:
+Demo:
+- JSON implementációk
 
-CourseRepository
-- JsonCourseRepository most
-- ApiCourseRepository később
+Valódi app:
+- API implementációk
 
-ProgramRepository
-- JsonProgramRepository most
-- ApiProgramRepository később
+A UI-nak nem kell tudnia, hogy az adat JSON-ból vagy Laravelből érkezik.
 
-UserRepository
-- JsonUserRepository most
-- ApiUserRepository később
+## AI
 
-CreatorRepository
-- JsonCreatorRepository most
-- ApiCreatorRepository később
+Az első valódi verzióhoz nem szükséges AI.
 
-Így a UI nem tudja, hogy JSON-ból vagy API-ból érkezett az adat.
+Első stabil termék:
+1. creator tartalom
+2. authored sequence
+3. creator program template
+4. user program választás
+5. teljes track csere
+6. napválasztás
+7. progress és feedback
 
-## API első kör
+AI később:
+- program ajánlás
+- következő ciklus javaslat
+- személyre szabott megerősítés
+- program finomhangolás
 
-### bootstrap / session
-
-POST /api/v1/users/bootstrap
-GET /api/v1/me
-
-### onboarding
-
-GET /api/v1/me/profile
-PUT /api/v1/me/profile
-
-### courses
-
-GET /api/v1/courses
-GET /api/v1/courses/{id}
-
-Creator:
-
-POST /api/v1/creator/courses
-PUT /api/v1/creator/courses/{id}
-POST /api/v1/creator/courses/{id}/publish
-
-### course units
-
-POST /api/v1/creator/courses/{course}/units
-PUT /api/v1/creator/units/{id}
-DELETE /api/v1/creator/units/{id}
-
-POST /api/v1/creator/units/{id}/media
-POST /api/v1/creator/units/{id}/cover
-
-### programs
-
-GET /api/v1/me/programs
-GET /api/v1/me/programs/{id}
-POST /api/v1/me/programs
-
-### progress
-
-PUT /api/v1/me/program-items/{id}/progress
-POST /api/v1/me/reflections
-POST /api/v1/me/checkins
-
-## Fontos döntés
-
-Az első valódi verzióban még nem kell AI.
-
-A program-generálás kezdetben lehet deterministic / szabályalapú.
-
-Például:
-
-user profile
-→ cél + akadály + idő + formátum
-→ kurzus metaadatok pontozása
-→ legjobb tartalmak kiválasztása
-→ 12 hétre kiosztás
-
-Az AI később ráépülhet erre a struktúrára.
+Az AI nem írhatja felül automatikusan a képző által rögzített szakmai sorrendet.

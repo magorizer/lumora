@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ProgramTemplateService } from '../../core/data/program-template.service';
 import { ProgramDay } from '../../core/models/content.models';
-import { UserFlowService } from '../services/user-flow.service';
-import { UserFlowUiService } from '../services/user-flow-ui.service';
 
 interface DayOption {
   id: ProgramDay;
@@ -12,16 +11,15 @@ interface DayOption {
 }
 
 @Component({
-  selector: 'app-questionnaire-preferences',
+  selector: 'app-program-customize',
   standalone: true,
-  templateUrl: './questionnaire-preferences.page.html',
+  templateUrl: './program-customize.page.html',
   styleUrls: ['../user-pages.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestionnairePreferencesPage implements OnInit {
-  readonly flow = inject(UserFlowService);
-  readonly ui = inject(UserFlowUiService);
+export class ProgramCustomizePage implements OnInit {
   readonly programs = inject(ProgramTemplateService);
+  private readonly router = inject(Router);
 
   readonly days: DayOption[] = [
     { id: 'monday', short: 'H', label: 'Hétfő' },
@@ -34,6 +32,22 @@ export class QuestionnairePreferencesPage implements OnInit {
   ];
 
   async ngOnInit(): Promise<void> {
-    await Promise.all([this.flow.load(), this.programs.load()]);
+    await this.programs.load();
+  }
+
+  changeMorning(event: Event): void {
+    this.programs.setTrack('morning', (event.target as HTMLSelectElement).value);
+  }
+
+  changeEvening(event: Event): void {
+    this.programs.setTrack('evening', (event.target as HTMLSelectElement).value);
+  }
+
+  back(): void {
+    void this.router.navigateByUrl('/program');
+  }
+
+  start(): void {
+    void this.router.navigateByUrl('/week');
   }
 }

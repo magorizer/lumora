@@ -1,4 +1,4 @@
-import { Catalog, Course, ProgramData, PortalumiUser } from '../models/content.models';
+import { Catalog, Course, ProgramData, ProgramTemplatesData, PortalumiUser } from '../models/content.models';
 
 export abstract class CourseRepository {
   abstract loadCatalog(): Promise<Catalog>;
@@ -15,4 +15,9 @@ export abstract class UserRepository {
 export abstract class CreatorRepository {
   abstract saveDraft(course: Course): Promise<Course>;
   abstract publish(course: Course): Promise<Course>;
+}
+
+
+export abstract class ProgramTemplateRepository {
+  abstract loadProgramTemplates(): Promise<ProgramTemplatesData>;
 }

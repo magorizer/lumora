@@ -1,0 +1,102 @@
+<section class="screen program-customize-screen">
+  <div class="eyebrow">Program finomhangolása</div>
+
+  @if (programs.selectedTemplate(); as template) {
+    <h1>{{ template.title }}</h1>
+    <p class="lead">{{ template.subtitle }}</p>
+
+    <div class="card">
+      <div class="card-title-inline">
+        <h2>Mely napokon szeretnél foglalkozni a programmal?</h2>
+        <span class="optional-pill">{{ programs.selectedDays().length }} nap</span>
+      </div>
+
+      <div class="program-day-grid">
+        @for (day of days; track day.id) {
+          <button
+            type="button"
+            [class.selected]="programs.isDaySelected(day.id)"
+            (click)="programs.toggleDay(day.id)"
+            [attr.aria-label]="day.label"
+          >
+            <strong>{{ day.short }}</strong>
+            <small>{{ day.label }}</small>
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (programs.morningSequence(); as morning) {
+      <div class="card program-track-editor">
+        <div class="program-track-heading">
+          <div>
+            <span class="routine-period">Reggeli program</span>
+            <h2>{{ morning.title }}</h2>
+            <p>{{ morning.creatorName }} · {{ morning.description }}</p>
+          </div>
+          <span class="locked-order">Sorrend rögzített</span>
+        </div>
+
+        <label class="program-track-switch">
+          Másik teljes reggeli program
+          <select [value]="morning.id" (change)="changeMorning($event)">
+            @for (sequence of programs.availableSequences('morning'); track sequence.id) {
+              <option [value]="sequence.id">{{ sequence.title }} · {{ sequence.creatorName }}</option>
+            }
+          </select>
+        </label>
+
+        <div class="sequence-list">
+          @for (session of morning.sessions; track session.position) {
+            <div class="sequence-row">
+              <span class="sequence-number">{{ session.position }}</span>
+              <div>
+                <strong>{{ session.title }}</strong>
+                <small>{{ session.duration }} · {{ session.type }}</small>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (programs.eveningSequence(); as evening) {
+      <div class="card program-track-editor">
+        <div class="program-track-heading">
+          <div>
+            <span class="routine-period">Esti program</span>
+            <h2>{{ evening.title }}</h2>
+            <p>{{ evening.creatorName }} · {{ evening.description }}</p>
+          </div>
+          <span class="locked-order">Sorrend rögzített</span>
+        </div>
+
+        <label class="program-track-switch">
+          Másik teljes esti program
+          <select [value]="evening.id" (change)="changeEvening($event)">
+            @for (sequence of programs.availableSequences('evening'); track sequence.id) {
+              <option [value]="sequence.id">{{ sequence.title }} · {{ sequence.creatorName }}</option>
+            }
+          </select>
+        </label>
+
+        <div class="sequence-list">
+          @for (session of evening.sessions; track session.position) {
+            <div class="sequence-row">
+              <span class="sequence-number">{{ session.position }}</span>
+              <div>
+                <strong>{{ session.title }}</strong>
+                <small>{{ session.duration }} · {{ session.type }}</small>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="action-row">
+      <button class="secondary-action" type="button" (click)="back()">Másik program</button>
+      <button class="primary-action" type="button" (click)="start()">Program indítása <span>→</span></button>
+    </div>
+  }
+</section>

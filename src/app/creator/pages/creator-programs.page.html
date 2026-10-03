@@ -1,0 +1,128 @@
+<section class="creator-page creator-programs-page">
+  <div class="creator-intro">
+    <span class="eyebrow">Programok</span>
+    <h1>Előre definiált programcsomagok</h1>
+    <p>
+      Itt a képző teljes, sorrendben felépített reggeli és esti sorozatokból állít össze programot a felhasználók számára.
+    </p>
+  </div>
+
+  <div class="creator-programs-layout">
+    <div class="creator-card">
+      <div class="creator-heading">
+        <div>
+          <h2>Programok</h2>
+          <p class="creator-help">{{ programs.templates().length }} kész csomag</p>
+        </div>
+        <button class="creator-primary" type="button" (click)="create()">+ Új program</button>
+      </div>
+
+      <div class="creator-program-template-list">
+        @for (template of programs.templates(); track template.id) {
+          <button
+            type="button"
+            [class.active]="selectedId() === template.id"
+            (click)="select(template.id)"
+          >
+            <span class="program-admin-dot" [class]="'program-admin-dot program-template-' + template.accent"></span>
+            <span>
+              <strong>{{ template.title }}</strong>
+              <small>{{ template.subtitle }}</small>
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (selected(); as template) {
+      <div class="creator-card">
+        <div class="creator-heading">
+          <div>
+            <span class="eyebrow">Program szerkesztése</span>
+            <h2>{{ template.title }}</h2>
+          </div>
+          <span class="creator-status">demo</span>
+        </div>
+
+        <div class="creator-form-grid">
+          <label class="full">
+            Program neve
+            <input [value]="template.title" (input)="updateField('title', $event)">
+          </label>
+
+          <label class="full">
+            Rövid alcím
+            <input [value]="template.subtitle" (input)="updateField('subtitle', $event)">
+          </label>
+
+          <label class="full">
+            Leírás
+            <textarea rows="4" [value]="template.description" (input)="updateField('description', $event)"></textarea>
+          </label>
+
+          <label>
+            Reggeli teljes program
+            <select [value]="template.morningSequenceId" (change)="updateTrack('morning', $event)">
+              @for (sequence of programs.availableSequences('morning'); track sequence.id) {
+                <option [value]="sequence.id">{{ sequence.title }} · {{ sequence.creatorName }}</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Esti teljes program
+            <select [value]="template.eveningSequenceId" (change)="updateTrack('evening', $event)">
+              @for (sequence of programs.availableSequences('evening'); track sequence.id) {
+                <option [value]="sequence.id">{{ sequence.title }} · {{ sequence.creatorName }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <div class="creator-program-preview-grid">
+          @if (programs.sequenceById(template.morningSequenceId); as morning) {
+            <div class="creator-program-sequence-preview">
+              <span class="routine-period">Reggel</span>
+              <h3>{{ morning.title }}</h3>
+              <p>{{ morning.creatorName }}</p>
+              <div class="sequence-list compact-sequence-list">
+                @for (session of morning.sessions; track session.position) {
+                  <div class="sequence-row">
+                    <span class="sequence-number">{{ session.position }}</span>
+                    <div>
+                      <strong>{{ session.title }}</strong>
+                      <small>{{ session.duration }}</small>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          @if (programs.sequenceById(template.eveningSequenceId); as evening) {
+            <div class="creator-program-sequence-preview">
+              <span class="routine-period">Este</span>
+              <h3>{{ evening.title }}</h3>
+              <p>{{ evening.creatorName }}</p>
+              <div class="sequence-list compact-sequence-list">
+                @for (session of evening.sessions; track session.position) {
+                  <div class="sequence-row">
+                    <span class="sequence-number">{{ session.position }}</span>
+                    <div>
+                      <strong>{{ session.title }}</strong>
+                      <small>{{ session.duration }}</small>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <p class="creator-help mt-4">
+          Az egyes sorozatok belső sorrendje rögzített. A programcsomag teljes reggeli vagy esti sorozatot választ.
+        </p>
+      </div>
+    }
+  </div>
+</section>

@@ -116,3 +116,54 @@ export interface Catalog {
 }
 
 export interface UsersData { users: PortalumiUser[]; }
+
+
+export type ProgramDay =
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday';
+
+export type ProgramPeriod = 'morning' | 'evening';
+
+export type ProgramSequenceSessionType =
+  | 'breathwork'
+  | 'meditation'
+  | 'affirmation'
+  | 'nlp'
+  | 'exercise';
+
+export interface ProgramSequenceSession {
+  position: number;
+  title: string;
+  type: ProgramSequenceSessionType;
+  duration: string;
+  description: string;
+}
+
+export interface ProgramSequence {
+  id: string;
+  title: string;
+  creatorName: string;
+  period: ProgramPeriod;
+  description: string;
+  sessions: ProgramSequenceSession[];
+}
+
+export interface ProgramTemplate {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  accent: 'amber' | 'blue' | 'sage';
+  morningSequenceId: string;
+  eveningSequenceId: string;
+}
+
+export interface ProgramTemplatesData {
+  sequences: ProgramSequence[];
+  templates: ProgramTemplate[];
+}

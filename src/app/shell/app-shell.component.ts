@@ -38,9 +38,7 @@ export class AppShellComponent implements OnInit {
 
   readonly progressItems = computed(() => Array.from({ length: this.progressTotal() }));
   readonly progressLabel = computed(() =>
-    this.progressMode() === 'program'
-      ? `${this.progressCurrent()}. hét / ${this.progressTotal()}`
-      : `${this.progressCurrent()} / ${this.progressTotal()}`,
+    `${this.progressCurrent()} / ${this.progressTotal()}`,
   );
   readonly isFirstOnboarding = computed(() =>
     this.progressMode() === 'onboarding' && this.progressCurrent() === 1,
@@ -48,7 +46,7 @@ export class AppShellComponent implements OnInit {
 
   readonly userMenu: MenuItem[] = [
     { label: 'Programom', path: '/program', icon: '◇' },
-    { label: 'Aktuális hét', path: '/week', icon: '◫' },
+    { label: 'Mai program', path: '/week', icon: '◫' },
     { label: 'Lecke', path: '/lesson', icon: '▶' },
     { label: 'Haladás / review', path: '/review', icon: '↗' },
   ];
@@ -56,6 +54,7 @@ export class AppShellComponent implements OnInit {
   readonly creatorMenu: MenuItem[] = [
     { label: 'Áttekintés', path: '/creator/dashboard', icon: '◇' },
     { label: 'Kurzusaim', path: '/creator/courses', icon: '▦' },
+    { label: 'Programok', path: '/creator/programs', icon: '◫' },
     { label: 'Új kurzus', path: '/creator/courses/new', icon: '+' },
     { label: 'Képzői profil', path: '/creator/profile', icon: '◎' },
   ];
@@ -144,8 +143,8 @@ export class AppShellComponent implements OnInit {
       return { mode: 'onboarding', current: onboarding[path], total: 5 };
     }
 
-    if (['/program', '/program-adjustment', '/week', '/lesson', '/feedback'].includes(path)) {
-      return { mode: 'program', current: 3, total: 12 };
+    if (['/program', '/program/customize', '/program-adjustment', '/week', '/lesson', '/feedback'].includes(path)) {
+      return { mode: 'program', current: 1, total: 12 };
     }
 
     if (['/review', '/next-cycle'].includes(path)) {

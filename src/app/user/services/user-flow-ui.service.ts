@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ProgramItem, ProgramWeek } from '../../core/models/content.models';
+import { ProgramItem, ProgramPeriod, ProgramSequenceSession, ProgramWeek } from '../../core/models/content.models';
 import { UserFlowService } from './user-flow.service';
 
 export interface GoalOption {
@@ -81,6 +81,24 @@ export class UserFlowUiService {
     this.selectedLesson.set(item);
     this.lessonPlaying.set(false);
     void this.router.navigateByUrl(item.type === 'feedback' ? '/feedback' : '/lesson');
+  }
+
+  openTemplateSession(session: ProgramSequenceSession, period: ProgramPeriod): void {
+    const type: ProgramItem['type'] =
+      session.type === 'meditation'
+        ? 'meditation'
+        : session.type === 'breathwork'
+          ? 'audio'
+          : 'exercise';
+
+    this.selectedLesson.set({
+      type,
+      title: session.title,
+      duration: session.duration,
+      timeOfDay: period,
+    });
+    this.lessonPlaying.set(false);
+    void this.router.navigateByUrl('/lesson');
   }
 
   chooseGoal(option: GoalOption): void { this.flow.setMainGoal(option.label, option.scenarioId); }

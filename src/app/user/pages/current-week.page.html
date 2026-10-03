@@ -1,36 +1,53 @@
 <section class="screen screen-step-8">
-  <div class="eyebrow">Aktuális hét</div>
-  <h1>Ez a heti fókuszod.</h1>
-  <p class="lead">A program most a 3. héten jár. A mai feladatokból bármelyiket megnyithatod.</p>
+  <div class="eyebrow">Aktuális program</div>
 
-  @if (flow.scenario(); as scenario) {
+  @if (programs.selectedTemplate(); as template) {
+    <h1>{{ template.title }}</h1>
+    <p class="lead">Az 1. programlépés aktív. A sorrend a kész programon belül rögzített.</p>
+
     <div class="hero-card">
-      <span class="hero-kicker">3. hét · 1. hónap</span>
-      <h2>{{ scenario.weeks[2].title }}</h2>
-      <p>{{ scenario.weeks[2].focus }}</p>
+      <span class="hero-kicker">1 / 12</span>
+      <h2>Mai feladatok</h2>
+      <p>{{ template.subtitle }}</p>
+
       <div class="tag-row">
-        <span class="tag">{{ flow.answers().weeklyTime }}</span>
-        <span class="tag">3 mai feladat</span>
+        <span class="tag">{{ programs.selectedDays().length }} kiválasztott nap</span>
+        <span class="tag">reggel + este</span>
       </div>
     </div>
 
     <div class="card">
       <h2>Mai feladatok</h2>
+
       <div class="lesson-list">
-        @for (item of scenario.weeks[2].items; track item.title; let index = $index) {
-          <button class="lesson-row today-task-row" type="button" (click)="ui.openProgramItem(item)">
-            <span class="lesson-index">{{ index + 1 }}</span>
-            <span class="lesson-body">
-              <small>{{ item.type }} · {{ item.duration || 'rövid' }}</small>
-              <strong>{{ item.title }}</strong>
-              @if (flow.course(item.courseId); as course) {
-                @if (flow.instructor(course.instructorId); as instructor) {
-                  <span class="course-source">{{ instructor.name }} · {{ course.title }}</span>
-                }
-              }
-            </span>
-            <span class="lesson-state">→</span>
-          </button>
+        @if (programs.morningSequence(); as morning) {
+          @if (morning.sessions[0]; as session) {
+            <button class="lesson-row today-task-row" type="button" (click)="ui.openTemplateSession(session, 'morning')">
+              <span class="lesson-index">☀</span>
+              <span class="lesson-body">
+                <span class="day-time">Reggeli gyakorlat</span>
+                <strong>{{ session.title }}</strong>
+                <small>{{ session.duration }} · {{ morning.creatorName }}</small>
+                <span class="course-source">{{ morning.title }}</span>
+              </span>
+              <span class="lesson-state">→</span>
+            </button>
+          }
+        }
+
+        @if (programs.eveningSequence(); as evening) {
+          @if (evening.sessions[0]; as session) {
+            <button class="lesson-row today-task-row" type="button" (click)="ui.openTemplateSession(session, 'evening')">
+              <span class="lesson-index">☾</span>
+              <span class="lesson-body">
+                <span class="day-time">Esti gyakorlat</span>
+                <strong>{{ session.title }}</strong>
+                <small>{{ session.duration }} · {{ evening.creatorName }}</small>
+                <span class="course-source">{{ evening.title }}</span>
+              </span>
+              <span class="lesson-state">→</span>
+            </button>
+          }
         }
       </div>
     </div>
@@ -38,18 +55,18 @@
     <div class="progress-card">
       <div>
         <strong>Eddigi haladás</strong>
-        <span>2 / 12 hét kész</span>
+        <span>1 / 12 programlépés</span>
       </div>
       <div class="mini-progress"><span></span></div>
     </div>
 
     <div class="card checkin-card">
-      <span class="hero-kicker">2 hetes checkpoint · opcionális</span>
+      <span class="hero-kicker">Időszakos checkpoint · opcionális</span>
       <h2>Hogy működik neked a program?</h2>
-      <p>Nem minden lecke után kérünk részletes visszajelzést. Időnként viszont érdemes megnézni, mi segít, min változtatnál.</p>
+      <p>A részletes visszajelzés nem minden alkalom után jelenik meg.</p>
       <button class="secondary-action" type="button" (click)="ui.goStep(10)">Rövid check-in</button>
     </div>
   }
 
-  <button class="secondary-action w-full" type="button" (click)="ui.goStep(6)">Program áttekintése</button>
+  <button class="secondary-action w-full" type="button" (click)="ui.goStep(6)">Programok</button>
 </section>

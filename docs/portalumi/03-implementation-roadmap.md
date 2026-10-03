@@ -2,292 +2,204 @@
 
 Dátum: 2026-10-03
 
-## Alapelv
+## Fejlesztési workflow
 
-Nem írjuk újra a jelenlegi UI-t.
+Minden nagyobb feladat külön sub-branchen készül.
 
-A demo képernyőket fokozatosan kötjük valódi Laravel API-hoz.
+Flow:
+sub-branch
+→ implementáció
+→ ellenőrzés
+→ squash
+→ egy commit a portalumi-demo branchre
 
-Minden nagyobb fejlesztés külön sub-branchen készül, majd ellenőrzés után egy squash commitként kerül a portalumi-demo branchre.
+A main csak stabil mérföldkőnél frissül.
 
-## 0. fázis — stabil kiindulópont
-
-Cél:
-
-A jelenlegi demo legyen referencia.
-
-Feladatok:
-
-- demo snapshot dokumentálása
-- v1 adatmodell dokumentálása
-- implementációs roadmap rögzítése
-- jelenlegi frontend repository interfészek megtartása
-- demo JSON marad fallback / seed forrás
-
-Késznek tekinthető, ha:
-- dokumentáció bent van a repóban
-- következő fejlesztői lépések egyértelműek
-
-## 1. fázis — Laravel API alap
+## 0. fázis — domain demo lezárása
 
 Cél:
+A DB előtt véglegesítsük az alapfogalmakat.
 
-Legyen egy működő /api/v1 réteg és valódi adatbázis.
+Elkészült / demóban megjelenik:
+- 3 előre definiált 3 hónapos program
+- programonként reggeli + esti authored sequence
+- minden sequence 12 sorrendben rögzített alkalom
+- user napválasztás hétfőtől vasárnapig
+- hétvége engedélyezett
+- nincs kötelező program_week domain objektum
+- user csak teljes reggeli / esti sequence-t cserél
+- creator programcsomagokat definiálhat
+- creator kurzusokat és leckéket kezelhet
 
-Feladatok:
+Demo adat:
+src/assets/demo/program-templates.json
 
-- routes/api.php
-- API controller struktúra
-- MySQL / MariaDB konfiguráció
-- UUID alapú modellek
-- egységes JSON response formátum
-- API exception handling
-- CORS beállítás
+## 1. fázis — auth + Laravel API alap
 
-Első migrációk:
+Döntés a sprint elején:
+- Clerk integráció véglegesítése
 
+Preferált:
+- Clerk passwordless
+- nincs saját device-token auth
+
+Laravel:
+- /api/v1
+- DB kapcsolat
+- CORS
+- egységes API válaszok
+- Clerk token ellenőrzés
+
+Első táblák:
 - users
-- user_sessions
 - roles
 - user_roles
 - creator_profiles
 
-Késznek tekinthető, ha:
-- Laravel migráció lefut
-- API health endpoint működik
-- frontend eléri az API-t
+Kész, ha:
+- bejelentkezett Clerk userhez saját portaLumi user rekord tartozik
+- GET /api/v1/me működik
 
-## 2. fázis — username-only belépés
+## 2. fázis — creator kurzusok valódi DB-ben
 
-Cél:
-
-Valódi user legyen, de még ne legyen email és jelszó.
-
-Flow:
-
-első megnyitás
-→ username
-→ bootstrap API
-→ device token
-→ token localStorage
-→ GET /me
-
-Feladatok:
-
-- bootstrap user endpoint
-- session token generálás
-- token hash tárolás
-- Angular auth/session service
-- HTTP interceptor
-- /me endpoint
-
-Fontos:
-
-A username önmagában ne legyen autentikáció.
-
-A device token azonosítsa a felhasználót.
-
-Késznek tekinthető, ha:
-- browser refresh után ugyanaz a user töltődik vissza
-- másik browser külön userként jelenik meg
-- nincs email / password UI
-
-## 3. fázis — creator és course adatbázis
-
-Cél:
-
-A content creator felület ne JSON-ból működjön.
-
-Migrációk:
-
+Táblák:
 - courses
 - course_units
 
-Feladatok:
-
-- creator profile API
-- course list API
-- course create
-- course edit
-- course publish / draft
-- course unit create
-- course unit edit
-- course unit reorder
-- course unit delete
+Funkciók:
+- course create / edit
+- draft / publish
+- unit create / edit / delete
+- media URL
+- media upload
+- cover URL
+- cover upload
 
 Frontend:
-
 - ApiCourseRepository
 - ApiCreatorRepository
-- JSON repository leváltása creator módban
 
-Késznek tekinthető, ha:
-- új kurzus DB-be mentődik
-- refresh után is megmarad
-- leckék módosítása DB-ben marad
+Kész, ha refresh után minden creator adat megmarad.
 
-## 4. fázis — valódi média
+## 3. fázis — authored sequences
 
-Cél:
+Táblák:
+- content_sequences
+- content_sequence_items
 
-Videó, hang és borítókép valóban feltölthető legyen.
+Funkciók:
+- creator új sequence-t készít
+- morning / evening típus
+- meglévő course unitok hozzáadása
+- sorrend szerkesztése creator oldalon
+- publish után a sorrend a user számára locked
 
-Feladatok:
+Kész, ha egy 12 alkalmas felépített sorozat DB-ből betöltődik és a sorrend stabil.
 
-- Laravel upload endpoint
-- file validation
-- MIME és size limit
-- public/storage vagy privát media kiszolgálás
-- URL forrás támogatása
-- media_path / media_url kezelés
-- cover_path / cover_url kezelés
+## 4. fázis — creator program templates
 
-Első körben:
+Táblák:
+- program_templates
+- program_template_tracks
 
-- local Laravel Storage
+Funkciók:
+- program template létrehozása
+- cím, leírás
+- teljes reggeli sequence kiválasztása
+- teljes esti sequence kiválasztása
+- publish
 
-Később:
+Első seed programok:
+1. Energikusabb mindennapok
+2. Magabiztosság
+3. Megnyugvás / lelki béke
 
-- S3-kompatibilis storage
+Kész, ha a user programválasztó már DB-ből kapja a három csomagot.
 
-Késznek tekinthető, ha:
-- creator feltölt egy audio vagy videó fájlt
-- refresh után is lejátszható
-- külső URL is használható
-- borítókép upload és URL is működik
+## 5. fázis — user program példány
 
-## 5. fázis — onboarding valódi mentése
+Táblák:
+- user_programs
+- user_program_tracks
+- user_program_days
 
-Cél:
+Funkciók:
+- kész template kiválasztása
+- kiválasztott napok mentése
+- hétvége támogatása
+- teljes morning sequence csere
+- teljes evening sequence csere
+- start_date
+- end_date csak ha valóban szükséges
 
-A kérdőív válaszai DB-ben legyenek.
+Nincs duration_weeks mező.
 
-Migráció:
+Kész, ha a user saját programbeállítása refresh után is megmarad.
 
-- user_profiles
+## 6. fázis — napi program és progress
 
-Feladatok:
+Táblák:
+- user_sequence_progress
 
-- GET profile
-- PUT profile
-- onboarding válaszok autosave
-- onboarding complete flag
-
-Késznek tekinthető, ha:
-- másik route-ra lépés után nem vész el adat
-- refresh után visszaáll
-- backendből jön az összefoglaló
-
-## 6. fázis — program generálás v1
-
-Cél:
-
-A 12 hetes program ne statikus JSON legyen.
-
-Migrációk:
-
-- programs
-- program_weeks
-- program_items
-
-Első algoritmus:
-
-1. user célok és akadályok
-2. preferált formátum
-3. heti rendelkezésre álló idő
-4. kurzus recommendation metadata
-5. egyszerű pontszám
-6. tartalom kiválasztás
-7. 12 hetes sorrend
-
-Még nem kell LLM.
-
-Késznek tekinthető, ha:
-- két eltérő profil eltérő programot kap
-- program DB-ben tárolódik
-- refresh után ugyanazt a programot kapja vissza
-
-## 7. fázis — aktuális hét és haladás
-
-Migráció:
-
-- user_unit_progress
-
-Feladatok:
-
-- current week API
-- daily items
+Funkciók:
+- következő sequence item meghatározása
+- Mai program
+- morning / evening feladat
 - complete / skip
-- task response mentés
-- progress bar valós adatokból
+- saját válasz
+- progress 1 / 12 formában
 
-Késznek tekinthető, ha:
-- Mai feladatok valódi programból jönnek
-- kattintáskor valódi course unit nyílik
-- teljesítés tartósan mentődik
+A "hét" legfeljebb UI-csoportosítás, nem domain-kényszer.
 
-## 8. fázis — reflexió és check-in
+## 7. fázis — reflexió és check-in
 
-Migrációk:
-
+Táblák:
 - reflections
 - checkins
 
-Feladatok:
-
+Funkciók:
 - opcionális lesson reflection
-- 2 hetes / havi checkpoint
-- review adatok mentése
-- programhoz kapcsolás
+- időszakos checkpoint
+- review
+- korábbi válaszok visszatöltése
 
-Késznek tekinthető, ha:
-- visszajelzés nem sessionStorage-ben van
-- review oldalon valódi korábbi adatok jelennek meg
+## 8. fázis — affirmations
 
-## 9. fázis — következő ciklus
+Tábla:
+- affirmations
 
-Cél:
+Funkciók:
+- javasolt megerősítés
+- user módosíthatja
+- elfogadás
+- később saját hang feltöltése
+- cadence
 
-Az előző program eredményei alapján új ciklus induljon.
+## 9. fázis — ajánlás és AI
 
-Első körben szabályalapú:
+Csak a stabil adatmodell után.
 
-- completion rate
-- check-in
-- manuális prioritásváltás
-- felhasználói módosítás
+Első kör:
+- szabályalapú template ajánlás
 
-Később AI segíthet a finomhangolásban.
+Később AI:
+- program ajánlás
+- feedback alapján következő program
+- személyes affirmation
+- creator metaadatok intelligens használata
 
-## 10. fázis — valódi auth
+Fontos:
+Az AI nem keverheti össze önkényesen egy creator által felépített sequence belső sorrendjét.
 
-Csak akkor, amikor már szükséges.
+## Következő konkrét sprint
 
-Lehetséges sorrend:
+A demo program-template változtatások után:
 
-1. email + magic link
-2. email + password
-3. Apple / Google
-
-A már meglévő passwordless user rekordokat ehhez kell hozzákötni, nem lecserélni.
-
-## Első konkrét implementációs sprint
-
-A következő fejlesztési kör szerintem pontosan ez legyen:
-
-1. Laravel API route struktúra
-2. users + user_sessions + roles migráció
-3. username-only bootstrap endpoint
+1. Clerk döntés + integrációs proof of concept
+2. Laravel /api/v1 alap
+3. users + roles
 4. GET /me
-5. Angular ApiUserRepository
-6. auth/session interceptor
-7. demo user JSON leváltása
+5. Angular API auth interceptor
+6. creator courses DB migráció
 
-Ez egy jól körülhatárolható vertical slice:
-
-frontend
-→ Laravel API
-→ valódi DB
-→ ugyanaz a user refresh után is
-
-Ha ez működik, utána mehet a creator + course adatmodell.
+Ezután jön a sequences + program templates DB réteg.

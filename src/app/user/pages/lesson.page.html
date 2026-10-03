@@ -47,6 +47,28 @@
           </div>
         </div>
       }
+    } @else {
+      <div class="video-card template-session-card">
+        <span class="video-meta">
+          {{ item.timeOfDay === 'morning' ? 'Reggeli gyakorlat' : item.timeOfDay === 'evening' ? 'Esti gyakorlat' : 'Program' }}
+          · {{ item.duration || 'rövid' }}
+        </span>
+        <h2>{{ item.title }}</h2>
+
+        @if (item.type === 'audio' || item.type === 'meditation') {
+          <button class="video-preview" type="button" (click)="ui.lessonPlaying.set(!ui.lessonPlaying())">
+            <span class="play-button">{{ ui.lessonPlaying() ? 'Ⅱ' : '▶' }}</span>
+          </button>
+        } @else {
+          <div class="exercise-preview">
+            <span>✦</span>
+            <strong>Vezetett gyakorlat</strong>
+            <small>{{ item.duration || 'rövid' }}</small>
+          </div>
+        }
+
+        <p>Ez az alkalom a kiválasztott, sorrendben felépített program része.</p>
+      </div>
     }
 
     <div class="card">

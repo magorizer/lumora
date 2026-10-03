@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { UserFlowService } from '../services/user-flow.service';
-import { UserFlowUiService } from '../services/user-flow-ui.service';
+import { ProgramTemplateService } from '../../core/data/program-template.service';
 
 @Component({
   selector: 'app-program',
@@ -11,10 +11,15 @@ import { UserFlowUiService } from '../services/user-flow-ui.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramPage implements OnInit {
-  readonly flow = inject(UserFlowService);
-  readonly ui = inject(UserFlowUiService);
+  readonly programs = inject(ProgramTemplateService);
+  private readonly router = inject(Router);
 
   async ngOnInit(): Promise<void> {
-    await this.flow.load();
+    await this.programs.load();
+  }
+
+  choose(id: string): void {
+    this.programs.selectTemplate(id);
+    void this.router.navigateByUrl('/program/customize');
   }
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 
-import { UserFlowService } from '../services/user-flow.service';
+import { ProgramTemplateService } from '../../core/data/program-template.service';
 import { UserFlowUiService } from '../services/user-flow-ui.service';
 
 @Component({
@@ -11,10 +11,10 @@ import { UserFlowUiService } from '../services/user-flow-ui.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrentWeekPage implements OnInit {
-  readonly flow = inject(UserFlowService);
+  readonly programs = inject(ProgramTemplateService);
   readonly ui = inject(UserFlowUiService);
 
   async ngOnInit(): Promise<void> {
-    await this.flow.load();
+    await this.programs.load();
   }
 }

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-import { Catalog, Course, ProgramData, PortalumiUser, UsersData } from '../models/content.models';
-import { CourseRepository, CreatorRepository, ProgramRepository, UserRepository } from './repositories';
+import { Catalog, Course, ProgramData, ProgramTemplatesData, PortalumiUser, UsersData } from '../models/content.models';
+import { CourseRepository, CreatorRepository, ProgramRepository, ProgramTemplateRepository, UserRepository } from './repositories';
 
 @Injectable()
 export class JsonCourseRepository extends CourseRepository {
@@ -36,5 +36,14 @@ export class JsonCreatorRepository extends CreatorRepository {
   }
   override async publish(course: Course): Promise<Course> {
     return { ...course, status: 'published' };
+  }
+}
+
+
+@Injectable()
+export class JsonProgramTemplateRepository extends ProgramTemplateRepository {
+  private readonly http = inject(HttpClient);
+  override loadProgramTemplates(): Promise<ProgramTemplatesData> {
+    return firstValueFrom(this.http.get<ProgramTemplatesData>('assets/demo/program-templates.json'));
   }
 }

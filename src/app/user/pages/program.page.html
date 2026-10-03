@@ -1,128 +1,49 @@
-<section class="screen screen-step-6">
-  <div class="eyebrow">Program áttekintés</div>
-  <h1>Itt a személyre szabott 3 hónapos programod.</h1>
-  <p class="lead">A demo 3 előadó 9 kurzusából rak össze egy vegyes, 12 hetes útvonalat.</p>
+<section class="screen program-template-picker">
+  <div class="eyebrow">Kész programok</div>
+  <h1>Válassz egy felépített programot.</h1>
+  <p class="lead">
+    A demóban most három, előre megtervezett 3 hónapos program érhető el. A belső sorrend szakmailag rögzített.
+  </p>
 
-  @if (flow.scenario(); as scenario) {
-    <div class="hero-card">
-      <span class="hero-kicker">12 hetes útvonal</span>
-      <h2>{{ scenario.title }}</h2>
-      <p>{{ scenario.subtitle }}</p>
-      <div class="tag-row">
-        <span class="tag">{{ flow.answers().weeklyTime }}</span>
-        <span class="tag">{{ scenario.focus }}</span>
-        <span class="tag">3 előadó · 9 kurzus</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>A napi ritmusod</h2>
-      <p class="hint">A rövid rutinok végigkísérik a 12 hetet.</p>
-
-      <div class="routine-list">
-        @for (routine of scenario.dailyRoutines; track routine.title) {
-          <div class="routine-row">
-            <div class="routine-icon">{{ routine.period === 'Reggel' ? '☀' : '☾' }}</div>
-            <div class="routine-copy">
-              <span class="routine-period">{{ routine.period }}</span>
-              <strong>{{ routine.title }}</strong>
-              <small>{{ routine.duration }} · {{ routine.frequency }}</small>
-              <p>{{ routine.note }}</p>
-              @if (flow.course(routine.courseId); as course) {
-                @if (flow.instructor(course.instructorId); as instructor) {
-                  <span class="course-source">{{ instructor.name }} · {{ course.category }}</span>
-                }
-              }
+  <div class="program-template-grid">
+    @for (template of programs.templates(); track template.id) {
+      @if (programs.sequenceById(template.morningSequenceId); as morning) {
+        @if (programs.sequenceById(template.eveningSequenceId); as evening) {
+          <article [class]="'program-template-card program-template-' + template.accent">
+            <div class="program-template-top">
+              <span class="hero-kicker">3 hónapos program</span>
+              <span class="optional-pill">12 + 12 alkalom</span>
             </div>
-          </div>
-        }
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="card-title-inline">
-        <h2>A teljes 12 hét</h2>
-        <span class="optional-pill">kattintható előnézet</span>
-      </div>
+            <h2>{{ template.title }}</h2>
+            <p>{{ template.description }}</p>
 
-      <div class="timeline">
-        @for (week of scenario.weeks; track week.week) {
-          <button class="timeline-row program-week week-preview-row" type="button" (click)="ui.openWeekPreview(week)">
-            <span class="week-number">{{ week.week }}</span>
-            <span>
-              <span class="month-badge">{{ week.month }}. hónap</span>
-              <strong>{{ week.title }}</strong>
-              <small>{{ week.focus }}</small>
-            </span>
-            <span class="lesson-state">⌃</span>
-          </button>
-        }
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Akikből a program épül</h2>
-      <div class="speaker-list">
-        @for (instructor of flow.instructors(); track instructor.id) {
-          <div class="speaker-row">
-            <div class="speaker-avatar">{{ instructor.name.charAt(0) }}</div>
-            <div>
-              <strong>{{ instructor.name }}</strong>
-              <small>{{ instructor.specialty }}</small>
-              <span>{{ instructor.courseIds.length }} kurzus a demo katalógusban</span>
+            <div class="program-track-summary">
+              <div>
+                <span class="routine-period">Reggel</span>
+                <strong>{{ morning.title }}</strong>
+                <small>{{ morning.creatorName }} · {{ morning.sessions.length }} alkalom</small>
+              </div>
+              <div>
+                <span class="routine-period">Este</span>
+                <strong>{{ evening.title }}</strong>
+                <small>{{ evening.creatorName }} · {{ evening.sessions.length }} alkalom</small>
+              </div>
             </div>
-          </div>
-        }
-      </div>
-    </div>
-  }
 
-  <div class="action-row">
-    <button class="secondary-action" type="button" (click)="ui.goStep(7)">Módosítom</button>
-    <button class="primary-action" type="button" (click)="ui.goStep(8)">Program indítása <span>→</span></button>
+            <button class="primary-action" type="button" (click)="choose(template.id)">
+              Ezt választom <span>→</span>
+            </button>
+          </article>
+        }
+      }
+    }
+  </div>
+
+  <div class="card program-order-note">
+    <strong>Mit lehet majd módosítani?</strong>
+    <p>
+      Nem az egyes alkalmak sorrendjét keverjük össze. A teljes reggeli vagy esti program lecserélhető egy másik, szintén felépített sorozatra.
+    </p>
   </div>
 </section>
-
-@if (ui.weekPreview(); as week) {
-  <div class="bottom-sheet-backdrop" (click)="ui.closeWeekPreview()">
-    <section class="bottom-sheet" (click)="$event.stopPropagation()">
-      <div class="sheet-handle"></div>
-
-      <div class="sheet-head">
-        <div>
-          <span class="eyebrow">{{ week.week }}. hét · {{ week.month }}. hónap</span>
-          <h2>{{ week.title }}</h2>
-        </div>
-        <button class="sheet-close" type="button" (click)="ui.closeWeekPreview()">×</button>
-      </div>
-
-      <p>{{ week.focus }}</p>
-
-      <div class="sheet-list">
-        @for (item of week.items; track item.title) {
-          <div class="sheet-item">
-            <span class="lesson-index">{{ item.type === 'video' ? '▶' : item.type === 'audio' ? '◉' : item.type === 'meditation' ? '☾' : '✦' }}</span>
-            <div>
-              @if (item.timeOfDay) {
-                <span class="day-time">
-                  {{ item.timeOfDay === 'morning'
-                    ? 'Reggeli gyakorlat'
-                    : item.timeOfDay === 'evening'
-                      ? 'Esti gyakorlat'
-                      : 'Napközbeni feladat' }}
-                </span>
-              }
-              <strong>{{ item.title }}</strong>
-              <small>{{ item.type }} · {{ item.duration || 'rövid' }}</small>
-              @if (flow.course(item.courseId); as course) {
-                <span class="course-source">{{ course.title }}</span>
-              }
-            </div>
-          </div>
-        }
-      </div>
-
-      <p class="sheet-note">Ez csak előnézet. Innen még nem indítható el a hét tartalma.</p>
-    </section>
-  </div>
-}

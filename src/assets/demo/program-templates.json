@@ -1,0 +1,591 @@
+{
+  "sequences": [
+    {
+      "id": "energy-breathwork-morning",
+      "title": "Reggeli energizáló breathwork",
+      "creatorName": "Barta Márk",
+      "period": "morning",
+      "description": "12 egymásra épülő reggeli légzőgyakorlat az energikusabb napkezdéshez.",
+      "sessions": [
+        {
+          "position": 1,
+          "title": "Ébredő légzés",
+          "type": "breathwork",
+          "duration": "6 perc",
+          "description": "Gyengéd indítás, amely felébreszti a figyelmet és a légzés ritmusát."
+        },
+        {
+          "position": 2,
+          "title": "Ritmus és jelenlét",
+          "type": "breathwork",
+          "duration": "7 perc",
+          "description": "Egyenletesebb légzés és testérzet kialakítása."
+        },
+        {
+          "position": 3,
+          "title": "Hosszabb kilégzés, tisztább fókusz",
+          "type": "breathwork",
+          "duration": "7 perc",
+          "description": "A kilégzés tudatosításával fókuszáltabb, stabilabb kezdés."
+        },
+        {
+          "position": 4,
+          "title": "Mellkasi nyitás",
+          "type": "breathwork",
+          "duration": "8 perc",
+          "description": "Légzéshez kapcsolt mellkasi és vállövi nyitás."
+        },
+        {
+          "position": 5,
+          "title": "Energiafelébresztő ciklus",
+          "type": "breathwork",
+          "duration": "8 perc",
+          "description": "Kissé aktívabb ciklus a reggeli energia megemelésére."
+        },
+        {
+          "position": 6,
+          "title": "Stabil ritmus",
+          "type": "breathwork",
+          "duration": "9 perc",
+          "description": "Az eddigi elemek rendezése egy stabil gyakorlattá."
+        },
+        {
+          "position": 7,
+          "title": "Légzés és testtartás",
+          "type": "breathwork",
+          "duration": "8 perc",
+          "description": "A légzés és a testtartás összekapcsolása."
+        },
+        {
+          "position": 8,
+          "title": "Fókuszált reggel",
+          "type": "breathwork",
+          "duration": "9 perc",
+          "description": "Rövid fókuszgyakorlat a légzésre építve."
+        },
+        {
+          "position": 9,
+          "title": "Dinamikus breathwork",
+          "type": "breathwork",
+          "duration": "10 perc",
+          "description": "Dinamikusabb gyakorlatsor a nap energikus indításához."
+        },
+        {
+          "position": 10,
+          "title": "Nyugodt erő",
+          "type": "breathwork",
+          "duration": "9 perc",
+          "description": "Aktivitás és nyugalom egyensúlyának gyakorlása."
+        },
+        {
+          "position": 11,
+          "title": "Energia és szándék",
+          "type": "breathwork",
+          "duration": "10 perc",
+          "description": "Légzés után rövid napi szándék megfogalmazása."
+        },
+        {
+          "position": 12,
+          "title": "Integrált reggeli rutin",
+          "type": "breathwork",
+          "duration": "10 perc",
+          "description": "A 12 alkalom elemeinek összefűzése saját reggeli rutinná."
+        }
+      ]
+    },
+    {
+      "id": "energy-dispenza-evening",
+      "title": "Esti Joe Dispenza meditációs sorozat",
+      "creatorName": "Joe Dispenza",
+      "period": "evening",
+      "description": "12 alkalmas esti meditációs sorozat a nap lezárásához és a figyelem befelé fordításához.",
+      "sessions": [
+        {
+          "position": 1,
+          "title": "Érkezés az estébe",
+          "type": "meditation",
+          "duration": "15 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 2,
+          "title": "Testi lecsendesedés",
+          "type": "meditation",
+          "duration": "18 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 3,
+          "title": "Figyelem visszavétele",
+          "type": "meditation",
+          "duration": "18 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 4,
+          "title": "A nap elengedése",
+          "type": "meditation",
+          "duration": "20 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 5,
+          "title": "Tér és csend",
+          "type": "meditation",
+          "duration": "20 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 6,
+          "title": "Belső állapot megfigyelése",
+          "type": "meditation",
+          "duration": "22 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 7,
+          "title": "Hála és lezárás",
+          "type": "meditation",
+          "duration": "20 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 8,
+          "title": "Lassítás lefekvés előtt",
+          "type": "meditation",
+          "duration": "22 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 9,
+          "title": "Figyelem a jelenben",
+          "type": "meditation",
+          "duration": "20 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 10,
+          "title": "Érzelmi lecsendesítés",
+          "type": "meditation",
+          "duration": "24 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 11,
+          "title": "Szándék a következő napra",
+          "type": "meditation",
+          "duration": "22 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        },
+        {
+          "position": 12,
+          "title": "Integrált esti meditáció",
+          "type": "meditation",
+          "duration": "25 perc",
+          "description": "Esti vezetett meditációs alkalom, amely a figyelmet a külső ingerekről fokozatosan befelé vezeti."
+        }
+      ]
+    },
+    {
+      "id": "confidence-morning",
+      "title": "Reggeli magabiztosság meditáció + megerősítés",
+      "creatorName": "Szalai Eszter",
+      "period": "morning",
+      "description": "12 rövid reggeli alkalom meditációval és hiteles, cselekvéshez kötött pozitív megerősítéssel.",
+      "sessions": [
+        {
+          "position": 1,
+          "title": "Stabil kiindulópont",
+          "type": "affirmation",
+          "duration": "7 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 2,
+          "title": "Egy erősség felidézése",
+          "type": "affirmation",
+          "duration": "7 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 3,
+          "title": "Bátrabb belső hang",
+          "type": "affirmation",
+          "duration": "8 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 4,
+          "title": "Testtartás és jelenlét",
+          "type": "affirmation",
+          "duration": "8 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 5,
+          "title": "Egy kis bátor lépés",
+          "type": "affirmation",
+          "duration": "8 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 6,
+          "title": "Saját érték felismerése",
+          "type": "affirmation",
+          "duration": "9 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 7,
+          "title": "Határozottabb szándék",
+          "type": "affirmation",
+          "duration": "8 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 8,
+          "title": "Bizonyítékok magadról",
+          "type": "affirmation",
+          "duration": "9 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 9,
+          "title": "Önmagad támogatása",
+          "type": "affirmation",
+          "duration": "9 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 10,
+          "title": "Nyugodt magabiztosság",
+          "type": "affirmation",
+          "duration": "10 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 11,
+          "title": "Cselekvés előtti fókusz",
+          "type": "affirmation",
+          "duration": "9 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        },
+        {
+          "position": 12,
+          "title": "Saját reggeli megerősítés",
+          "type": "affirmation",
+          "duration": "10 perc",
+          "description": "Rövid meditáció, majd egy személyes, hihető megerősítés és egy konkrét napi szándék."
+        }
+      ]
+    },
+    {
+      "id": "confidence-nlp-evening",
+      "title": "Esti NLP önbizalom-program",
+      "creatorName": "Lantos Dóra",
+      "period": "evening",
+      "description": "12 egymásra épülő, lefekvés előtti NLP-gyakorlat a belső párbeszéd és az önbizalom átkeretezésére.",
+      "sessions": [
+        {
+          "position": 1,
+          "title": "A nap visszanézése",
+          "type": "nlp",
+          "duration": "6 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 2,
+          "title": "Belső kép finomítása",
+          "type": "nlp",
+          "duration": "7 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 3,
+          "title": "Erőforrás-állapot felidézése",
+          "type": "nlp",
+          "duration": "7 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 4,
+          "title": "Egy helyzet átkeretezése",
+          "type": "nlp",
+          "duration": "8 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 5,
+          "title": "Belső hang hangolása",
+          "type": "nlp",
+          "duration": "8 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 6,
+          "title": "Sikerélmény lehorgonyzása",
+          "type": "nlp",
+          "duration": "8 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 7,
+          "title": "Perceptuális váltás",
+          "type": "nlp",
+          "duration": "9 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 8,
+          "title": "Korlátozó mondat újraírása",
+          "type": "nlp",
+          "duration": "9 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 9,
+          "title": "Jövőbeli próba",
+          "type": "nlp",
+          "duration": "9 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 10,
+          "title": "Erőforrások összekapcsolása",
+          "type": "nlp",
+          "duration": "10 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 11,
+          "title": "Nyugodt önbizalom",
+          "type": "nlp",
+          "duration": "10 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        },
+        {
+          "position": 12,
+          "title": "Integrált esti NLP",
+          "type": "nlp",
+          "duration": "10 perc",
+          "description": "Rövid esti NLP-gyakorlat, amely megtartja a szakmai sorrendet és az előző alkalomra épít."
+        }
+      ]
+    },
+    {
+      "id": "calm-morning",
+      "title": "Reggeli meditáció a lelki békéért",
+      "creatorName": "Szalai Eszter",
+      "period": "morning",
+      "description": "12 alkalmas, 10–20 perces reggeli meditációs út a nyugodtabb belső alapállapot felé.",
+      "sessions": [
+        {
+          "position": 1,
+          "title": "Csendes érkezés",
+          "type": "meditation",
+          "duration": "10 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 2,
+          "title": "Légzés megfigyelése",
+          "type": "meditation",
+          "duration": "11 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 3,
+          "title": "Testi jelenlét",
+          "type": "meditation",
+          "duration": "12 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 4,
+          "title": "Gondolatok elengedése",
+          "type": "meditation",
+          "duration": "12 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 5,
+          "title": "Érzelmeknek tér adni",
+          "type": "meditation",
+          "duration": "14 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 6,
+          "title": "Biztonságérzet",
+          "type": "meditation",
+          "duration": "14 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 7,
+          "title": "Nyugodt figyelem",
+          "type": "meditation",
+          "duration": "15 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 8,
+          "title": "Belső tér",
+          "type": "meditation",
+          "duration": "15 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 9,
+          "title": "Elfogadás gyakorlása",
+          "type": "meditation",
+          "duration": "16 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 10,
+          "title": "Lassú reggel",
+          "type": "meditation",
+          "duration": "18 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 11,
+          "title": "Belső egyensúly",
+          "type": "meditation",
+          "duration": "18 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        },
+        {
+          "position": 12,
+          "title": "Integrált békés reggel",
+          "type": "meditation",
+          "duration": "20 perc",
+          "description": "Reggeli vezetett meditáció, amely fokozatosan mélyíti a testi és érzelmi lecsendesedést."
+        }
+      ]
+    },
+    {
+      "id": "calm-evening",
+      "title": "Esti lecsendesítő meditáció",
+      "creatorName": "Barta Márk",
+      "period": "evening",
+      "description": "12 alkalmas esti meditáció más előadótól, a nap lezárásához és a pihenés előkészítéséhez.",
+      "sessions": [
+        {
+          "position": 1,
+          "title": "Naplezáró légzés",
+          "type": "meditation",
+          "duration": "12 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 2,
+          "title": "Feszültség leengedése",
+          "type": "meditation",
+          "duration": "13 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 3,
+          "title": "Testi súly érzékelése",
+          "type": "meditation",
+          "duration": "14 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 4,
+          "title": "Gondolatok lassítása",
+          "type": "meditation",
+          "duration": "14 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 5,
+          "title": "A nap elengedése",
+          "type": "meditation",
+          "duration": "15 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 6,
+          "title": "Nyugodt testscan",
+          "type": "meditation",
+          "duration": "16 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 7,
+          "title": "Csendes este",
+          "type": "meditation",
+          "duration": "16 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 8,
+          "title": "Érzelmi lecsengés",
+          "type": "meditation",
+          "duration": "17 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 9,
+          "title": "Pihenésre hangolódás",
+          "type": "meditation",
+          "duration": "18 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 10,
+          "title": "Lassú figyelem",
+          "type": "meditation",
+          "duration": "18 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 11,
+          "title": "Hála és elengedés",
+          "type": "meditation",
+          "duration": "19 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        },
+        {
+          "position": 12,
+          "title": "Integrált esti nyugalom",
+          "type": "meditation",
+          "duration": "20 perc",
+          "description": "Esti vezetett meditáció a testi feszültség csökkentésére és a pihenés előkészítésére."
+        }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "energetic",
+      "title": "Energikusabb mindennapok",
+      "subtitle": "Reggeli breathwork + esti meditáció",
+      "description": "Egy 3 hónapos csomag energikusabb napkezdéshez és tudatos esti lezáráshoz.",
+      "accent": "amber",
+      "morningSequenceId": "energy-breathwork-morning",
+      "eveningSequenceId": "energy-dispenza-evening"
+    },
+    {
+      "id": "confidence",
+      "title": "Magabiztosság",
+      "subtitle": "Reggeli meditáció és megerősítés + esti NLP",
+      "description": "Egy 3 hónapos program, amely reggel a belső stabilitást, este pedig az önbizalmat támogató NLP-folyamatot építi.",
+      "accent": "blue",
+      "morningSequenceId": "confidence-morning",
+      "eveningSequenceId": "confidence-nlp-evening"
+    },
+    {
+      "id": "calm",
+      "title": "Megnyugvás / lelki béke",
+      "subtitle": "Reggeli és esti meditáció két különböző előadótól",
+      "description": "Egy 3 hónapos, nyugodtabb ritmusra épülő meditációs csomag reggeli és esti gyakorlattal.",
+      "accent": "sage",
+      "morningSequenceId": "calm-morning",
+      "eveningSequenceId": "calm-evening"
+    }
+  ]
+}
