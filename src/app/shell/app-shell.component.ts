@@ -95,6 +95,10 @@ export class AppShellComponent implements OnInit {
     return this.router.url === path || this.router.url.startsWith(path + '/');
   }
 
+  isHome(): boolean {
+    return this.router.url.split('?')[0] === '/home';
+  }
+
   private scheduleScrollToTop(): void {
     requestAnimationFrame(() => { void this.scrollPageToTop(); });
     window.setTimeout(() => { void this.scrollPageToTop(); }, 80);

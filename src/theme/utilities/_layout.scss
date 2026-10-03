@@ -1687,3 +1687,26 @@
     justify-content: flex-start;
   }
 }
+
+
+.creator-edit-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 50%;
+  color: var(--portalumi-gold-deep);
+  background: var(--portalumi-page-soft);
+  font-size: 18px;
+}
+
+.creator-edit-icon:hover {
+  background: var(--portalumi-gold-soft);
+}
+
+.daily-feedback-callout {
+  background:
+    radial-gradient(circle at 96% 0%, rgba(210, 171, 104, 0.16), transparent 36%),
+    var(--portalumi-surface);
+}

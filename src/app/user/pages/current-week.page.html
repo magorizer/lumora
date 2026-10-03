@@ -59,12 +59,13 @@
       </div>
       <div class="mini-progress"><span [style.width.%]="programs.currentPosition() / 12 * 100"></span></div>
     </div>
-
-    <div class="card checkin-card">
-      <span class="hero-kicker">Időszakos checkpoint · opcionális</span>
-      <h2>Hogy működik neked a program?</h2>
-      <p>A részletes visszajelzés nem minden alkalom után jelenik meg.</p>
-      <button class="secondary-action" type="button" (click)="ui.goStep(10)">Rövid check-in</button>
+    <div class="card daily-feedback-callout">
+      <span class="hero-kicker">Napi lezárás</span>
+      <h2>Kész vagy a mai programmal?</h2>
+      <p>A nap végén mindig kérünk egy rövid visszajelzést és reflexiót.</p>
+      <button class="primary-action w-full" type="button" (click)="ui.goStep(10)">
+        Napi program befejezése <span>→</span>
+      </button>
     </div>
   }
 

@@ -12,7 +12,13 @@
           <span class="creator-status" [class.draft]="course.status === 'draft'">
             {{ course.status === 'draft' ? 'draft' : 'publikált' }}
           </span>
-          <button class="creator-secondary" type="button" (click)="creator.openCourseEditor()">Kurzus szerkesztése</button>
+          <button
+            class="creator-edit-icon"
+            type="button"
+            (click)="creator.openCourseEditor()"
+            aria-label="Kurzus szerkesztése"
+            title="Kurzus szerkesztése"
+          >✎</button>
         </div>
       </div>
 
@@ -76,8 +82,20 @@
           <span>{{ course.recommendation?.problems?.join(', ') || 'nincs megadva' }}</span>
         </div>
         <div>
-          <strong>Check-in</strong>
-          <span>{{ course.engagement?.checkpointCadence || 'nincs' }}</span>
+          <strong>Formátumok</strong>
+          <span>{{ course.format.join(', ') || 'nincs megadva' }}</span>
+        </div>
+        <div>
+          <strong>Előfeltételek</strong>
+          <span>{{ course.recommendation?.prerequisites?.join(', ') || 'nincs megadva' }}</span>
+        </div>
+        <div>
+          <strong>Ajánlott időpontok</strong>
+          <span>{{ course.recommendation?.preferredTimes?.join(', ') || course.bestTime }}</span>
+        </div>
+        <div>
+          <strong>Visszajelzés</strong>
+          <span>minden programnap után</span>
         </div>
       </div>
     </div>
@@ -147,6 +165,55 @@
               placeholder="önbizalom, kommunikáció, fókusz"
             >
           </label>
+
+          <label>
+            Formátumok
+            <input
+              [value]="course.format.join(', ')"
+              (input)="creator.updateCourse('format', $event)"
+              placeholder="videó, hanganyag, gyakorlat"
+            >
+          </label>
+
+          <div class="sheet-field-group">
+            <span class="sheet-section-label">Ajánlási metaadatok</span>
+
+            <label>
+              Célok
+              <input
+                [value]="course.recommendation?.goals?.join(', ') || ''"
+                (input)="creator.updateRecommendation('goals', $event)"
+                placeholder="önbizalom, fókusz, stresszkezelés"
+              >
+            </label>
+
+            <label>
+              Problémák
+              <input
+                [value]="course.recommendation?.problems?.join(', ') || ''"
+                (input)="creator.updateRecommendation('problems', $event)"
+                placeholder="halogatás, stressz, bizonytalanság"
+              >
+            </label>
+
+            <label>
+              Ajánlott időpontok
+              <input
+                [value]="course.recommendation?.preferredTimes?.join(', ') || course.bestTime"
+                (input)="creator.updateRecommendation('preferredTimes', $event)"
+                placeholder="reggel, este"
+              >
+            </label>
+
+            <label>
+              Előfeltételek
+              <input
+                [value]="course.recommendation?.prerequisites?.join(', ') || ''"
+                (input)="creator.updateRecommendation('prerequisites', $event)"
+                placeholder="pl. alapozó kurzus"
+              >
+            </label>
+          </div>
         </div>
 
         @if (creator.saveMessage()) {

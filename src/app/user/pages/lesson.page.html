@@ -105,28 +105,10 @@
       </button>
     </div>
 
-    <div class="card optional-reflection-card">
-      <div class="card-title-inline">
-        <h2>Rövid reflexió</h2>
-        <span class="optional-pill">opcionális</span>
-      </div>
-
-      <p>Ha most van egy felismerésed, érdemes eltenni későbbre.</p>
-
-      <textarea
-        class="text-field"
-        rows="3"
-        [value]="flow.answers().lessonReflection"
-        (input)="ui.setLessonReflection($event)"
-        placeholder="Mi volt ebből most a legfontosabb neked?"
-      ></textarea>
-    </div>
   }
 
   <div class="action-row">
-    <button class="secondary-action" type="button" (click)="ui.goStep(8)">Vissza a hétre</button>
-    <button class="primary-action" type="button" (click)="ui.goStep(8)">Lecke befejezése <span>→</span></button>
+    <button class="secondary-action" type="button" (click)="ui.goStep(8)">Vissza a mai programhoz</button>
+    <button class="primary-action" type="button" (click)="ui.goStep(8)">Lecke kész <span>→</span></button>
   </div>
-
-  <button class="later-link" type="button" (click)="ui.goStep(10)">Rövid visszajelzést adok</button>
 </section>

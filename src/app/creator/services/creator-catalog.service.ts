@@ -136,7 +136,7 @@ export class CreatorCatalogService {
   }
 
   updateCourse(
-    field: 'title' | 'category' | 'description' | 'level' | 'totalDuration' | 'bestTime' | 'topics',
+    field: 'title' | 'category' | 'description' | 'level' | 'totalDuration' | 'bestTime' | 'topics' | 'format',
     event: Event,
   ): void {
     const value = (event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value;
@@ -145,8 +145,8 @@ export class CreatorCatalogService {
     this.courses.update((courses) =>
       courses.map((course) => {
         if (course.id !== selectedId) return course;
-        if (field === 'topics') {
-          return { ...course, topics: value.split(',').map((item) => item.trim()).filter(Boolean) };
+        if (field === 'topics' || field === 'format') {
+          return { ...course, [field]: value.split(',').map((item) => item.trim()).filter(Boolean) };
         }
 
         return { ...course, [field]: value };
@@ -154,6 +154,31 @@ export class CreatorCatalogService {
     );
 
     this.saveMessage.set('Kurzus módosítva a demóban.');
+  }
+
+  updateRecommendation(
+    field: 'goals' | 'problems' | 'preferredTimes' | 'prerequisites',
+    event: Event,
+  ): void {
+    const value = (event.target as HTMLInputElement | HTMLTextAreaElement).value;
+    const selectedId = this.selectedCourseId();
+    const items = value.split(',').map((item) => item.trim()).filter(Boolean);
+
+    this.courses.update((courses) =>
+      courses.map((course) =>
+        course.id !== selectedId
+          ? course
+          : {
+              ...course,
+              recommendation: {
+                ...(course.recommendation ?? {}),
+                [field]: items,
+              },
+            },
+      ),
+    );
+
+    this.saveMessage.set('Ajánlási metaadatok módosítva.');
   }
 
   updateUnit(
