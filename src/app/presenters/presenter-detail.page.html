@@ -37,13 +37,14 @@
       @if (directory.coursesFor(person.name).length) {
         <div class="directory-list">
           @for (course of directory.coursesFor(person.name); track course.id) {
-            <div class="directory-card compact-directory-card static-directory-card">
+            <button class="directory-card compact-directory-card" type="button" (click)="coursePreview.set(course)">
               <span class="directory-icon">▶</span>
               <span class="directory-copy">
                 <strong>{{ course.title }}</strong>
                 <small>{{ course.category }} · {{ course.totalDuration }}</small>
               </span>
-            </div>
+              <span class="home-card-arrow">→</span>
+            </button>
           }
         </div>
       } @else {
@@ -72,6 +73,46 @@
             <div>
               <strong>{{ session.title }}</strong>
               <small>{{ session.duration }} · {{ session.type }}</small>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+}
+
+
+@if (coursePreview(); as course) {
+  <div class="bottom-sheet-backdrop" (click)="coursePreview.set(null)">
+    <section class="bottom-sheet" (click)="$event.stopPropagation()">
+      <div class="sheet-handle"></div>
+
+      <div class="sheet-head">
+        <div>
+          <span class="eyebrow">{{ course.category }}</span>
+          <h2>{{ course.title }}</h2>
+        </div>
+        <button class="sheet-close" type="button" (click)="coursePreview.set(null)">×</button>
+      </div>
+
+      <p>{{ course.description }}</p>
+
+      <div class="tag-row mt-4">
+        <span class="tag">{{ course.level }}</span>
+        <span class="tag">{{ course.totalDuration }}</span>
+        <span class="tag">{{ course.bestTime }}</span>
+      </div>
+
+      <div class="sequence-list mt-4">
+        @for (unit of course.units; track unit.id; let index = $index) {
+          <div class="sequence-row">
+            <span class="sequence-number">{{ index + 1 }}</span>
+            <div>
+              <strong>{{ unit.title }}</strong>
+              <small>{{ unit.duration }} · {{ unit.type }}</small>
+              @if (unit.summary) {
+                <p class="hint">{{ unit.summary }}</p>
+              }
             </div>
           </div>
         }

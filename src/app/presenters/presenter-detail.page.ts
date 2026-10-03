@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ProgramSequence } from '../core/models/content.models';
+import { Course, ProgramSequence } from '../core/models/content.models';
 import { PresenterDirectoryService, PresenterSummary } from './presenter-directory.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class PresenterDetailPage implements OnInit {
 
   readonly presenter = signal<PresenterSummary | null>(null);
   readonly preview = signal<ProgramSequence | null>(null);
+  readonly coursePreview = signal<Course | null>(null);
 
   async ngOnInit(): Promise<void> {
     await this.directory.load();
