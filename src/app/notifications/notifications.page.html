@@ -1,0 +1,69 @@
+<section class="screen notifications-screen">
+  <div class="eyebrow">Beállítások</div>
+  <h1>Értesítések</h1>
+
+  <div class="notification-window-card">
+    <p class="notification-window-copy">
+      Az értesítések naponta
+      <input
+        class="hour-input"
+        type="number"
+        min="0"
+        max="23"
+        [value]="startHour()"
+        (input)="setHour('start', $event)"
+        aria-label="Értesítések kezdete"
+      >
+      és
+      <input
+        class="hour-input"
+        type="number"
+        min="0"
+        max="23"
+        [value]="endHour()"
+        (input)="setHour('end', $event)"
+        aria-label="Értesítések vége"
+      >
+      óra között érkeznek.
+    </p>
+
+    <div class="notification-info">
+      <span>i</span>
+      <p>
+        Ahogy haladsz a programmal, ezek az értesítések változhatnak.
+        Ha valamelyik nem tetszik, átírhatod vagy törölheted.
+      </p>
+    </div>
+  </div>
+
+  <div class="notification-list">
+    @for (item of notifications(); track item.id; let index = $index) {
+      <article class="notification-card">
+        <div class="notification-card-head">
+          <span class="optional-pill">Demo értesítés {{ index + 1 }}</span>
+          <button
+            class="notification-delete"
+            type="button"
+            (click)="removeNotification(item.id)"
+            aria-label="Értesítés törlése"
+            title="Törlés"
+          >×</button>
+        </div>
+
+        <textarea
+          rows="3"
+          [value]="item.text"
+          (input)="updateNotification(item.id, $event)"
+          aria-label="Értesítés szövege"
+        ></textarea>
+      </article>
+    }
+
+    @if (!notifications().length) {
+      <div class="card empty-notification-state">
+        <strong>Nincs aktív demo értesítés.</strong>
+        <p>Később a program alapján automatikusan is kerülhetnek ide új értesítések.</p>
+      </div>
+    }
+  </div>
+</section>
