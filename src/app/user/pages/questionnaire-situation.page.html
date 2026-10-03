@@ -1,0 +1,29 @@
+<section class="screen screen-step-2">
+            <div class="eyebrow">Adaptív kérdőív</div>
+            <h1>Hol tartasz most?</h1>
+            <p class="lead">Pár rövid kérdés, hogy jobban megértsünk.</p>
+
+            <div class="card">
+              <h2>Jelenlegi helyzet</h2>
+              <div class="option-grid">
+                @for (item of ui.situationOptions; track item) {
+                  <button class="option" [class.selected]="flow.answers().situation === item" (click)="flow.patch({ situation: item })">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Mi akadályoz leginkább?</h2>
+              <p class="hint">Többet is kijelölhetsz.</p>
+              <div class="option-grid">
+                @for (item of ui.obstacleOptions; track item) {
+                  <button class="option" [class.selected]="flow.answers().obstacles.includes(item)" (click)="flow.toggleObstacle(item)">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button class="secondary-action" (click)="ui.goStep(1)">← Vissza</button>
+              <button class="primary-action" (click)="ui.goStep(3)">Tovább <span>→</span></button>
+            </div>
+          </section>

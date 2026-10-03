@@ -1,75 +1,49 @@
-// Lumora theme tokens. Product components should reference Ionic or --app-* variables only.
 :root {
-  --ion-color-primary: #5f7161;
-  --ion-color-primary-rgb: 95, 113, 97;
+  --ion-color-primary: #b98c47;
+  --ion-color-primary-rgb: 185, 140, 71;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #546356;
-  --ion-color-primary-tint: #6f7f71;
+  --ion-color-primary-shade: #a47c3f;
+  --ion-color-primary-tint: #c1975a;
 
-  --ion-color-secondary: #927b66;
-  --ion-color-secondary-rgb: 146, 123, 102;
-  --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #806c5a;
-  --ion-color-secondary-tint: #9d8875;
-
-  --ion-color-success: #4f7a63;
-  --ion-color-warning: #9a7444;
-  --ion-color-danger: #a65555;
-
-  --app-page-bg: #f4f2ed;
-  --app-surface: #fffdf8;
+  --app-page-bg: #fbf7ef;
+  --app-surface: #fffdf9;
   --app-surface-elevated: #ffffff;
-  --app-text: #202520;
-  --app-text-muted: #687068;
-  --app-border: #dedfd8;
-  --app-primary-soft: #e8eee7;
-  --app-shadow: 0 18px 50px rgba(37, 45, 38, 0.08);
-}
+  --app-text: #14202b;
+  --app-text-muted: #667286;
+  --app-border: #eadfce;
+  --app-primary-soft: #f5e8d0;
+  --app-shadow: 0 24px 70px rgba(55, 45, 32, 0.12);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ion-color-primary: #9fb4a1;
-    --ion-color-primary-rgb: 159, 180, 161;
-    --ion-color-primary-contrast: #152017;
-    --ion-color-primary-contrast-rgb: 21, 32, 23;
-    --ion-color-primary-shade: #8c9e8e;
-    --ion-color-primary-tint: #a9bcae;
-
-    --ion-color-secondary: #c2aa91;
-    --ion-color-secondary-rgb: 194, 170, 145;
-    --ion-color-secondary-contrast: #211a14;
-    --ion-color-secondary-contrast-rgb: 33, 26, 20;
-    --ion-color-secondary-shade: #ab9680;
-    --ion-color-secondary-tint: #c8b39c;
-
-    --app-page-bg: #111411;
-    --app-surface: #181c18;
-    --app-surface-elevated: #202520;
-    --app-text: #f3f2ed;
-    --app-text-muted: #aeb6ad;
-    --app-border: #303730;
-    --app-primary-soft: #263229;
-    --app-shadow: none;
-  }
+  --portalumi-page: #fbf7ef;
+  --portalumi-page-soft: #f7f0e5;
+  --portalumi-surface: #fffdf9;
+  --portalumi-ink: #14202b;
+  --portalumi-ink-soft: #26364a;
+  --portalumi-muted: #667286;
+  --portalumi-muted-light: #8c93a0;
+  --portalumi-border: #eadfce;
+  --portalumi-border-strong: #decfb8;
+  --portalumi-gold: #c19855;
+  --portalumi-gold-deep: #9d7437;
+  --portalumi-gold-soft: #f5e8d0;
+  --portalumi-on-gold: #fffdf9;
+  --portalumi-progress-track: #e9e2d7;
+  --portalumi-glow: rgba(202, 166, 104, 0.22);
+  --portalumi-focus-ring: rgba(193, 152, 85, 0.18);
+  --portalumi-shadow: 0 30px 80px rgba(62, 50, 34, 0.14);
+  --portalumi-card-shadow: 0 12px 36px rgba(73, 58, 39, 0.07);
+  --portalumi-button-shadow: rgba(157, 116, 55, 0.22);
+  --portalumi-portal-sky: #f4deaf;
+  --portalumi-portal-haze: #ead3ae;
+  --portalumi-sun: #f6cf7c;
+  --portalumi-hill: #cfb27f;
+  --portalumi-hill-soft: #dcc9a8;
 }
 
 .color-primary { color: var(--ion-color-primary); }
-.color-primary-contrast { color: var(--ion-color-primary-contrast); }
-.color-primary-tint { color: var(--ion-color-primary-tint); }
-.color-secondary { color: var(--ion-color-secondary); }
-.color-secondary-contrast { color: var(--ion-color-secondary-contrast); }
-.color-secondary-shade { color: var(--ion-color-secondary-shade); }
-.color-success { color: var(--ion-color-success); }
-.color-warning { color: var(--ion-color-warning); }
-.color-danger { color: var(--ion-color-danger); }
-.color-medium { color: var(--ion-color-medium); }
-.color-light { color: var(--ion-color-light); }
-.color-ion-text { color: var(--ion-text-color); }
 .color-text { color: var(--app-text); }
 .color-text-muted { color: var(--app-text-muted); }
 .bg-page { background: var(--app-page-bg); }
 .bg-surface { background: var(--app-surface); }
-.bg-surface-elevated { background: var(--app-surface-elevated); }
 .border-color { border-color: var(--app-border); }

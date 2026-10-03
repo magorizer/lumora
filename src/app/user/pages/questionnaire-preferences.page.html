@@ -1,0 +1,37 @@
+<section class="screen screen-step-3">
+            <div class="eyebrow">Adaptív kérdőív</div>
+            <h1>Mi illik hozzád?</h1>
+            <p class="lead">Állítsuk be a tempót és a formát.</p>
+
+            <div class="card">
+              <h2>Hetente mennyi időt tudsz rászánni?</h2>
+              <div class="option-grid">
+                @for (item of ui.timeOptions; track item) {
+                  <button class="option" [class.selected]="flow.answers().weeklyTime === item" (click)="flow.patch({ weeklyTime: item })">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Milyen formában tanulnál szívesen?</h2>
+              <div class="option-grid">
+                @for (item of ui.formatOptions; track item) {
+                  <button class="option" [class.selected]="flow.answers().formats.includes(item)" (click)="flow.toggleFormat(item)">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Milyen tempó lenne jó?</h2>
+              <div class="option-grid compact">
+                @for (item of ui.paceOptions; track item) {
+                  <button class="option" [class.selected]="flow.answers().pace === item" (click)="flow.patch({ pace: item })">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button class="secondary-action" (click)="ui.goStep(2)">← Vissza</button>
+              <button class="primary-action" (click)="ui.goStep(4)">Tovább <span>→</span></button>
+            </div>
+          </section>

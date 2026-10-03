@@ -1,0 +1,393 @@
+{
+  "instructors": [
+    {
+      "id": "lantos-dora",
+      "name": "Lantos Dóra",
+      "role": "NLP és kommunikációs tréner · demo profil",
+      "specialty": "NLP, perspektívaváltás, belső nyelv",
+      "bio": "Rövid, gyakorlatias NLP-eszközökre épülő demo tartalmak.",
+      "courseIds": [
+        "nlp-foundations",
+        "perceptual-positions",
+        "nlp-evening-meditation"
+      ]
+    },
+    {
+      "id": "barta-mark",
+      "name": "Barta Márk",
+      "role": "Fókusz és stresszkezelés · demo profil",
+      "specialty": "reggeli rutin, fókusz, idegrendszeri lecsendesítés",
+      "bio": "Mikrogyakorlatok a nap indításához, fókuszhoz és stresszcsökkentéshez.",
+      "courseIds": [
+        "morning-focus-5",
+        "focus-energy",
+        "stress-reset"
+      ]
+    },
+    {
+      "id": "szalai-eszter",
+      "name": "Szalai Eszter",
+      "role": "Önismereti és készségfejlesztő tréner · demo profil",
+      "specialty": "önbizalom, asszertivitás, szokások",
+      "bio": "Önbizalom-, határhúzás- és szokásépítő demo programok.",
+      "courseIds": [
+        "confidence-in-action",
+        "boundaries-assertiveness",
+        "micro-habits"
+      ]
+    }
+  ],
+  "courses": [
+    {
+      "id": "nlp-foundations",
+      "instructorId": "lantos-dora",
+      "title": "NLP alapok a hétköznapokban",
+      "category": "NLP",
+      "topics": [
+        "belső reprezentáció",
+        "állapotváltás",
+        "nyelvi minták"
+      ],
+      "description": "Bevezető kurzus az NLP egyszerű, hétköznapi alkalmazásához.",
+      "format": [
+        "videó",
+        "gyakorlat"
+      ],
+      "level": "kezdő",
+      "totalDuration": "58 perc",
+      "bestTime": "napközben",
+      "units": [
+        {
+          "id": "nlp-f-1",
+          "title": "Hogyan építünk belső képet?",
+          "type": "video",
+          "duration": "14 perc"
+        },
+        {
+          "id": "nlp-f-2",
+          "title": "Állapotváltás 3 lépésben",
+          "type": "exercise",
+          "duration": "10 perc"
+        },
+        {
+          "id": "nlp-f-3",
+          "title": "Nyelvi minták és átkeretezés",
+          "type": "video",
+          "duration": "18 perc"
+        }
+      ]
+    },
+    {
+      "id": "perceptual-positions",
+      "instructorId": "lantos-dora",
+      "title": "Perceptuális pozíciók",
+      "category": "NLP · kapcsolatok",
+      "topics": [
+        "perspektívaváltás",
+        "konfliktus",
+        "empátia"
+      ],
+      "description": "Ugyanazt a helyzetet saját, másik és külső nézőpontból dolgozza fel.",
+      "format": [
+        "videó",
+        "vezetett gyakorlat"
+      ],
+      "level": "középhaladó",
+      "totalDuration": "46 perc",
+      "bestTime": "délután vagy este",
+      "units": [
+        {
+          "id": "pp-1",
+          "title": "A három nézőpont",
+          "type": "video",
+          "duration": "12 perc"
+        },
+        {
+          "id": "pp-2",
+          "title": "Vezetett perspektívaváltás",
+          "type": "exercise",
+          "duration": "18 perc"
+        },
+        {
+          "id": "pp-3",
+          "title": "Integráció",
+          "type": "audio",
+          "duration": "8 perc"
+        }
+      ]
+    },
+    {
+      "id": "nlp-evening-meditation",
+      "instructorId": "lantos-dora",
+      "title": "NLP esti lecsendesedés",
+      "category": "NLP · meditáció",
+      "topics": [
+        "lecsendesedés",
+        "naplezárás",
+        "mentális átkeretezés"
+      ],
+      "description": "Lefekvés előtti rövid vezetett meditáció, amely a nap élményeit nyugodtabb keretbe rendezi.",
+      "format": [
+        "meditáció",
+        "hanganyag"
+      ],
+      "level": "minden szint",
+      "totalDuration": "12 perc / alkalom",
+      "bestTime": "lefekvés előtt",
+      "units": [
+        {
+          "id": "night-1",
+          "title": "A nap elengedése",
+          "type": "meditation",
+          "duration": "12 perc"
+        },
+        {
+          "id": "night-2",
+          "title": "Erőforrások felidézése",
+          "type": "meditation",
+          "duration": "10 perc"
+        },
+        {
+          "id": "night-3",
+          "title": "Holnapi szándék",
+          "type": "meditation",
+          "duration": "8 perc"
+        }
+      ]
+    },
+    {
+      "id": "morning-focus-5",
+      "instructorId": "barta-mark",
+      "title": "Reggeli 5 perces indító fókusz",
+      "category": "rutin · fókusz",
+      "topics": [
+        "szándék",
+        "energia",
+        "prioritás"
+      ],
+      "description": "3–5 perces rövid reggeli indító program, hogy a nap ne automatikusan kezdődjön.",
+      "format": [
+        "hanganyag",
+        "mikrogyakorlat"
+      ],
+      "level": "minden szint",
+      "totalDuration": "5 perc / alkalom",
+      "bestTime": "ébredés után",
+      "units": [
+        {
+          "id": "morning-1",
+          "title": "3 perces jelenlét",
+          "type": "audio",
+          "duration": "3 perc"
+        },
+        {
+          "id": "morning-2",
+          "title": "Mai egyetlen fókusz",
+          "type": "exercise",
+          "duration": "2 perc"
+        },
+        {
+          "id": "morning-3",
+          "title": "5 perces teljes indító",
+          "type": "audio",
+          "duration": "5 perc"
+        }
+      ]
+    },
+    {
+      "id": "focus-energy",
+      "instructorId": "barta-mark",
+      "title": "Fókusz és energiamenedzsment",
+      "category": "fókusz",
+      "topics": [
+        "figyelem",
+        "prioritások",
+        "energiablokkok"
+      ],
+      "description": "Gyakorlati program a szétszórt figyelem rendezésére.",
+      "format": [
+        "videó",
+        "feladat"
+      ],
+      "level": "kezdő",
+      "totalDuration": "64 perc",
+      "bestTime": "délelőtt",
+      "units": [
+        {
+          "id": "focus-1",
+          "title": "Mi viszi el a figyelmed?",
+          "type": "video",
+          "duration": "15 perc"
+        },
+        {
+          "id": "focus-2",
+          "title": "Egy fókuszblokk",
+          "type": "exercise",
+          "duration": "20 perc"
+        },
+        {
+          "id": "focus-3",
+          "title": "Heti energiatérkép",
+          "type": "exercise",
+          "duration": "15 perc"
+        }
+      ]
+    },
+    {
+      "id": "stress-reset",
+      "instructorId": "barta-mark",
+      "title": "Stressz Reset",
+      "category": "stresszkezelés",
+      "topics": [
+        "feszültség",
+        "légzés",
+        "testi lecsendesítés"
+      ],
+      "description": "Rövid, napközben is használható lecsendesítő gyakorlatok.",
+      "format": [
+        "hanganyag",
+        "gyakorlat"
+      ],
+      "level": "minden szint",
+      "totalDuration": "36 perc",
+      "bestTime": "szükség szerint",
+      "units": [
+        {
+          "id": "stress-1",
+          "title": "90 másodperces reset",
+          "type": "audio",
+          "duration": "2 perc"
+        },
+        {
+          "id": "stress-2",
+          "title": "Testi feszültség térképe",
+          "type": "exercise",
+          "duration": "8 perc"
+        },
+        {
+          "id": "stress-3",
+          "title": "Vissza a jelenbe",
+          "type": "audio",
+          "duration": "7 perc"
+        }
+      ]
+    },
+    {
+      "id": "confidence-in-action",
+      "instructorId": "szalai-eszter",
+      "title": "Önbizalom gyakorlatban",
+      "category": "önismeret · önbizalom",
+      "topics": [
+        "belső erőforrás",
+        "önmegerősítés",
+        "cselekvés"
+      ],
+      "description": "Nem motivációs beszéd, hanem kis viselkedési kísérletek az önbizalom erősítésére.",
+      "format": [
+        "videó",
+        "mini kihívás"
+      ],
+      "level": "kezdő",
+      "totalDuration": "72 perc",
+      "bestTime": "napközben",
+      "units": [
+        {
+          "id": "conf-1",
+          "title": "Belső erő alapjai",
+          "type": "video",
+          "duration": "12 perc"
+        },
+        {
+          "id": "conf-2",
+          "title": "Egy fokkal bátrabb reakció",
+          "type": "exercise",
+          "duration": "15 perc"
+        },
+        {
+          "id": "conf-3",
+          "title": "Bizonyítékgyűjtés magadról",
+          "type": "exercise",
+          "duration": "10 perc"
+        }
+      ]
+    },
+    {
+      "id": "boundaries-assertiveness",
+      "instructorId": "szalai-eszter",
+      "title": "Határok és asszertivitás",
+      "category": "kommunikáció",
+      "topics": [
+        "nemet mondás",
+        "határok",
+        "tiszta kérés"
+      ],
+      "description": "Konkrét kommunikációs gyakorlatok a tisztább határokhoz.",
+      "format": [
+        "videó",
+        "szerepgyakorlat"
+      ],
+      "level": "középhaladó",
+      "totalDuration": "81 perc",
+      "bestTime": "napközben",
+      "units": [
+        {
+          "id": "bound-1",
+          "title": "Hol csúsznak el a határaid?",
+          "type": "video",
+          "duration": "16 perc"
+        },
+        {
+          "id": "bound-2",
+          "title": "Tiszta nem",
+          "type": "exercise",
+          "duration": "15 perc"
+        },
+        {
+          "id": "bound-3",
+          "title": "Kérés vád nélkül",
+          "type": "exercise",
+          "duration": "12 perc"
+        }
+      ]
+    },
+    {
+      "id": "micro-habits",
+      "instructorId": "szalai-eszter",
+      "title": "Mikroszokások 30 napra",
+      "category": "szokások",
+      "topics": [
+        "következetesség",
+        "mikrolépés",
+        "visszacsatolás"
+      ],
+      "description": "Apró, ismételhető lépésekből épít tartósabb rutint.",
+      "format": [
+        "videó",
+        "napi feladat"
+      ],
+      "level": "minden szint",
+      "totalDuration": "55 perc + napi 2 perc",
+      "bestTime": "rugalmas",
+      "units": [
+        {
+          "id": "habit-1",
+          "title": "A túl kicsi lépés ereje",
+          "type": "video",
+          "duration": "11 perc"
+        },
+        {
+          "id": "habit-2",
+          "title": "2 perces szabály",
+          "type": "exercise",
+          "duration": "5 perc"
+        },
+        {
+          "id": "habit-3",
+          "title": "30 napos mini tracker",
+          "type": "exercise",
+          "duration": "2 perc / nap"
+        }
+      ]
+    }
+  ]
+}

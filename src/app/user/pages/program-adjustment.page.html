@@ -1,0 +1,35 @@
+<section class="screen screen-step-7">
+            <div class="eyebrow">Program finomhangolása</div>
+            <h1>Igazítsuk jobban hozzád.</h1>
+            <p class="lead">Válassz egy irányt, és a demo azonnal frissíti a javaslatot.</p>
+
+            <div class="card">
+              <h2>Mit szeretnél módosítani?</h2>
+              <div class="option-grid">
+                @for (item of ui.adjustmentOptions; track item) {
+                  <button class="option" [class.selected]="flow.answers().adjustment === item" (click)="flow.patch({ adjustment: item })">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Mi változott?</h2>
+              <div class="option-grid">
+                @for (item of ui.adjustmentReasons; track item) {
+                  <button class="option" [class.selected]="flow.answers().adjustmentReason === item" (click)="flow.patch({ adjustmentReason: item })">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="hero-card">
+              <span class="hero-kicker">Javasolt módosítás</span>
+              <h2>{{ flow.answers().adjustment }}</h2>
+              <p>{{ flow.answers().adjustmentReason }}</p>
+              <div class="tag-row"><span class="tag">heti 30–45 perc</span><span class="tag">hanganyag + mini feladat</span></div>
+            </div>
+
+            <div class="action-row">
+              <button class="secondary-action" (click)="ui.goStep(6)">Mégsem</button>
+              <button class="primary-action" (click)="ui.goStep(8)">Frissítés <span>→</span></button>
+            </div>
+          </section>

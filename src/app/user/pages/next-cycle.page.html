@@ -1,0 +1,27 @@
+<section class="screen screen-step-12">
+            <div class="eyebrow">Következő 2–3 hónap</div>
+            <h1>Itt az újratervezett személyes útvonalad.</h1>
+
+            @if (flow.scenario(); as scenario) {
+              <div class="hero-card">
+                <span class="hero-kicker">Új fókusz</span>
+                <h2>{{ scenario.nextCycle.focus }}</h2>
+                <p>{{ scenario.nextCycle.description }}</p>
+                <div class="tag-row"><span class="tag">{{ scenario.nextCycle.weeklyTime }}</span><span class="tag">{{ scenario.nextCycle.format }}</span></div>
+              </div>
+
+              <div class="card">
+                <h2>Az új ciklus 4 lépése</h2>
+                <div class="timeline">
+                  @for (item of scenario.nextCycle.steps; track item; let index = $index) {
+                    <div class="timeline-row"><span class="week-number">{{ index + 1 }}</span><div><strong>{{ item }}</strong><small>fokozatos, gyakorlati lépés</small></div></div>
+                  }
+                </div>
+              </div>
+            }
+
+            <div class="action-row">
+              <button class="secondary-action" (click)="ui.goStep(6)">Még átnézem</button>
+              <button class="primary-action" (click)="ui.restart()">Demo újraindítása <span>↻</span></button>
+            </div>
+          </section>

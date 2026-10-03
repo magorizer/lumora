@@ -1,0 +1,674 @@
+{
+  "scenarios": [
+    {
+      "id": "confidence",
+      "title": "Önbizalom, fókusz és belső stabilitás",
+      "subtitle": "Három hónapos vegyes program 3 előadó 9 kurzusából, napi mikro-rutinokkal és heti fő feladatokkal.",
+      "focus": "önbizalom + fókusz + NLP",
+      "summary": "Reggeli 3–5 perc, heti 2–3 fő tartalom, esti 8–12 perces lecsendesedés.",
+      "dailyRoutines": [
+        {
+          "period": "Reggel",
+          "title": "5 perces indító fókusz",
+          "courseId": "morning-focus-5",
+          "duration": "3–5 perc",
+          "frequency": "hétfő–péntek",
+          "note": "Ébredés után: jelenlét + a nap egyetlen fontos fókusza."
+        },
+        {
+          "period": "Lefekvés előtt",
+          "title": "NLP esti lecsendesedés",
+          "courseId": "nlp-evening-meditation",
+          "duration": "8–12 perc",
+          "frequency": "heti 5 alkalom",
+          "note": "Naplezárás, átkeretezés és a másnapi szándék rövid felépítése."
+        }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "month": 1,
+          "title": "Kiindulópont és napi ritmus",
+          "focus": "Először legyen egy egyszerű reggeli és esti kapaszkodó.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Mi történik most valójában?",
+              "duration": "12 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Személyes kiindulópont térképe",
+              "duration": "15 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "month": 1,
+          "title": "Stressz és figyelem",
+          "focus": "Vedd észre, mikor csúszik szét a figyelmed.",
+          "items": [
+            {
+              "type": "audio",
+              "title": "90 másodperces reset",
+              "duration": "2 perc",
+              "courseId": "stress-reset",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Heti energiatérkép",
+              "duration": "15 perc",
+              "courseId": "focus-energy",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "month": 1,
+          "title": "Önbizalom gyakorlatban",
+          "focus": "Próbálj ki egy fokkal bátrabb reakciót.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Belső erő alapjai",
+              "duration": "12 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Egy fokkal bátrabb reakció",
+              "duration": "15 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "feedback",
+              "title": "Heti check-in",
+              "duration": "3 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "month": 1,
+          "title": "NLP alapok",
+          "focus": "Ismerd fel, hogyan alakítod belül ugyanazt a helyzetet.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Hogyan építünk belső képet?",
+              "duration": "14 perc",
+              "courseId": "nlp-foundations",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Állapotváltás 3 lépésben",
+              "duration": "10 perc",
+              "courseId": "nlp-foundations",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "month": 2,
+          "title": "Fókusz visszavétele",
+          "focus": "Egy hétre csökkentsd le a fontos dolgok számát.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Mi viszi el a figyelmed?",
+              "duration": "15 perc",
+              "courseId": "focus-energy",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Egy fókuszblokk",
+              "duration": "20 perc",
+              "courseId": "focus-energy",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "month": 2,
+          "title": "Perspektívaváltás",
+          "focus": "Nézz rá egy nehéz helyzetre három különböző nézőpontból.",
+          "items": [
+            {
+              "type": "video",
+              "title": "A három nézőpont",
+              "duration": "12 perc",
+              "courseId": "perceptual-positions",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Vezetett perspektívaváltás",
+              "duration": "18 perc",
+              "courseId": "perceptual-positions",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "month": 2,
+          "title": "Határok",
+          "focus": "Gyakorolj egy tiszta nemet vagy egy tiszta kérést.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Hol csúsznak el a határaid?",
+              "duration": "16 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Tiszta nem",
+              "duration": "15 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "month": 2,
+          "title": "Átkeretezés",
+          "focus": "Figyeld meg a belső mondatokat, majd építs alternatív keretet.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Nyelvi minták és átkeretezés",
+              "duration": "18 perc",
+              "courseId": "nlp-foundations",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Saját átkeretező mondatok",
+              "duration": "10 perc",
+              "courseId": "nlp-foundations",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 9,
+          "month": 3,
+          "title": "Stresszhelyzetben is visszatérni",
+          "focus": "A cél nem a stressz eltüntetése, hanem a gyorsabb visszatérés.",
+          "items": [
+            {
+              "type": "audio",
+              "title": "Vissza a jelenbe",
+              "duration": "7 perc",
+              "courseId": "stress-reset",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Testi feszültség térképe",
+              "duration": "8 perc",
+              "courseId": "stress-reset",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 10,
+          "month": 3,
+          "title": "Mikroszokások",
+          "focus": "Csak olyan szokást építs, ami rossz napon is elvégezhető.",
+          "items": [
+            {
+              "type": "video",
+              "title": "A túl kicsi lépés ereje",
+              "duration": "11 perc",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "2 perces szabály",
+              "duration": "5 perc",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 11,
+          "month": 3,
+          "title": "Integrációs hét",
+          "focus": "Kösd össze az önbizalom, fókusz és kommunikáció gyakorlatait.",
+          "items": [
+            {
+              "type": "exercise",
+              "title": "3 napos integrációs kihívás",
+              "duration": "20 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "audio",
+              "title": "Erőforrások felidézése",
+              "duration": "10 perc",
+              "courseId": "nlp-evening-meditation",
+              "timeOfDay": "evening",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 12,
+          "month": 3,
+          "title": "Lezárás és következő irány",
+          "focus": "Nézd meg, mi maradt veled a 12 hétből.",
+          "items": [
+            {
+              "type": "exercise",
+              "title": "12 hetes visszatekintés",
+              "duration": "20 perc",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "feedback",
+              "title": "Ciklus végi review",
+              "duration": "8 perc",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        }
+      ],
+      "nextCycle": {
+        "focus": "kapcsolatok + kommunikáció",
+        "description": "A következő ciklus a megszerzett belső stabilitást kapcsolati és kommunikációs helyzetekbe viszi át.",
+        "weeklyTime": "heti 45–60 perc + mikro-rutinok",
+        "format": "videó + hanganyag + gyakorlat + meditáció",
+        "steps": [
+          "Kapcsolódási minták",
+          "Asszertív alapok",
+          "NLP nézőpontváltás",
+          "Kapcsolati mini kihívások"
+        ]
+      }
+    },
+    {
+      "id": "relationships",
+      "title": "Kapcsolatok, kommunikáció és önbizalom",
+      "subtitle": "Három hónapos vegyes program a tisztább kapcsolódásért, ugyanabból a 9 kurzusos demo katalógusból.",
+      "focus": "kapcsolatok + kommunikáció + NLP",
+      "summary": "Reggeli fókusz, heti kommunikációs gyakorlatok és lefekvés előtti lecsendesedés.",
+      "dailyRoutines": [
+        {
+          "period": "Reggel",
+          "title": "5 perces indító fókusz",
+          "courseId": "morning-focus-5",
+          "duration": "3–5 perc",
+          "frequency": "hétfő–péntek",
+          "note": "Ébredés után: jelenlét + a nap egyetlen fontos fókusza."
+        },
+        {
+          "period": "Lefekvés előtt",
+          "title": "NLP esti lecsendesedés",
+          "courseId": "nlp-evening-meditation",
+          "duration": "8–12 perc",
+          "frequency": "heti 5 alkalom",
+          "note": "Naplezárás, átkeretezés és a másnapi szándék rövid felépítése."
+        }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "month": 1,
+          "title": "Kapcsolati térkép",
+          "focus": "Lásd tisztábban, mely kapcsolatokban szeretnél változást.",
+          "items": [
+            {
+              "type": "exercise",
+              "title": "Kapcsolati térkép",
+              "duration": "15 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "audio",
+              "title": "3 perces jelenlét",
+              "duration": "3 perc",
+              "courseId": "morning-focus-5",
+              "timeOfDay": "morning",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "month": 1,
+          "title": "Automatikus reakciók",
+          "focus": "Vedd észre a gyors, ismétlődő válaszokat.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Hogyan építünk belső képet?",
+              "duration": "14 perc",
+              "courseId": "nlp-foundations",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "audio",
+              "title": "90 másodperces reset",
+              "duration": "2 perc",
+              "courseId": "stress-reset",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "month": 1,
+          "title": "Asszertív alapok",
+          "focus": "Fogalmazz tisztán anélkül, hogy támadnál vagy visszahúzódnál.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Hol csúsznak el a határaid?",
+              "duration": "16 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Kérés vád nélkül",
+              "duration": "12 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "feedback",
+              "title": "Heti check-in",
+              "duration": "3 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "month": 1,
+          "title": "NLP nézőpontváltás",
+          "focus": "Lásd ugyanazt a helyzetet több nézőpontból.",
+          "items": [
+            {
+              "type": "video",
+              "title": "A három nézőpont",
+              "duration": "12 perc",
+              "courseId": "perceptual-positions",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Vezetett perspektívaváltás",
+              "duration": "18 perc",
+              "courseId": "perceptual-positions",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "month": 2,
+          "title": "Tiszta határok",
+          "focus": "Gyakorolj nemet mondani indokolás-túltengés nélkül.",
+          "items": [
+            {
+              "type": "exercise",
+              "title": "Tiszta nem",
+              "duration": "15 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "audio",
+              "title": "Vissza a jelenbe",
+              "duration": "7 perc",
+              "courseId": "stress-reset",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "month": 2,
+          "title": "Belső nyelv",
+          "focus": "Figyeld meg, hogyan meséled magadnak a konfliktust.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Nyelvi minták és átkeretezés",
+              "duration": "18 perc",
+              "courseId": "nlp-foundations",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Saját átkeretező mondatok",
+              "duration": "10 perc",
+              "courseId": "nlp-foundations",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "month": 2,
+          "title": "Önbizalom a kapcsolatban",
+          "focus": "Maradj jelen akkor is, amikor könnyebb lenne visszahúzódni.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Belső erő alapjai",
+              "duration": "12 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Egy fokkal bátrabb reakció",
+              "duration": "15 perc",
+              "courseId": "confidence-in-action",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "month": 2,
+          "title": "Fókusz a fontos beszélgetésekre",
+          "focus": "Ne minden konfliktust akarj egyszerre megoldani.",
+          "items": [
+            {
+              "type": "video",
+              "title": "Mi viszi el a figyelmed?",
+              "duration": "15 perc",
+              "courseId": "focus-energy",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Mai egyetlen fókusz",
+              "duration": "2 perc",
+              "courseId": "morning-focus-5",
+              "timeOfDay": "morning",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 9,
+          "month": 3,
+          "title": "Stressz és konfliktus",
+          "focus": "A reakció előtt legyen egy rövid megállás.",
+          "items": [
+            {
+              "type": "audio",
+              "title": "90 másodperces reset",
+              "duration": "2 perc",
+              "courseId": "stress-reset",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "Testi feszültség térképe",
+              "duration": "8 perc",
+              "courseId": "stress-reset",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 10,
+          "month": 3,
+          "title": "Kapcsolati mikroszokások",
+          "focus": "Kis, ismételhető kapcsolati gesztusok.",
+          "items": [
+            {
+              "type": "video",
+              "title": "A túl kicsi lépés ereje",
+              "duration": "11 perc",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "exercise",
+              "title": "30 napos mini tracker",
+              "duration": "2 perc / nap",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 11,
+          "month": 3,
+          "title": "Integrációs beszélgetés",
+          "focus": "Válassz egy valódi helyzetet, és vezesd végig az új mintával.",
+          "items": [
+            {
+              "type": "exercise",
+              "title": "Egy valódi beszélgetés",
+              "duration": "25 perc",
+              "courseId": "boundaries-assertiveness",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "meditation",
+              "title": "A nap elengedése",
+              "duration": "12 perc",
+              "courseId": "nlp-evening-meditation",
+              "timeOfDay": "evening",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        },
+        {
+          "week": 12,
+          "month": 3,
+          "title": "Lezárás",
+          "focus": "Mi működött, és mit szeretnél továbbvinni?",
+          "items": [
+            {
+              "type": "exercise",
+              "title": "12 hetes visszatekintés",
+              "duration": "20 perc",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            },
+            {
+              "type": "feedback",
+              "title": "Ciklus végi review",
+              "duration": "8 perc",
+              "courseId": "micro-habits",
+              "timeOfDay": "daytime",
+              "cadence": "heti 1 alkalom"
+            }
+          ]
+        }
+      ],
+      "nextCycle": {
+        "focus": "belső stabilitás + fókusz",
+        "description": "A következő ciklus a kapcsolati fejlődés mellé több fókuszt, energiamenedzsmentet és következetes szokást épít.",
+        "weeklyTime": "heti 60 perc + mikro-rutinok",
+        "format": "videó + mini feladat + meditáció",
+        "steps": [
+          "Belső stabilitás",
+          "Fókusz visszavétele",
+          "Önmegerősítés",
+          "Következetes mini szokások"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+<section class="screen screen-step-11">
+            <div class="eyebrow">Időszak végi review</div>
+            <h1>Nézzük meg, mi változott eddig.</h1>
+
+            <div class="card"><h2>Mi működött?</h2><div class="tag-row"><span class="tag">heti ritmus</span><span class="tag">hanganyagok</span><span class="tag">mini feladatok</span></div></div>
+
+            <div class="summary-grid">
+              <div class="metric-card"><span>Elvégzett anyag</span><strong>8</strong></div>
+              <div class="metric-card"><span>Aktív részvétel</span><strong>4 hét</strong></div>
+              <div class="metric-card wide"><span>{{ flow.answers().mainGoal }}</span><strong>érezhető előrelépés</strong></div>
+            </div>
+
+            <div class="card"><h2>Mi maradt fontos?</h2><div class="tag-row"><span class="tag">fókusz</span><span class="tag">kapcsolatok</span><span class="tag">belső egyensúly</span></div></div>
+
+            <div class="card"><h2>Rövid összegzés</h2><p>A demo a válaszaidból most egy gyakorlatiasabb következő ciklust javasol.</p></div>
+
+            <div class="card checkin-card">
+              <span class="hero-kicker">Személyre szabott megerősítés</span>
+              <h2>Ezt vinnénk tovább a reggelekbe.</h2>
+              <div class="affirmation-copy">„{{ flow.answers().affirmationText }}”</div>
+              <p>Ha egyetértesz vele, egy ideig minden 2. reggel bekerülhet a rövid indító rutinodba. Később ezt a saját hangodon is felmondhatod.</p>
+              @if (flow.answers().affirmationAccepted) {
+                <div class="affirmation-status">✓ Elfogadva · minden 2. reggel</div>
+              } @else {
+                <div class="action-row">
+                  <button class="secondary-action">Módosítom később</button>
+                  <button class="primary-action" (click)="ui.acceptAffirmation()">Elfogadom <span>→</span></button>
+                </div>
+              }
+            </div>
+
+            <button class="primary-action" (click)="ui.goStep(12)">Tovább a következő szakaszra <span>→</span></button>
+          </section>

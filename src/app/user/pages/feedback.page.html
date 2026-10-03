@@ -1,0 +1,38 @@
+<section class="screen screen-step-10">
+            <div class="eyebrow">Időszakos check-in · opcionális</div>
+            <h1>Hogy működik neked eddig?</h1>
+            <p class="lead">Ezt nem kell minden lecke után kitölteni. A válaszaidból finomítható a következő szakasz.</p>
+
+            <div class="card">
+              <h2>Mennyire volt hasznos?</h2>
+              <div class="rating-row">
+                @for (value of ui.ratingValues; track value) {
+                  <button [class.selected]="flow.answers().rating === value" (click)="flow.patch({ rating: value })">☆<small>{{ value }}</small></button>
+                }
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Mennyire volt nehéz?</h2>
+              <div class="option-grid compact">
+                @for (item of ['könnyű','pont jó','nehéz']; track item) {
+                  <button class="option" [class.selected]="flow.answers().difficulty === item" (click)="flow.patch({ difficulty: item })">{{ item }}</button>
+                }
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Éreztél valami változást?</h2>
+              <div class="option-grid compact">
+                @for (item of ['igen, kicsit','igen, sokat','még nem']; track item) {
+                  <button class="option" [class.selected]="flow.answers().change === item" (click)="flow.patch({ change: item })">{{ item }}</button>
+                }
+              </div>
+              <textarea class="text-field" rows="3" [value]="flow.answers().note" (input)="ui.setNote($event)" placeholder="Mi volt a legfontosabb felismerés?"></textarea>
+            </div>
+
+            <div class="action-row">
+              <button class="secondary-action" (click)="ui.goStep(8)">Most kihagyom</button>
+              <button class="primary-action" (click)="ui.goStep(11)">Elküldöm <span>→</span></button>
+            </div>
+          </section>

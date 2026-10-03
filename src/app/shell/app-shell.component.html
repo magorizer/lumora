@@ -1,0 +1,101 @@
+<ion-content [fullscreen]="true">
+  <main class="demo-shell" [class.wide-shell]="layout() !== 'user'">
+    <section class="phone-stage" [class.wide-stage]="layout() !== 'user'">
+      @if (layout() === 'user') {
+        <header class="brand-header" [class.brand-header-first]="isFirstOnboarding()">
+          <div class="brand-copy">
+            <img class="brand-logo-image" src="assets/demo/portalumi-logo.png" alt="portaLumi">
+
+            @if (progressMode() !== 'none') {
+              <div class="progress-row" [class.program-progress]="progressMode() === 'program'">
+                <span>{{ progressLabel() }}</span>
+                <div class="progress-segments" aria-hidden="true">
+                  @for (item of progressItems(); track $index) {
+                    <span
+                      [class.active]="$index < progressCurrent()"
+                      [class.current]="$index + 1 === progressCurrent()"
+                    ></span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+          <img class="portal-hero" src="assets/demo/portalumi-hero.webp" alt="" aria-hidden="true">
+
+          <div class="shell-controls">
+            <button class="shell-control" type="button" (click)="toggleMenu()" aria-label="Menü">☰</button>
+            <a class="shell-control profile-control" routerLink="/profile" aria-label="Profil">
+              {{ auth.user()?.name?.charAt(0) || 'P' }}
+            </a>
+          </div>
+        </header>
+      } @else {
+        <header class="wide-topbar">
+          <div class="wide-brand">
+            <img src="assets/demo/portalumi-logo.png" alt="portaLumi">
+            <span>{{ layout() === 'creator' ? 'Képzői tér' : 'Profil' }}</span>
+          </div>
+
+          <div class="wide-actions">
+            @if (auth.hasRole('content_creator')) {
+              <button class="mode-switch" type="button" (click)="toggleRole()">
+                {{ auth.activeRole() === 'user' ? 'Képzői mód' : 'Felhasználói mód' }}
+              </button>
+            }
+            <a class="shell-control profile-control" routerLink="/profile">
+              {{ auth.user()?.name?.charAt(0) || 'P' }}
+            </a>
+            <button class="shell-control" type="button" (click)="toggleMenu()">☰</button>
+          </div>
+        </header>
+      }
+
+      <router-outlet />
+    </section>
+  </main>
+
+  @if (menuOpen()) {
+    <div class="menu-backdrop" (click)="closeMenu()">
+      <aside class="app-menu" (click)="$event.stopPropagation()">
+        <div class="menu-head">
+          <img src="assets/demo/portalumi-logo.png" alt="portaLumi">
+          <button type="button" (click)="closeMenu()">×</button>
+        </div>
+
+        <div class="menu-user">
+          <span class="menu-avatar">{{ auth.user()?.name?.charAt(0) || 'P' }}</span>
+          <div>
+            <strong>{{ auth.user()?.name }}</strong>
+            <small>{{ auth.activeRole() === 'content_creator' ? 'Content creator' : 'Felhasználó' }}</small>
+          </div>
+        </div>
+
+        <nav>
+          @for (item of menuItems(); track item.path) {
+            <a [routerLink]="item.path" [class.active]="isActive(item.path)" (click)="closeMenu()">
+              <span>{{ item.icon }}</span>
+              <strong>{{ item.label }}</strong>
+            </a>
+          }
+          <a routerLink="/profile" [class.active]="isActive('/profile')" (click)="closeMenu()">
+            <span>◎</span>
+            <strong>Profil</strong>
+          </a>
+        </nav>
+
+        @if (auth.hasRole('user') && auth.hasRole('content_creator')) {
+          <button class="role-switch" type="button" (click)="toggleRole()">
+            <span>⇄</span>
+            <div>
+              <small>Átváltás</small>
+              <strong>{{ auth.activeRole() === 'user' ? 'Képzői módra' : 'Felhasználói módra' }}</strong>
+            </div>
+          </button>
+        }
+
+        <div class="menu-demo-note">DEMO · JSON adatforrás</div>
+      </aside>
+    </div>
+  }
+</ion-content>

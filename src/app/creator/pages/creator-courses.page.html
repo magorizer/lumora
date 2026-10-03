@@ -1,0 +1,48 @@
+<section class="creator-page">
+  <div class="creator-intro">
+    <span class="eyebrow">Kurzusaim</span>
+    <h1>Tartalomkönyvtár</h1>
+    <p>Válassz egy kurzust. A leckék és gyakorlatok külön oldalon nyílnak meg, és egyenként szerkeszthetők.</p>
+  </div>
+
+  <div class="creator-heading">
+    <div>
+      <h2>{{ creator.instructor()?.name }}</h2>
+      <p class="creator-help">{{ creator.instructorCourses().length }} kurzus</p>
+    </div>
+    <button class="creator-primary" type="button" (click)="go('/creator/courses/new')">+ Új kurzus</button>
+  </div>
+
+  <div class="creator-course-grid">
+    @for (course of creator.instructorCourses(); track course.id) {
+      <button
+        type="button"
+        [class]="'creator-course-tile ' + creator.courseThemeClass(course.id)"
+        (click)="openCourse(course.id)"
+      >
+        <span class="course-color-mark"></span>
+
+        <div class="creator-course-tile-head">
+          <span class="creator-course-icon">
+            {{ course.format.includes('meditáció') ? '☾' : course.format.includes('hanganyag') ? '◉' : '▶' }}
+          </span>
+          <span class="creator-status" [class.draft]="course.status === 'draft'">
+            {{ course.status === 'draft' ? 'draft' : 'publikált' }}
+          </span>
+        </div>
+
+        <div>
+          <small>{{ course.category }}</small>
+          <h2>{{ course.title }}</h2>
+          <p>{{ course.description }}</p>
+        </div>
+
+        <div class="creator-course-tile-footer">
+          <span>{{ course.units.length }} tartalom</span>
+          <span>{{ course.totalDuration }}</span>
+          <strong>Megnyitás →</strong>
+        </div>
+      </button>
+    }
+  </div>
+</section>

@@ -1,0 +1,110 @@
+<section class="screen screen-step-9">
+  <div class="eyebrow">Kurzusanyag</div>
+  <h1>A mai program egyik eleme.</h1>
+
+  @if (ui.activeLesson(); as item) {
+    @if (flow.course(item.courseId); as course) {
+      @if (flow.instructor(course.instructorId); as instructor) {
+        <div class="video-card">
+          <span class="video-meta">{{ item.type }} · {{ item.duration || 'rövid' }}</span>
+          <h2>{{ item.title }}</h2>
+
+          <div class="instructor-line">
+            <div class="speaker-avatar">{{ instructor.name.charAt(0) }}</div>
+            <div>
+              <strong>{{ instructor.name }}</strong>
+              <small>{{ instructor.role }}</small>
+            </div>
+          </div>
+
+          @if (item.type === 'video' || item.type === 'audio' || item.type === 'meditation') {
+            <button class="video-preview" type="button" (click)="ui.lessonPlaying.set(!ui.lessonPlaying())">
+              <span class="play-button">{{ ui.lessonPlaying() ? 'Ⅱ' : '▶' }}</span>
+            </button>
+          } @else {
+            <div class="exercise-preview">
+              <span>✦</span>
+              <strong>Gyakorlati feladat</strong>
+              <small>{{ item.duration || 'rövid' }}</small>
+            </div>
+          }
+
+          <p>{{ course.description }}</p>
+
+          <div class="tag-row">
+            <span class="tag">{{ course.category }}</span>
+            <span class="tag">{{ course.level }}</span>
+            <span class="tag">{{ course.bestTime }}</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>A kurzus témái</h2>
+          <div class="tag-row">
+            @for (topic of course.topics; track topic) {
+              <span class="tag">{{ topic }}</span>
+            }
+          </div>
+        </div>
+      }
+    }
+
+    <div class="card">
+      <h2>Mai feladat</h2>
+      <p>
+        @if (item.type === 'exercise') {
+          Dolgozd végig a feladatot, majd írd le röviden, mit vettél észre.
+        } @else {
+          Írj le 3 olyan helyzetet, amikor visszafogtad magad, és mellé egy új, bátrabb reakciót.
+        }
+      </p>
+
+      <label class="lesson-note-label">
+        <span>Saját válasz</span>
+        <span>opcionális</span>
+      </label>
+
+      <textarea
+        class="text-field"
+        rows="4"
+        [value]="flow.answers().taskResponse"
+        (input)="ui.setTaskResponse($event)"
+        placeholder="Írd le ide a válaszodat, ha szeretnéd..."
+      ></textarea>
+
+      <button
+        class="check-row"
+        type="button"
+        [class.selected]="flow.answers().completedLesson"
+        (click)="flow.patch({ completedLesson: !flow.answers().completedLesson })"
+      >
+        <span>{{ flow.answers().completedLesson ? '✓' : '□' }}</span>
+        Elvégeztem
+      </button>
+    </div>
+
+    <div class="card optional-reflection-card">
+      <div class="card-title-inline">
+        <h2>Rövid reflexió</h2>
+        <span class="optional-pill">opcionális</span>
+      </div>
+
+      <p>Ha most van egy felismerésed, érdemes eltenni későbbre.</p>
+
+      <textarea
+        class="text-field"
+        rows="3"
+        [value]="flow.answers().lessonReflection"
+        (input)="ui.setLessonReflection($event)"
+        placeholder="Mi volt ebből most a legfontosabb neked?"
+      ></textarea>
+    </div>
+  }
+
+  <div class="action-row">
+    <button class="secondary-action" type="button" (click)="ui.goStep(8)">Vissza a hétre</button>
+    <button class="primary-action" type="button" (click)="ui.goStep(8)">Lecke befejezése <span>→</span></button>
+  </div>
+
+  <button class="later-link" type="button" (click)="ui.goStep(10)">Rövid visszajelzést adok</button>
+</section>

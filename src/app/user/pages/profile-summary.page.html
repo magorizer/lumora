@@ -1,0 +1,31 @@
+<section class="screen screen-step-4">
+            <div class="eyebrow">Személyes profil</div>
+            <h1>Ezt értettük meg rólad.</h1>
+            <p class="lead">Ellenőrizd, mielőtt összeállítjuk az utadat.</p>
+
+            <div class="summary-grid">
+              <div class="metric-card"><span>Fő cél</span><strong>{{ flow.answers().mainGoal }}</strong></div>
+              <div class="metric-card"><span>Időkeret</span><strong>{{ flow.answers().weeklyTime }}</strong></div>
+              <div class="metric-card wide">
+                <span>Kapcsolódó témák</span>
+                <div class="tag-row">
+                  @for (item of flow.answers().obstacles; track item) { <span class="tag">{{ item }}</span> }
+                </div>
+              </div>
+              <div class="metric-card wide">
+                <span>Preferált forma</span>
+                <strong>{{ flow.answers().formats.join(' + ') }}</strong>
+                <small>{{ flow.answers().pace }} tempó</small>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Kiinduló helyzet</h2>
+              <p>{{ flow.answers().situation }}. A fő fókuszod most a(z) {{ flow.answers().mainGoal.toLowerCase() }}.</p>
+            </div>
+
+            <div class="action-row">
+              <button class="secondary-action" (click)="ui.goStep(1)">Módosítom</button>
+              <button class="primary-action" (click)="ui.goStep(5)">Jóváhagyom <span>→</span></button>
+            </div>
+          </section>

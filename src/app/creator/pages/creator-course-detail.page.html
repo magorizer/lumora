@@ -1,0 +1,136 @@
+<section class="creator-page">
+  @if (creator.selectedCourse(); as course) {
+    <button class="creator-back-link" type="button" (click)="back()">← Kurzusaim</button>
+
+    <div [class]="'creator-card creator-course-detail-hero ' + creator.courseThemeClass(course.id)">
+      <div class="creator-heading">
+        <div>
+          <span class="eyebrow">{{ course.category }}</span>
+          <h1>{{ course.title }}</h1>
+        </div>
+        <span class="creator-status" [class.draft]="course.status === 'draft'">
+          {{ course.status === 'draft' ? 'draft' : 'publikált' }}
+        </span>
+      </div>
+
+      <p>{{ course.description }}</p>
+
+      <div class="creator-detail-grid">
+        <div><small>Szint</small><strong>{{ course.level }}</strong></div>
+        <div><small>Időtartam</small><strong>{{ course.totalDuration }}</strong></div>
+        <div><small>Napszak</small><strong>{{ course.bestTime }}</strong></div>
+        <div><small>Tartalmak</small><strong>{{ course.units.length }}</strong></div>
+      </div>
+    </div>
+
+    <div [class]="'creator-card ' + creator.courseThemeClass(course.id)">
+      <div class="creator-heading">
+        <div>
+          <span class="eyebrow">Kurzus tartalma</span>
+          <h2>Leckék és gyakorlatok</h2>
+        </div>
+        <button class="creator-primary" type="button">+ Új tartalom</button>
+      </div>
+
+      <p class="creator-help">Kattints bármelyik elemre a szerkesztéshez.</p>
+
+      <div class="creator-unit-list">
+        @for (unit of course.units; track unit.id; let index = $index) {
+          <button class="creator-content-row" type="button" (click)="creator.openUnitEditor(unit.id)">
+            <span class="creator-content-type">
+              {{ unit.type === 'video' ? '▶' : unit.type === 'audio' ? '◉' : unit.type === 'meditation' ? '☾' : '✦' }}
+            </span>
+
+            <span>
+              <small>{{ index + 1 }}. · {{ unit.type }} · {{ unit.duration }}</small>
+              <strong>{{ unit.title }}</strong>
+              @if (unit.summary) {
+                <small>{{ unit.summary }}</small>
+              }
+            </span>
+
+            <span class="lesson-state">Szerkesztés →</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="creator-card">
+      <h2>Ajánlási metaadatok</h2>
+      <div class="creator-chips">
+        @for (topic of course.topics; track topic) {
+          <em>{{ topic }}</em>
+        }
+      </div>
+
+      <div class="creator-meta-grid">
+        <div>
+          <strong>Célok</strong>
+          <span>{{ course.recommendation?.goals?.join(', ') || 'nincs megadva' }}</span>
+        </div>
+        <div>
+          <strong>Problémák</strong>
+          <span>{{ course.recommendation?.problems?.join(', ') || 'nincs megadva' }}</span>
+        </div>
+        <div>
+          <strong>Check-in</strong>
+          <span>{{ course.engagement?.checkpointCadence || 'nincs' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</section>
+
+@if (creator.editingUnit(); as unit) {
+  <div class="bottom-sheet-backdrop" (click)="creator.closeUnitEditor()">
+    <section class="bottom-sheet" (click)="$event.stopPropagation()">
+      <div class="sheet-handle"></div>
+
+      <div class="sheet-head">
+        <div>
+          <span class="eyebrow">Tartalom szerkesztése</span>
+          <h2>{{ unit.title }}</h2>
+        </div>
+        <button class="sheet-close" type="button" (click)="creator.closeUnitEditor()">×</button>
+      </div>
+
+      <div class="sheet-form">
+        <label>
+          Cím
+          <input [value]="unit.title" (input)="creator.updateUnit(unit.id, 'title', $event)">
+        </label>
+
+        <label>
+          Típus
+          <select [value]="unit.type" (change)="creator.updateUnit(unit.id, 'type', $event)">
+            <option value="video">videó</option>
+            <option value="audio">hanganyag</option>
+            <option value="exercise">gyakorlat</option>
+            <option value="meditation">meditáció</option>
+          </select>
+        </label>
+
+        <label>
+          Időtartam
+          <input [value]="unit.duration" (input)="creator.updateUnit(unit.id, 'duration', $event)">
+        </label>
+
+        <label>
+          Rövid leírás
+          <textarea
+            rows="4"
+            [value]="unit.summary || ''"
+            (input)="creator.updateUnit(unit.id, 'summary', $event)"
+            placeholder="Mit tartalmaz ez a lecke vagy gyakorlat?"
+          ></textarea>
+        </label>
+      </div>
+
+      @if (creator.saveMessage()) {
+        <p class="sheet-note">{{ creator.saveMessage() }}</p>
+      }
+
+      <button class="creator-primary w-full mt-4" type="button" (click)="creator.closeUnitEditor()">Kész</button>
+    </section>
+  </div>
+}

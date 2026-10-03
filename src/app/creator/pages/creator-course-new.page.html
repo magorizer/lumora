@@ -1,0 +1,153 @@
+<section class="creator-page">
+  <div class="creator-intro">
+    <span class="eyebrow">Új kurzus · DEMO</span>
+    <h1>Tölts fel egy új tananyagot.</h1>
+    <p>A metaadatok lesznek később az AI / recommendation engine bemenetei.</p>
+  </div>
+
+  <div class="creator-card">
+    <div class="creator-form-section">
+      <span class="creator-step">1</span>
+      <div>
+        <h2>Alapadatok</h2>
+        <div class="creator-form-grid">
+          <label class="full">
+            Kurzus címe
+            <input [value]="creator.draft().title" (input)="creator.updateDraft('title',$event)">
+          </label>
+          <label>
+            Kategória
+            <input [value]="creator.draft().category" (input)="creator.updateDraft('category',$event)">
+          </label>
+          <label>
+            Szint
+            <select [value]="creator.draft().level" (change)="creator.updateDraft('level',$event)">
+              <option>kezdő</option>
+              <option>középhaladó</option>
+              <option>haladó</option>
+            </select>
+          </label>
+          <label class="full">
+            Leírás
+            <textarea rows="3" [value]="creator.draft().description" (input)="creator.updateDraft('description',$event)"></textarea>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="creator-form-section">
+      <span class="creator-step">2</span>
+      <div>
+        <h2>Ajánlási metaadatok</h2>
+        <div class="creator-form-grid">
+          <label class="full">
+            Témák
+            <input [value]="creator.draft().topics" (input)="creator.updateDraft('topics',$event)">
+          </label>
+          <label class="full">
+            Milyen célokhoz?
+            <input [value]="creator.draft().goals" (input)="creator.updateDraft('goals',$event)">
+          </label>
+          <label class="full">
+            Milyen problémákhoz?
+            <input [value]="creator.draft().problems" (input)="creator.updateDraft('problems',$event)">
+          </label>
+          <label>
+            Időtartam
+            <input [value]="creator.draft().totalDuration" (input)="creator.updateDraft('totalDuration',$event)">
+          </label>
+          <label>
+            Napszak
+            <select [value]="creator.draft().bestTime" (change)="creator.updateDraft('bestTime',$event)">
+              <option>reggel</option>
+              <option>napközben</option>
+              <option>este</option>
+              <option>lefekvés előtt</option>
+              <option>rugalmas</option>
+            </select>
+          </label>
+          <label class="full">
+            Formátum
+            <input [value]="creator.draft().format" (input)="creator.updateDraft('format',$event)">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="creator-form-section">
+      <span class="creator-step">3</span>
+      <div>
+        <h2>Anyag feltöltése</h2>
+        <label class="creator-upload">
+          <input type="file" (change)="creator.fakeUpload($event)">
+          <span class="creator-upload-icon">↑</span>
+          <strong>{{ creator.fakeUploadName() || 'Videó / hanganyag kiválasztása' }}</strong>
+          <small>A demóban nem kerül szerverre.</small>
+        </label>
+      </div>
+    </div>
+
+    <div class="creator-form-section">
+      <span class="creator-step">4</span>
+      <div>
+        <h2>Interakciók és utánkövetés</h2>
+        <p class="creator-help">
+          Itt állítható, kérjen-e a rendszer írásos reflexiót, mikor legyen checkpoint,
+          és használjon-e később személyre szabott megerősítést.
+        </p>
+
+        <div class="creator-form-grid">
+          <label>
+            Lecke utáni reflexió
+            <select [value]="creator.draft().lessonReflection" (change)="creator.updateDraft('lessonReflection',$event)">
+              <option value="off">nincs</option>
+              <option value="optional">opcionális</option>
+              <option value="recommended">ajánlott</option>
+            </select>
+          </label>
+
+          <label>
+            Időszakos check-in
+            <select [value]="creator.draft().checkpointCadence" (change)="creator.updateDraft('checkpointCadence',$event)">
+              <option value="off">nincs</option>
+              <option value="biweekly">2 hetente</option>
+              <option value="monthly">havonta</option>
+            </select>
+          </label>
+
+          <label class="full">
+            Reflexiós kérdés
+            <input [value]="creator.draft().lessonReflectionPrompt" (input)="creator.updateDraft('lessonReflectionPrompt',$event)">
+          </label>
+
+          <label>
+            Személyes megerősítés
+            <select [value]="creator.draft().reinforcementEnabled" (change)="creator.updateDraft('reinforcementEnabled',$event)">
+              <option value="yes">igen</option>
+              <option value="no">nem</option>
+            </select>
+          </label>
+
+          <label>
+            Reggeli ismétlés
+            <select [value]="creator.draft().morningCadence" (change)="creator.updateDraft('morningCadence',$event)">
+              <option value="daily">minden reggel</option>
+              <option value="every_2_days">minden 2. reggel</option>
+              <option value="weekly">hetente</option>
+            </select>
+          </label>
+
+          <label class="full">
+            Megerősítés generálási instrukció
+            <textarea rows="3" [value]="creator.draft().reinforcementPrompt" (input)="creator.updateDraft('reinforcementPrompt',$event)"></textarea>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="creator-heading mt-6 mb-0">
+      <button class="creator-secondary" (click)="go('/creator/dashboard')">Mégsem</button>
+      <button class="creator-primary" (click)="create()">Draft létrehozása</button>
+    </div>
+  </div>
+</section>

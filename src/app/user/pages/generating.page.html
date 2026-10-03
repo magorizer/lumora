@@ -1,0 +1,22 @@
+<section class="screen screen-step-5">
+            <div class="eyebrow">Program készítése</div>
+            <h1>Összeállítjuk a személyes útvonaladat.</h1>
+            <p class="lead">A demo most úgy viselkedik, mintha az ajánlórendszer dolgozna.</p>
+
+            <div class="generation-card">
+              <div class="generation-list">
+                @for (stage of ui.generationStages; track stage; let index = $index) {
+                  <div class="generation-item" [class.active]="ui.generationPhase() === index">
+                    <span class="status-dot">{{ ui.generationPhase() > index ? '✓' : index + 1 }}</span>
+                    <div><strong>{{ stage }}</strong><small>{{ ui.generationPhase() > index ? 'kész' : ui.generationPhase() === index ? 'folyamatban…' : 'várakozik' }}</small></div>
+                  </div>
+                }
+              </div>
+              <div class="loading-bar"><span [style.width.%]="ui.generationPhase() * 25"></span></div>
+              <p class="hint center">Ez a demóban néhány másodperc.</p>
+            </div>
+
+            <button class="primary-action" [disabled]="ui.generationPhase() < 4" (click)="ui.goStep(6)">
+              {{ ui.generationPhase() < 4 ? 'Készül…' : 'Megnézem a programot' }} <span>→</span>
+            </button>
+          </section>
