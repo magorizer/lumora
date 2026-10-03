@@ -8,9 +8,12 @@
           <span class="eyebrow">{{ course.category }}</span>
           <h1>{{ course.title }}</h1>
         </div>
-        <span class="creator-status" [class.draft]="course.status === 'draft'">
-          {{ course.status === 'draft' ? 'draft' : 'publikált' }}
-        </span>
+        <div class="creator-heading-actions">
+          <span class="creator-status" [class.draft]="course.status === 'draft'">
+            {{ course.status === 'draft' ? 'draft' : 'publikált' }}
+          </span>
+          <button class="creator-secondary" type="button" (click)="creator.openCourseEditor()">Kurzus szerkesztése</button>
+        </div>
       </div>
 
       <p>{{ course.description }}</p>
@@ -81,6 +84,81 @@
   }
 </section>
 
+@if (creator.editingCourse()) {
+  @if (creator.selectedCourse(); as course) {
+    <div class="bottom-sheet-backdrop" (click)="creator.closeCourseEditor()">
+      <section class="bottom-sheet" (click)="$event.stopPropagation()">
+        <div class="sheet-handle"></div>
+
+        <div class="sheet-head">
+          <div>
+            <span class="eyebrow">Kurzus szerkesztése</span>
+            <h2>{{ course.title }}</h2>
+          </div>
+          <button class="sheet-close" type="button" (click)="creator.closeCourseEditor()">×</button>
+        </div>
+
+        <div class="sheet-form">
+          <label>
+            Kurzus címe
+            <input [value]="course.title" (input)="creator.updateCourse('title', $event)">
+          </label>
+
+          <label>
+            Kategória
+            <input [value]="course.category" (input)="creator.updateCourse('category', $event)">
+          </label>
+
+          <label>
+            Leírás
+            <textarea rows="4" [value]="course.description" (input)="creator.updateCourse('description', $event)"></textarea>
+          </label>
+
+          <label>
+            Szint
+            <select [value]="course.level" (change)="creator.updateCourse('level', $event)">
+              <option value="kezdő">kezdő</option>
+              <option value="középhaladó">középhaladó</option>
+              <option value="haladó">haladó</option>
+            </select>
+          </label>
+
+          <label>
+            Időtartam
+            <input [value]="course.totalDuration" (input)="creator.updateCourse('totalDuration', $event)">
+          </label>
+
+          <label>
+            Ajánlott napszak
+            <select [value]="course.bestTime" (change)="creator.updateCourse('bestTime', $event)">
+              <option value="reggel">reggel</option>
+              <option value="napközben">napközben</option>
+              <option value="este">este</option>
+              <option value="lefekvés előtt">lefekvés előtt</option>
+              <option value="rugalmas">rugalmas</option>
+            </select>
+          </label>
+
+          <label>
+            Témák
+            <input
+              [value]="course.topics.join(', ')"
+              (input)="creator.updateCourse('topics', $event)"
+              placeholder="önbizalom, kommunikáció, fókusz"
+            >
+          </label>
+        </div>
+
+        @if (creator.saveMessage()) {
+          <p class="sheet-note">{{ creator.saveMessage() }}</p>
+        }
+
+        <button class="creator-primary w-full mt-4" type="button" (click)="creator.closeCourseEditor()">Kész</button>
+      </section>
+    </div>
+  }
+}
+
 @if (creator.editingUnit(); as unit) {
   <div class="bottom-sheet-backdrop" (click)="creator.closeUnitEditor()">
     <section class="bottom-sheet" (click)="$event.stopPropagation()">
@@ -124,6 +202,88 @@
             placeholder="Mit tartalmaz ez a lecke vagy gyakorlat?"
           ></textarea>
         </label>
+
+        @if (unit.type !== 'exercise') {
+          <div class="sheet-field-group">
+            <span class="sheet-section-label">
+              {{ unit.type === 'video' ? 'Videó forrása' : 'Hang forrása' }}
+            </span>
+
+            <div class="source-toggle">
+              <button
+                type="button"
+                [class.active]="(unit.sourceMode || 'upload') === 'upload'"
+                (click)="creator.setUnitSourceMode(unit.id, 'upload')"
+              >Feltöltés</button>
+              <button
+                type="button"
+                [class.active]="unit.sourceMode === 'url'"
+                (click)="creator.setUnitSourceMode(unit.id, 'url')"
+              >URL</button>
+            </div>
+
+            @if ((unit.sourceMode || 'upload') === 'upload') {
+              <label class="upload-inline">
+                <input
+                  type="file"
+                  [accept]="unit.type === 'video' ? 'video/*' : 'audio/*'"
+                  (change)="creator.fakeUnitUpload(unit.id, 'media', $event)"
+                >
+                <strong>{{ unit.uploadName || (unit.type === 'video' ? 'Videó kiválasztása' : 'Hangfájl kiválasztása') }}</strong>
+                <small>Demo: a fájl neve kerül eltárolásra.</small>
+              </label>
+            } @else {
+              <label>
+                {{ unit.type === 'video' ? 'Videó URL' : 'Hang URL' }}
+                <input
+                  type="url"
+                  [value]="unit.mediaUrl || ''"
+                  (input)="creator.updateUnit(unit.id, 'mediaUrl', $event)"
+                  placeholder="https://..."
+                >
+              </label>
+            }
+          </div>
+        }
+
+        <div class="sheet-field-group">
+          <span class="sheet-section-label">Borítókép</span>
+
+          <div class="source-toggle">
+            <button
+              type="button"
+              [class.active]="(unit.coverMode || 'upload') === 'upload'"
+              (click)="creator.setUnitCoverMode(unit.id, 'upload')"
+            >Feltöltés</button>
+            <button
+              type="button"
+              [class.active]="unit.coverMode === 'url'"
+              (click)="creator.setUnitCoverMode(unit.id, 'url')"
+            >URL</button>
+          </div>
+
+          @if ((unit.coverMode || 'upload') === 'upload') {
+            <label class="upload-inline">
+              <input
+                type="file"
+                accept="image/*"
+                (change)="creator.fakeUnitUpload(unit.id, 'cover', $event)"
+              >
+              <strong>{{ unit.coverUploadName || 'Kép kiválasztása' }}</strong>
+              <small>JPG, PNG, WebP</small>
+            </label>
+          } @else {
+            <label>
+              Kép URL
+              <input
+                type="url"
+                [value]="unit.coverUrl || ''"
+                (input)="creator.updateUnit(unit.id, 'coverUrl', $event)"
+                placeholder="https://..."
+              >
+            </label>
+          }
+        </div>
       </div>
 
       @if (creator.saveMessage()) {

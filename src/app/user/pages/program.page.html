@@ -103,6 +103,15 @@
           <div class="sheet-item">
             <span class="lesson-index">{{ item.type === 'video' ? '▶' : item.type === 'audio' ? '◉' : item.type === 'meditation' ? '☾' : '✦' }}</span>
             <div>
+              @if (item.timeOfDay) {
+                <span class="day-time">
+                  {{ item.timeOfDay === 'morning'
+                    ? 'Reggeli gyakorlat'
+                    : item.timeOfDay === 'evening'
+                      ? 'Esti gyakorlat'
+                      : 'Napközbeni feladat' }}
+                </span>
+              }
               <strong>{{ item.title }}</strong>
               <small>{{ item.type }} · {{ item.duration || 'rövid' }}</small>
               @if (flow.course(item.courseId); as course) {

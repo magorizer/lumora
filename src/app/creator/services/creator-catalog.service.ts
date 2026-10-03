@@ -32,6 +32,7 @@ export class CreatorCatalogService {
   readonly selectedInstructorId = signal('');
   readonly selectedCourseId = signal<string | null>(null);
   readonly editingUnitId = signal<string | null>(null);
+  readonly editingCourse = signal(false);
   readonly saveMessage = signal('');
   readonly fakeUploadName = signal('');
 
@@ -114,7 +115,16 @@ export class CreatorCatalogService {
     }
 
     this.editingUnitId.set(null);
+    this.editingCourse.set(false);
     this.saveMessage.set('');
+  }
+
+  openCourseEditor(): void {
+    this.editingCourse.set(true);
+  }
+
+  closeCourseEditor(): void {
+    this.editingCourse.set(false);
   }
 
   openUnitEditor(unitId: string): void {
@@ -125,7 +135,32 @@ export class CreatorCatalogService {
     this.editingUnitId.set(null);
   }
 
-  updateUnit(unitId: string, field: 'title' | 'type' | 'duration' | 'summary', event: Event): void {
+  updateCourse(
+    field: 'title' | 'category' | 'description' | 'level' | 'totalDuration' | 'bestTime' | 'topics',
+    event: Event,
+  ): void {
+    const value = (event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value;
+    const selectedId = this.selectedCourseId();
+
+    this.courses.update((courses) =>
+      courses.map((course) => {
+        if (course.id !== selectedId) return course;
+        if (field === 'topics') {
+          return { ...course, topics: value.split(',').map((item) => item.trim()).filter(Boolean) };
+        }
+
+        return { ...course, [field]: value };
+      }),
+    );
+
+    this.saveMessage.set('Kurzus módosítva a demóban.');
+  }
+
+  updateUnit(
+    unitId: string,
+    field: 'title' | 'type' | 'duration' | 'summary' | 'sourceMode' | 'mediaUrl' | 'coverMode' | 'coverUrl',
+    event: Event,
+  ): void {
     const value = (event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value;
 
     this.courses.update((courses) =>
@@ -137,19 +172,56 @@ export class CreatorCatalogService {
           units: course.units.map((unit) => {
             if (unit.id !== unitId) return unit;
 
-            if (field === 'type') {
-              return { ...unit, type: value as CourseUnit['type'] };
-            }
-
+            if (field === 'type') return { ...unit, type: value as CourseUnit['type'] };
+            if (field === 'sourceMode') return { ...unit, sourceMode: value as 'upload' | 'url' };
+            if (field === 'coverMode') return { ...unit, coverMode: value as 'upload' | 'url' };
             if (field === 'title') return { ...unit, title: value };
             if (field === 'duration') return { ...unit, duration: value };
-            return { ...unit, summary: value };
+            if (field === 'summary') return { ...unit, summary: value };
+            if (field === 'mediaUrl') return { ...unit, mediaUrl: value };
+            return { ...unit, coverUrl: value };
           }),
         };
       }),
     );
 
     this.saveMessage.set('Módosítva a demóban.');
+  }
+
+  setUnitSourceMode(unitId: string, mode: 'upload' | 'url'): void {
+    this.patchUnit(unitId, { sourceMode: mode });
+  }
+
+  setUnitCoverMode(unitId: string, mode: 'upload' | 'url'): void {
+    this.patchUnit(unitId, { coverMode: mode });
+  }
+
+  fakeUnitUpload(unitId: string, target: 'media' | 'cover', event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const fileName = input.files?.[0]?.name;
+    if (!fileName) return;
+
+    this.patchUnit(
+      unitId,
+      target === 'media'
+        ? { sourceMode: 'upload', uploadName: fileName }
+        : { coverMode: 'upload', coverUploadName: fileName },
+    );
+
+    this.saveMessage.set('Fájl kiválasztva a demóban.');
+  }
+
+  private patchUnit(unitId: string, patch: Partial<CourseUnit>): void {
+    this.courses.update((courses) =>
+      courses.map((course) =>
+        course.id !== this.selectedCourseId()
+          ? course
+          : {
+              ...course,
+              units: course.units.map((unit) => unit.id === unitId ? { ...unit, ...patch } : unit),
+            },
+      ),
+    );
   }
 
   updateDraft(field: keyof CreatorDraft, event: Event): void {

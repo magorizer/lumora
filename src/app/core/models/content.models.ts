@@ -69,6 +69,12 @@ export interface CourseUnit {
   type: 'video' | 'audio' | 'exercise' | 'meditation';
   duration: string;
   summary?: string;
+  sourceMode?: 'upload' | 'url';
+  mediaUrl?: string;
+  uploadName?: string;
+  coverMode?: 'upload' | 'url';
+  coverUrl?: string;
+  coverUploadName?: string;
 }
 
 export interface RecommendationMetadata {
