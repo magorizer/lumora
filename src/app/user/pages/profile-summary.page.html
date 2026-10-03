@@ -17,6 +17,25 @@
                 <strong>{{ flow.answers().formats.join(' + ') }}</strong>
                 <small>{{ flow.answers().pace }} tempó</small>
               </div>
+
+              <div class="metric-card wide">
+                <span>Meditációs tapasztalat</span>
+                @if (flow.answers().meditatedBefore === 'no') {
+                  <strong>Még nem meditált</strong>
+                } @else if (flow.answers().meditatedBefore === 'yes') {
+                  <strong>
+                    {{ flow.answers().meditationExperience === 'beginner'
+                      ? 'Kezdő'
+                      : flow.answers().meditationExperience === 'advanced'
+                        ? 'Haladó'
+                        : flow.answers().meditationExperience === 'zen'
+                          ? 'Zen'
+                          : 'Nincs megadva' }}
+                  </strong>
+                } @else {
+                  <strong>Nincs megadva</strong>
+                }
+              </div>
             </div>
 
             <div class="card">
