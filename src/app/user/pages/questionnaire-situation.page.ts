@@ -17,4 +17,11 @@ export class QuestionnaireSituationPage implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.flow.load();
   }
+
+  setMeditatedBefore(value: 'yes' | 'no'): void {
+    this.flow.patch({
+      meditatedBefore: value,
+      meditationExperience: value === 'no' ? '' : this.flow.answers().meditationExperience,
+    });
+  }
 }
