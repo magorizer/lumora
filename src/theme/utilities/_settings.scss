@@ -282,3 +282,51 @@
     grid-column: auto;
   }
 }
+
+
+.format-dropdown {
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 14px;
+  background: var(--portalumi-page-soft);
+}
+
+.format-dropdown summary {
+  display: grid;
+  gap: 4px;
+  padding: 12px 13px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.format-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.format-dropdown summary span {
+  color: var(--portalumi-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.format-dropdown summary strong {
+  color: var(--portalumi-ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.format-dropdown[open] .format-option-grid {
+  padding: 0 12px 12px;
+}
+
+.standalone-badge {
+  display: inline-block !important;
+  width: fit-content;
+  margin-top: 6px !important;
+  padding: 4px 7px;
+  border-radius: 999px;
+  color: var(--portalumi-gold-deep) !important;
+  background: var(--portalumi-gold-soft);
+  font-size: 9px !important;
+  font-weight: 800;
+}

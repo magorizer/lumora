@@ -21,15 +21,18 @@ Cél:
 A DB előtt véglegesítsük az alapfogalmakat.
 
 Elkészült / demóban megjelenik:
-- 3 előre definiált 3 hónapos program
-- programonként reggeli + esti authored sequence
-- minden sequence 12 sorrendben rögzített alkalom
+- 3 eltérő ritmusú előre definiált csomag
+- csak reggeli csomag
+- csak esti csomag
+- napi 3 blokkos csomag
 - user napválasztás hétfőtől vasárnapig
 - hétvége engedélyezett
 - nincs kötelező program_week domain objektum
-- user csak teljes reggeli / esti sequence-t cserél
-- creator programcsomagokat definiálhat
+- user teljes kurzust cserélhet a csomagon belül
+- creator bármely feltöltött kurzusból csomagot állíthat össze
 - creator kurzusokat és leckéket kezelhet
+- kurzus lehet kötött sorrendű vagy moduláris
+- tartalom külön jelölhető egyénileg is hallgathatónak
 
 Demo adat:
 src/assets/demo/program-templates.json
@@ -96,17 +99,18 @@ Funkciók:
 
 Kész, ha egy 12 alkalmas felépített sorozat DB-ből betöltődik és a sorrend stabil.
 
-## 4. fázis — creator program templates
+## 4. fázis — creator package templates
 
 Táblák:
 - program_templates
-- program_template_tracks
+- program_template_items
 
 Funkciók:
-- program template létrehozása
+- csomag létrehozása
 - cím, leírás
-- teljes reggeli sequence kiválasztása
-- teljes esti sequence kiválasztása
+- tetszőleges számú kurzus hozzáadása
+- blokk időpontjának megadása
+- blokkok sorrendezése
 - publish
 
 Első seed programok:
@@ -120,15 +124,14 @@ Kész, ha a user programválasztó már DB-ből kapja a három csomagot.
 
 Táblák:
 - user_programs
-- user_program_tracks
+- user_program_items
 - user_program_days
 
 Funkciók:
-- kész template kiválasztása
+- kész csomag kiválasztása
 - kiválasztott napok mentése
 - hétvége támogatása
-- teljes morning sequence csere
-- teljes evening sequence csere
+- teljes kurzus csere egy csomagelemen belül
 - start_date
 - end_date csak ha valóban szükséges
 

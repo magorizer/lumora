@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 
 import { ProgramTemplateService } from '../../core/data/program-template.service';
-import { ProgramPeriod, ProgramTemplate } from '../../core/models/content.models';
+import { ProgramTemplate } from '../../core/models/content.models';
 
 @Component({
   selector: 'app-creator-programs',
@@ -38,9 +38,30 @@ export class CreatorProgramsPage implements OnInit {
     this.programs.updateTemplateField(selected.id, field, (event.target as HTMLInputElement | HTMLTextAreaElement).value);
   }
 
-  updateTrack(period: ProgramPeriod, event: Event): void {
+  addItem(): void {
+    const selected = this.selected();
+    if (selected) this.programs.addTemplateItem(selected.id);
+  }
+
+  removeItem(itemId: string): void {
+    const selected = this.selected();
+    if (selected) this.programs.removeTemplateItem(selected.id, itemId);
+  }
+
+  moveItem(itemId: string, direction: -1 | 1): void {
+    const selected = this.selected();
+    if (selected) this.programs.moveTemplateItem(selected.id, itemId, direction);
+  }
+
+  updateItemCourse(itemId: string, event: Event): void {
     const selected = this.selected();
     if (!selected) return;
-    this.programs.updateTemplateTrack(selected.id, period, (event.target as HTMLSelectElement).value);
+    this.programs.updateTemplateItemCourse(selected.id, itemId, (event.target as HTMLSelectElement).value);
+  }
+
+  updateItemTime(itemId: string, event: Event): void {
+    const selected = this.selected();
+    if (!selected) return;
+    this.programs.updateTemplateItemTime(selected.id, itemId, (event.target as HTMLSelectElement).value);
   }
 }

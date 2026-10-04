@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ProgramItem, ProgramPeriod, ProgramSequenceSession, ProgramWeek } from '../../core/models/content.models';
+import { CourseUnit, ProgramItem, ProgramPeriod, ProgramSequenceSession, ProgramWeek } from '../../core/models/content.models';
 import { UserFlowService } from './user-flow.service';
 
 export interface GoalOption {
@@ -81,6 +81,26 @@ export class UserFlowUiService {
     this.selectedLesson.set(item);
     this.lessonPlaying.set(false);
     void this.router.navigateByUrl(item.type === 'feedback' ? '/feedback' : '/lesson');
+  }
+
+  openCourseUnit(courseId: string, unit: CourseUnit, timeLabel: string): void {
+    const timeOfDay: ProgramItem['timeOfDay'] =
+      timeLabel.includes('reggel') || timeLabel.includes('ébredés')
+        ? 'morning'
+        : timeLabel.includes('este') || timeLabel.includes('lefekvés')
+          ? 'evening'
+          : 'daytime';
+
+    this.selectedLesson.set({
+      type: unit.type,
+      title: unit.title,
+      duration: unit.duration,
+      courseId,
+      unitId: unit.id,
+      timeOfDay,
+    });
+    this.lessonPlaying.set(false);
+    void this.router.navigateByUrl('/lesson');
   }
 
   openTemplateSession(session: ProgramSequenceSession, period: ProgramPeriod): void {

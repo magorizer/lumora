@@ -36,19 +36,41 @@ export class CreatorCatalogService {
   readonly saveMessage = signal('');
   readonly fakeUploadName = signal('');
 
-  readonly levelOptions = ['nincs', 'kezdő', 'középhaladó', 'haladó'];
+  readonly levelOptions = ['nincs', 'kezdő', 'középhaladó', 'haladó', 'minden szint'];
   readonly bestTimeOptions = [
     'nincs',
     'közvetlenül ébredés után',
+    'ébredés után 15–30 perccel',
     'reggel',
     'délelőtt',
+    'ebéd körül',
     'napközben',
     'délután',
+    'kora este',
     'este',
     'közvetlenül lefekvés előtt',
     'bármikor',
+    'szükség szerint',
   ];
-  readonly formatOptions = ['videó', 'hanganyag', 'meditáció', 'gyakorlat'];
+  readonly formatOptions = [
+    'videó',
+    'hanganyag',
+    'szöveg / cikk',
+    'kép / galéria',
+    'PDF / munkafüzet',
+    'meditáció',
+    'vezetett gyakorlat',
+    'feladat',
+    'kvíz',
+    'kérdőív / survey',
+    'vizsga / teszt',
+    'prezentáció',
+    'élő / webinar',
+    'beszélgetés / közösségi',
+    'külső tartalom / beágyazás',
+    'interaktív / multimédia',
+    'letölthető anyag',
+  ];
 
   readonly draft = signal<CreatorDraft>({
     title: 'Új fejlődési mini-kurzus',
@@ -58,7 +80,7 @@ export class CreatorCatalogService {
     goals: 'önbizalom, fókusz, kapcsolati rugalmasság',
     problems: 'halogatás, belső feszültség, bizonytalanság',
     level: 'nincs',
-    bestTime: 'napközben',
+    bestTime: 'nincs',
     format: 'videó, hanganyag, gyakorlat',
     requiresSequentialOrder: 'yes',
     lessonReflection: 'optional',
@@ -311,6 +333,11 @@ export class CreatorCatalogService {
     this.patchUnit(unitId, { coverMode: mode });
   }
 
+  setUnitStandaloneFromEvent(unitId: string, event: Event): void {
+    this.patchUnit(unitId, { standaloneAllowed: (event.target as HTMLInputElement).checked });
+    this.saveMessage.set('Önálló használat beállítása módosítva.');
+  }
+
   fakeUnitUpload(unitId: string, target: 'media' | 'cover', event: Event): void {
     const input = event.target as HTMLInputElement;
     const fileName = input.files?.[0]?.name;
@@ -389,6 +416,7 @@ export class CreatorCatalogService {
           type: 'video',
           duration: '12 perc',
           summary: 'Rövid bevezetés a kurzus fő témájába.',
+          standaloneAllowed: false,
         },
         {
           id: id + '-2',
@@ -396,6 +424,7 @@ export class CreatorCatalogService {
           type: 'exercise',
           duration: '10 perc',
           summary: 'Egy rövid, kipróbálható gyakorlat.',
+          standaloneAllowed: true,
         },
       ],
     };

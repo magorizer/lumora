@@ -1,101 +1,82 @@
-# portaLumi program templates és scheduling döntések
+# portaLumi csomagok és scheduling döntések
 
-Dátum: 2026-10-03
+Dátum: 2026-10-04
 
-## Mi változott
+## Csomag
 
-A program fő domain objektuma nem program_week.
+A csomag felhasználói összeállítás több meglévő kurzusból.
 
-A szakmai tartalom sorrendje külön authored sequence-ben él.
+Nem fix reggel + este szerkezet.
 
-A programcsomag teljes authored sequence-eket kapcsol össze.
+Egy csomagban tetszőleges számú napi blokk lehet.
 
-A user kiválaszthatja, mely napokon szeretne foglalkozni a programmal, beleértve a hétvégét is.
+Példák:
+- csak reggel
+- csak este
+- reggel + este
+- napi 3 blokk
+- később más ritmusok is
 
-## User napválasztás
+Minden blokk:
+- egy teljes kurzusra hivatkozik
+- kap egy időpont / napszak címkét
+- sorrendben szerepel a csomagon belül
 
-Kérdés:
-
-"Mely napokon szeretnél foglalkozni a programmal?"
-
-Választható:
-- Hétfő
-- Kedd
-- Szerda
-- Csütörtök
-- Péntek
-- Szombat
-- Vasárnap
-
-Nem kérdezzük külön, hány alkalom fér bele hetente.
-
-## Customizálás
-
-A user nem rendezheti át egy képző 12 alkalmas szakmai sorozatának belső sorrendjét.
-
-Megengedett:
-- teljes reggeli program cseréje másik reggeli programra
-- teljes esti program cseréje másik esti programra
-- saját napok kiválasztása
-
-Nem megengedett:
-- 1., 7., 3., 5. alkalom tetszőleges összekeverése
-
-## Demo programok
+## Demo csomagok
 
 ### 1. Energikusabb mindennapok
-
-Reggel:
-- Reggeli energizáló breathwork
-- Barta Márk
-- 12 alkalom
-
-Este:
-- Esti Joe Dispenza meditációs sorozat
-- 12 alkalom
+- csak reggel
+- Reggeli 5 perces indító fókusz
+- közvetlenül ébredés után
 
 ### 2. Magabiztosság
-
-Reggel:
-- meditáció + pozitív megerősítések
-- 5–10 perc
-- 12 alkalom
-
-Este:
-- NLP önbizalom-program
-- 5–10 perc
-- 12 alkalom
+- csak este
+- Önbizalom gyakorlatban
+- este
 
 ### 3. Megnyugvás / lelki béke
+- napi 3 blokk
+- reggel: Reggeli 5 perces indító fókusz
+- délután: Stressz Reset
+- közvetlenül lefekvés előtt: NLP esti lecsendesedés
 
-Reggel:
-- 10–20 perces meditáció
-- 12 alkalom
+## Creator csomag editor
 
-Este:
-- másik előadó meditációs sorozata
-- 12 alkalom
+Minden content creator:
+- létrehozhat új csomagot
+- az összes már feltöltött kurzusból választhat
+- több kurzust is hozzáadhat
+- ugyanazt a kurzust több blokkban is használhatja
+- megadhatja minden blokk időpontját
+- átrendezheti a blokkokat
+- törölhet blokkot
 
-## Demo JSON
+A kurzus tulajdonosa és a csomag összeállítója nem feltétlenül ugyanaz.
 
-src/assets/demo/program-templates.json
+## Kurzus sorrend
 
-A JSON tartalmazza:
-- 6 authored sequence-et
-- sequence-enként 12 alkalmat
-- 3 előre definiált programcsomagot
+Kurzus szinten:
+- Kötelező időrendi sorrend = bekapcsolva
+- Moduláris = kikapcsolva
 
-## Creator oldal
+A csomag nem írhatja felül a kötött sorrendet.
 
-Új menüpont:
+## Egyénileg is hallgatható tartalom
 
-Programok
+Egy course_unit külön jelölhető:
 
-A creator:
-- létrehozhat programcsomagot
-- szerkesztheti a címet és leírást
-- kiválaszthatja a teljes reggeli sequence-et
-- kiválaszthatja a teljes esti sequence-et
-- előnézetben látja a 12 + 12 alkalmat
+standaloneAllowed = true
 
-A sequence belső szerkesztése későbbi külön editor feladat.
+Ez azt jelenti, hogy például egy meditáció vagy rövid gyakorlat a teljes kurzustól függetlenül is ajánlható / használható.
+
+Ez külön fogalom a moduláris kurzustól:
+- moduláris kurzus: a kurzus leckéi nem kötelező sorrendűek
+- standalone tartalom: konkrét lecke külön is kiemelhető
+
+## User customizálás
+
+A user:
+- kiválasztja a napokat
+- a csomag egy teljes kurzusát másik teljes kurzusra cserélheti
+
+Nem rendezi át automatikusan egy kötött kurzus leckéit.

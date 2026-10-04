@@ -35,16 +35,12 @@ export class ProgramCustomizePage implements OnInit {
     await this.programs.load();
   }
 
-  changeMorning(event: Event): void {
-    this.programs.setTrack('morning', (event.target as HTMLSelectElement).value);
-  }
-
-  changeEvening(event: Event): void {
-    this.programs.setTrack('evening', (event.target as HTMLSelectElement).value);
+  changeCourse(itemId: string, event: Event): void {
+    this.programs.setSelectedItemCourse(itemId, (event.target as HTMLSelectElement).value);
   }
 
   back(): void {
-    void this.router.navigateByUrl('/program');
+    void this.router.navigateByUrl('/packages');
   }
 
   start(): void {

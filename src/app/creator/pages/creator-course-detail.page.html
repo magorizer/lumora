@@ -60,6 +60,9 @@
               @if (unit.summary) {
                 <small>{{ unit.summary }}</small>
               }
+              @if (unit.standaloneAllowed) {
+                <small class="standalone-badge">Egyénileg is hallgatható</small>
+              }
             </span>
 
             <span class="lesson-state">Szerkesztés →</span>
@@ -182,8 +185,11 @@
             >
           </label>
 
-          <div class="sheet-field-group">
-            <span class="sheet-section-label">Formátumok</span>
+          <details class="format-dropdown">
+            <summary>
+              <span>Formátumok</span>
+              <strong>{{ course.format.length ? course.format.join(', ') : 'nincs' }}</strong>
+            </summary>
             <div class="format-option-grid">
               @for (format of creator.formatOptions; track format) {
                 <label class="format-option" [class.selected]="course.format.includes(format)">
@@ -196,7 +202,7 @@
                 </label>
               }
             </div>
-          </div>
+          </details>
 
           <div class="sheet-field-group">
             <span class="sheet-section-label">Ajánlási metaadatok</span>
@@ -283,6 +289,24 @@
             placeholder="Mit tartalmaz ez a lecke vagy gyakorlat?"
           ></textarea>
         </label>
+
+        <div class="sheet-field-group compact-setting">
+          <label class="toggle-setting">
+            <span>
+              <strong>Egyénileg is hallgatható</strong>
+              <small>Bekapcsolva ez a tartalom a kurzustól függetlenül is ajánlható.</small>
+            </span>
+            <span class="switch-control">
+              <input
+                type="checkbox"
+                [checked]="unit.standaloneAllowed === true"
+                (change)="creator.setUnitStandaloneFromEvent(unit.id, $event)"
+                aria-label="Egyénileg is hallgatható"
+              >
+              <span></span>
+            </span>
+          </label>
+        </div>
 
         @if (unit.type !== 'exercise') {
           <div class="sheet-field-group">

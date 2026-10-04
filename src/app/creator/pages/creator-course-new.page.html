@@ -84,8 +84,11 @@
             </select>
           </label>
 
-          <div class="full sheet-field-group">
-            <span class="sheet-section-label">Formátumok</span>
+          <details class="full format-dropdown">
+            <summary>
+              <span>Formátumok</span>
+              <strong>{{ creator.draft().format || 'nincs' }}</strong>
+            </summary>
             <div class="format-option-grid">
               @for (format of creator.formatOptions; track format) {
                 <label class="format-option" [class.selected]="creator.draftHasFormat(format)">
@@ -98,7 +101,7 @@
                 </label>
               }
             </div>
-          </div>
+          </details>
 
           <p class="creator-help full">
             Az összesített időtartamot a leckék és gyakorlatok időtartamából számoljuk ki automatikusan.

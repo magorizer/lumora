@@ -2,7 +2,7 @@
   <div class="eyebrow">Csomagok</div>
   <h1>Válassz egy kész programcsomagot.</h1>
   <p class="lead">
-    A demóban most három, előre megtervezett 3 hónapos program érhető el. A belső sorrend szakmailag rögzített.
+    A csomagok többféle ritmusban működhetnek: lehet csak reggeli, csak esti, vagy akár több külön blokk egy napon.
   </p>
 
   <div class="custom-program-card">
@@ -16,43 +16,39 @@
 
   <div class="program-template-grid">
     @for (template of programs.templates(); track template.id) {
-      @if (programs.sequenceById(template.morningSequenceId); as morning) {
-        @if (programs.sequenceById(template.eveningSequenceId); as evening) {
-          <article [class]="'program-template-card program-template-' + template.accent">
-            <div class="program-template-top">
-              <span class="hero-kicker">3 hónapos program</span>
-              <span class="optional-pill">12 + 12 alkalom</span>
-            </div>
+      <article [class]="'program-template-card program-template-' + template.accent">
+        <div class="program-template-top">
+          <span class="hero-kicker">Kész csomag</span>
+          <span class="optional-pill">{{ template.items.length }} blokk / nap</span>
+        </div>
 
-            <h2>{{ template.title }}</h2>
-            <p>{{ template.description }}</p>
+        <h2>{{ template.title }}</h2>
+        <p>{{ template.description }}</p>
 
-            <div class="program-track-summary">
+        <div class="program-track-summary package-track-summary">
+          @for (item of template.items; track item.id) {
+            @if (programs.courseById(item.courseId); as course) {
               <div>
-                <span class="routine-period">Reggel</span>
-                <strong>{{ morning.title }}</strong>
-                <small>{{ morning.creatorName }} · {{ morning.sessions.length }} alkalom</small>
+                <span class="routine-period">{{ item.timeLabel }}</span>
+                <strong>{{ course.title }}</strong>
+                <small>{{ programs.instructorNameForCourse(course) }} · {{ course.units.length }} tartalom</small>
               </div>
-              <div>
-                <span class="routine-period">Este</span>
-                <strong>{{ evening.title }}</strong>
-                <small>{{ evening.creatorName }} · {{ evening.sessions.length }} alkalom</small>
-              </div>
-            </div>
+            }
+          }
+        </div>
 
-            <button class="primary-action" type="button" (click)="choose(template.id)">
-              Ezt választom <span>→</span>
-            </button>
-          </article>
-        }
-      }
+        <button class="primary-action" type="button" (click)="choose(template.id)">
+          Ezt választom <span>→</span>
+        </button>
+      </article>
     }
   </div>
 
   <div class="card program-order-note">
-    <strong>Mit lehet majd módosítani?</strong>
+    <strong>Mit lehet módosítani?</strong>
     <p>
-      Nem az egyes alkalmak sorrendjét keverjük össze. A teljes reggeli vagy esti program lecserélhető egy másik, szintén felépített sorozatra.
+      A csomagban teljes kurzusokat cserélhetsz másik kurzusra. Ha egy kurzus kötött sorrendű,
+      annak belső leckesorrendje változatlan marad.
     </p>
   </div>
 </section>
