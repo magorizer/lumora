@@ -57,7 +57,7 @@ export class CreatorCatalogService {
     topics: 'önreflexió, állapotváltás, belső erőforrás',
     goals: 'önbizalom, fókusz, kapcsolati rugalmasság',
     problems: 'halogatás, belső feszültség, bizonytalanság',
-    level: 'kezdő',
+    level: 'nincs',
     bestTime: 'napközben',
     format: 'videó, hanganyag, gyakorlat',
     requiresSequentialOrder: 'yes',
@@ -223,6 +223,10 @@ export class CreatorCatalogService {
   setDraftSequentialOrder(event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.draft.update((current) => ({ ...current, requiresSequentialOrder: checked ? 'yes' : 'no' }));
+  }
+
+  setSequentialOrderFromEvent(event: Event): void {
+    this.setSequentialOrder((event.target as HTMLInputElement).checked);
   }
 
   setSequentialOrder(required: boolean): void {
