@@ -563,29 +563,54 @@
     {
       "id": "energetic",
       "title": "Energikusabb mindennapok",
-      "subtitle": "Reggeli breathwork + esti meditáció",
-      "description": "Egy 3 hónapos csomag energikusabb napkezdéshez és tudatos esti lezáráshoz.",
+      "subtitle": "Csak reggel · rövid, fókuszált indítás",
+      "description": "Egyszerű reggeli csomag azoknak, akik a nap elején szeretnének egy rövid, energizáló rutint.",
       "accent": "amber",
-      "morningSequenceId": "energy-breathwork-morning",
-      "eveningSequenceId": "energy-dispenza-evening"
+      "items": [
+        {
+          "id": "energetic-morning",
+          "courseId": "morning-focus-5",
+          "timeLabel": "közvetlenül ébredés után"
+        }
+      ]
     },
     {
       "id": "confidence",
       "title": "Magabiztosság",
-      "subtitle": "Reggeli meditáció és megerősítés + esti NLP",
-      "description": "Egy 3 hónapos program, amely reggel a belső stabilitást, este pedig az önbizalmat támogató NLP-folyamatot építi.",
+      "subtitle": "Csak este · önbizalom és mentális átkeretezés",
+      "description": "Esti csomag, amely a nap lezárásakor dolgozik az önbizalommal és a belső párbeszéddel.",
       "accent": "blue",
-      "morningSequenceId": "confidence-morning",
-      "eveningSequenceId": "confidence-nlp-evening"
+      "items": [
+        {
+          "id": "confidence-evening",
+          "courseId": "confidence-in-action",
+          "timeLabel": "este"
+        }
+      ]
     },
     {
       "id": "calm",
       "title": "Megnyugvás / lelki béke",
-      "subtitle": "Reggeli és esti meditáció két különböző előadótól",
-      "description": "Egy 3 hónapos, nyugodtabb ritmusra épülő meditációs csomag reggeli és esti gyakorlattal.",
+      "subtitle": "Napi 3 blokk · reggel, napközben és lefekvés előtt",
+      "description": "Sűrűbb, hárompontos napi ritmus: rövid reggeli fókusz, napközbeni reset és esti lecsendesedés.",
       "accent": "sage",
-      "morningSequenceId": "calm-morning",
-      "eveningSequenceId": "calm-evening"
+      "items": [
+        {
+          "id": "calm-morning",
+          "courseId": "morning-focus-5",
+          "timeLabel": "reggel"
+        },
+        {
+          "id": "calm-day",
+          "courseId": "stress-reset",
+          "timeLabel": "délután"
+        },
+        {
+          "id": "calm-evening",
+          "courseId": "nlp-evening-meditation",
+          "timeLabel": "közvetlenül lefekvés előtt"
+        }
+      ]
     }
   ]
 }
