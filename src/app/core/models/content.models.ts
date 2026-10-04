@@ -75,6 +75,7 @@ export interface CourseUnit {
   coverMode?: 'upload' | 'url';
   coverUrl?: string;
   coverUploadName?: string;
+  standaloneAllowed?: boolean;
 }
 
 export interface RecommendationMetadata {
@@ -154,14 +155,21 @@ export interface ProgramSequence {
   sessions: ProgramSequenceSession[];
 }
 
+export interface ProgramPackageItem {
+  id: string;
+  courseId: string;
+  timeLabel: string;
+}
+
 export interface ProgramTemplate {
   id: string;
   title: string;
   subtitle: string;
   description: string;
   accent: 'amber' | 'blue' | 'sage';
-  morningSequenceId: string;
-  eveningSequenceId: string;
+  items: ProgramPackageItem[];
+  morningSequenceId?: string;
+  eveningSequenceId?: string;
 }
 
 export interface ProgramTemplatesData {
