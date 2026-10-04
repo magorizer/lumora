@@ -61,19 +61,22 @@
           "id": "nlp-f-1",
           "title": "Hogyan építünk belső képet?",
           "type": "video",
-          "duration": "14 perc"
+          "duration": "14 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "nlp-f-2",
           "title": "Állapotváltás 3 lépésben",
           "type": "exercise",
-          "duration": "10 perc"
+          "duration": "10 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "nlp-f-3",
           "title": "Nyelvi minták és átkeretezés",
           "type": "video",
-          "duration": "18 perc"
+          "duration": "18 perc",
+          "standaloneAllowed": false
         }
       ],
       "requiresSequentialOrder": true
@@ -101,19 +104,22 @@
           "id": "pp-1",
           "title": "A három nézőpont",
           "type": "video",
-          "duration": "12 perc"
+          "duration": "12 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "pp-2",
           "title": "Vezetett perspektívaváltás",
           "type": "exercise",
-          "duration": "18 perc"
+          "duration": "18 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "pp-3",
           "title": "Integráció",
           "type": "audio",
-          "duration": "8 perc"
+          "duration": "8 perc",
+          "standaloneAllowed": true
         }
       ],
       "requiresSequentialOrder": true
@@ -141,19 +147,22 @@
           "id": "night-1",
           "title": "A nap elengedése",
           "type": "meditation",
-          "duration": "12 perc"
+          "duration": "12 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "night-2",
           "title": "Erőforrások felidézése",
           "type": "meditation",
-          "duration": "10 perc"
+          "duration": "10 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "night-3",
           "title": "Holnapi szándék",
           "type": "meditation",
-          "duration": "8 perc"
+          "duration": "8 perc",
+          "standaloneAllowed": true
         }
       ],
       "requiresSequentialOrder": true
@@ -181,19 +190,22 @@
           "id": "morning-1",
           "title": "3 perces jelenlét",
           "type": "audio",
-          "duration": "3 perc"
+          "duration": "3 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "morning-2",
           "title": "Mai egyetlen fókusz",
           "type": "exercise",
-          "duration": "2 perc"
+          "duration": "2 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "morning-3",
           "title": "5 perces teljes indító",
           "type": "audio",
-          "duration": "5 perc"
+          "duration": "5 perc",
+          "standaloneAllowed": true
         }
       ],
       "requiresSequentialOrder": false
@@ -221,19 +233,22 @@
           "id": "focus-1",
           "title": "Mi viszi el a figyelmed?",
           "type": "video",
-          "duration": "15 perc"
+          "duration": "15 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "focus-2",
           "title": "Egy fókuszblokk",
           "type": "exercise",
-          "duration": "20 perc"
+          "duration": "20 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "focus-3",
           "title": "Heti energiatérkép",
           "type": "exercise",
-          "duration": "15 perc"
+          "duration": "15 perc",
+          "standaloneAllowed": false
         }
       ],
       "requiresSequentialOrder": true
@@ -261,19 +276,22 @@
           "id": "stress-1",
           "title": "90 másodperces reset",
           "type": "audio",
-          "duration": "2 perc"
+          "duration": "2 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "stress-2",
           "title": "Testi feszültség térképe",
           "type": "exercise",
-          "duration": "8 perc"
+          "duration": "8 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "stress-3",
           "title": "Vissza a jelenbe",
           "type": "audio",
-          "duration": "7 perc"
+          "duration": "7 perc",
+          "standaloneAllowed": true
         }
       ],
       "requiresSequentialOrder": false
@@ -301,19 +319,22 @@
           "id": "conf-1",
           "title": "Belső erő alapjai",
           "type": "video",
-          "duration": "12 perc"
+          "duration": "12 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "conf-2",
           "title": "Egy fokkal bátrabb reakció",
           "type": "exercise",
-          "duration": "15 perc"
+          "duration": "15 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "conf-3",
           "title": "Bizonyítékgyűjtés magadról",
           "type": "exercise",
-          "duration": "10 perc"
+          "duration": "10 perc",
+          "standaloneAllowed": true
         }
       ],
       "requiresSequentialOrder": true
@@ -341,19 +362,22 @@
           "id": "bound-1",
           "title": "Hol csúsznak el a határaid?",
           "type": "video",
-          "duration": "16 perc"
+          "duration": "16 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "bound-2",
           "title": "Tiszta nem",
           "type": "exercise",
-          "duration": "15 perc"
+          "duration": "15 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "bound-3",
           "title": "Kérés vád nélkül",
           "type": "exercise",
-          "duration": "12 perc"
+          "duration": "12 perc",
+          "standaloneAllowed": false
         }
       ],
       "requiresSequentialOrder": true
@@ -381,19 +405,22 @@
           "id": "habit-1",
           "title": "A túl kicsi lépés ereje",
           "type": "video",
-          "duration": "11 perc"
+          "duration": "11 perc",
+          "standaloneAllowed": false
         },
         {
           "id": "habit-2",
           "title": "2 perces szabály",
           "type": "exercise",
-          "duration": "5 perc"
+          "duration": "5 perc",
+          "standaloneAllowed": true
         },
         {
           "id": "habit-3",
           "title": "30 napos mini tracker",
           "type": "exercise",
-          "duration": "2 perc / nap"
+          "duration": "2 perc / nap",
+          "standaloneAllowed": true
         }
       ],
       "requiresSequentialOrder": true
