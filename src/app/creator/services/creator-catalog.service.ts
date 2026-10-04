@@ -55,6 +55,7 @@ export class CreatorCatalogService {
   readonly formatOptions = [
     'videó',
     'hanganyag',
+    'podcast',
     'szöveg / cikk',
     'kép / galéria',
     'PDF / munkafüzet',
@@ -69,6 +70,8 @@ export class CreatorCatalogService {
     'beszélgetés / közösségi',
     'külső tartalom / beágyazás',
     'interaktív / multimédia',
+    'interaktív szcenárió',
+    'mini-tananyag / tutorial',
     'letölthető anyag',
   ];
 
