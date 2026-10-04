@@ -24,12 +24,12 @@ Jelentése:
 - a kurzusoldalon "Moduláris" jelzés jelenik meg
 - később a programgenerátor különálló modulokat is kiválaszthat belőle
 
-Az editorban a beállítás két rádiógomb:
+Az editorban ez egy egyszerű switch:
 
-"Kötelező időrendi sorrendben hallgatás"
+"Kötelező időrendi sorrend"
 
-- Igen
-- Nem
+- bekapcsolva: a leckék egymásra épülnek
+- kikapcsolva: Moduláris
 
 ## Későbbi ötlet: két kurzus egyesítése
 
