@@ -50,14 +50,18 @@ Demo opciók:
 - videó
 - hanganyag
 - szöveg / cikk
+- kép / galéria
 - PDF / munkafüzet
 - meditáció
 - vezetett gyakorlat
 - feladat
 - kvíz
-- kérdőív
+- kérdőív / survey
+- vizsga / teszt
 - prezentáció
 - élő / webinar
+- beszélgetés / közösségi
+- külső tartalom / beágyazás
 - interaktív / multimédia
 - letölthető anyag
 
