@@ -74,7 +74,6 @@ Ugyanaz a személy lehet user és content_creator is.
 - category
 - description
 - level
-- total_duration_minutes nullable
 - best_time nullable
 - status draft / published / archived
 - topics JSON
@@ -108,6 +107,8 @@ Típusok:
 - audio
 - exercise
 - meditation
+
+A kurzus teljes időtartamát nem tároljuk külön adatként. A course_units duration értékeiből számoljuk.
 
 ## Felépített tartalmi sorozatok
 
