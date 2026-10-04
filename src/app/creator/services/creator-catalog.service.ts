@@ -372,7 +372,7 @@ export class CreatorCatalogService {
       recommendation: {
         goals: d.goals.split(',').map((x) => x.trim()).filter(Boolean),
         problems: d.problems.split(',').map((x) => x.trim()).filter(Boolean),
-        preferredTimes: [d.bestTime],
+        preferredTimes: d.bestTime === 'nincs' ? [] : [d.bestTime],
       },
       engagement: {
         lessonReflection: d.lessonReflection,
