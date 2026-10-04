@@ -92,6 +92,7 @@ Ugyanaz a személy lehet user és content_creator is.
 - type
 - duration_minutes nullable
 - summary nullable
+- standalone_allowed boolean
 - source_mode upload / url
 - media_url nullable
 - media_path nullable
@@ -138,11 +139,15 @@ A position sorrend szakmai része a sorozatnak.
 
 ## Előre definiált programcsomagok
 
-A creator teljes sorozatokból állít össze felhasználóknak választható programot.
+A csomag nem fix "reggel + este" szerkezet.
 
-Példa:
-- reggeli sorozat
-- esti sorozat
+Bármely content creator összeállíthat csomagot a rendszerben már feltöltött kurzusokból.
+
+Lehet például:
+- csak reggeli blokk
+- csak esti blokk
+- napi 3 külön blokk
+- később tetszőleges számú blokk
 
 ### program_templates
 - id UUID
@@ -154,11 +159,21 @@ Példa:
 - created_at
 - updated_at
 
-### program_template_tracks
+### program_template_items
 - id UUID
 - program_template_id
-- period morning / evening
-- sequence_id
+- course_id
+- position
+- time_label
+- created_at
+- updated_at
+
+A time_label nem merev enum az első körben, hanem pl.:
+- közvetlenül ébredés után
+- reggel
+- délután
+- este
+- közvetlenül lefekvés előtt
 
 A program template nem tartalmaz week struktúrát.
 
@@ -180,15 +195,21 @@ Amikor a user kiválaszt egy kész programot, abból saját program-példány k�
 
 Nincs duration_weeks mező. Ha kell végdátum, end_date tárolható.
 
-### user_program_tracks
+### user_program_items
 - id UUID
 - user_program_id
-- period morning / evening
-- sequence_id
+- source_program_template_item_id nullable
+- course_id
+- position
+- time_label
 
-A user a teljes reggeli vagy esti tracket lecserélheti egy másik teljes, felépített sorozatra.
+A user egy teljes kurzust lecserélhet másik teljes kurzusra a csomagon belül.
 
-Az egyes sorozatok belső sorrendjét nem változtatja.
+Ha a kurzusnál requires_sequential_order = true, a kurzus belső leckesorrendjét nem változtatja.
+
+Ha false, a kurzus moduláris.
+
+Egy course_unit külön standalone_allowed = true értéket is kaphat, ha a kurzustól függetlenül is ajánlható / hallgatható.
 
 ### user_program_days
 - id UUID
@@ -294,9 +315,9 @@ Az első valódi verzióhoz nem szükséges AI.
 Első stabil termék:
 1. creator tartalom
 2. authored sequence
-3. creator program template
-4. user program választás
-5. teljes track csere
+3. creator csomag összeállítás
+4. user csomag választás
+5. teljes kurzus csere a csomagon belül
 6. napválasztás
 7. progress és feedback
 
