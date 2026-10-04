@@ -1,9 +1,10 @@
 <section class="creator-page creator-programs-page">
   <div class="creator-intro">
-    <span class="eyebrow">Programok</span>
+    <span class="eyebrow">Csomagok</span>
     <h1>Előre definiált programcsomagok</h1>
     <p>
-      Itt a képző teljes, sorrendben felépített reggeli és esti sorozatokból állít össze programot a felhasználók számára.
+      Bármelyik képző összeállíthat új csomagot az összes már feltöltött kurzusból.
+      Egy csomag lehet csak reggeli, csak esti, vagy akár több külön blokk egy napon.
     </p>
   </div>
 
@@ -11,10 +12,10 @@
     <div class="creator-card">
       <div class="creator-heading">
         <div>
-          <h2>Programok</h2>
+          <h2>Csomagok</h2>
           <p class="creator-help">{{ programs.templates().length }} kész csomag</p>
         </div>
-        <button class="creator-primary" type="button" (click)="create()">+ Új program</button>
+        <button class="creator-primary" type="button" (click)="create()">+ Új csomag</button>
       </div>
 
       <div class="creator-program-template-list">
@@ -27,7 +28,7 @@
             <span class="program-admin-dot" [class]="'program-admin-dot program-template-' + template.accent"></span>
             <span>
               <strong>{{ template.title }}</strong>
-              <small>{{ template.subtitle }}</small>
+              <small>{{ template.items.length }} napi blokk · {{ template.subtitle }}</small>
             </span>
           </button>
         }
@@ -38,7 +39,7 @@
       <div class="creator-card">
         <div class="creator-heading">
           <div>
-            <span class="eyebrow">Program szerkesztése</span>
+            <span class="eyebrow">Csomag szerkesztése</span>
             <h2>{{ template.title }}</h2>
           </div>
           <span class="creator-status">demo</span>
@@ -46,7 +47,7 @@
 
         <div class="creator-form-grid">
           <label class="full">
-            Program neve
+            Csomag neve
             <input [value]="template.title" (input)="updateField('title', $event)">
           </label>
 
@@ -59,68 +60,64 @@
             Leírás
             <textarea rows="4" [value]="template.description" (input)="updateField('description', $event)"></textarea>
           </label>
-
-          <label>
-            Reggeli teljes program
-            <select [value]="template.morningSequenceId" (change)="updateTrack('morning', $event)">
-              @for (sequence of programs.availableSequences('morning'); track sequence.id) {
-                <option [value]="sequence.id">{{ sequence.title }} · {{ sequence.creatorName }}</option>
-              }
-            </select>
-          </label>
-
-          <label>
-            Esti teljes program
-            <select [value]="template.eveningSequenceId" (change)="updateTrack('evening', $event)">
-              @for (sequence of programs.availableSequences('evening'); track sequence.id) {
-                <option [value]="sequence.id">{{ sequence.title }} · {{ sequence.creatorName }}</option>
-              }
-            </select>
-          </label>
         </div>
 
-        <div class="creator-program-preview-grid">
-          @if (programs.sequenceById(template.morningSequenceId); as morning) {
-            <div class="creator-program-sequence-preview">
-              <span class="routine-period">Reggel</span>
-              <h3>{{ morning.title }}</h3>
-              <p>{{ morning.creatorName }}</p>
-              <div class="sequence-list compact-sequence-list">
-                @for (session of morning.sessions; track session.position) {
-                  <div class="sequence-row">
-                    <span class="sequence-number">{{ session.position }}</span>
-                    <div>
-                      <strong>{{ session.title }}</strong>
-                      <small>{{ session.duration }}</small>
-                    </div>
-                  </div>
-                }
-              </div>
-            </div>
-          }
+        <div class="creator-heading package-items-heading">
+          <div>
+            <span class="eyebrow">Napi blokkok</span>
+            <h2>Kurzusok a csomagban</h2>
+          </div>
+          <button class="creator-secondary" type="button" (click)="addItem()">+ Kurzus hozzáadása</button>
+        </div>
 
-          @if (programs.sequenceById(template.eveningSequenceId); as evening) {
-            <div class="creator-program-sequence-preview">
-              <span class="routine-period">Este</span>
-              <h3>{{ evening.title }}</h3>
-              <p>{{ evening.creatorName }}</p>
-              <div class="sequence-list compact-sequence-list">
-                @for (session of evening.sessions; track session.position) {
-                  <div class="sequence-row">
-                    <span class="sequence-number">{{ session.position }}</span>
-                    <div>
-                      <strong>{{ session.title }}</strong>
-                      <small>{{ session.duration }}</small>
-                    </div>
-                  </div>
-                }
+        <div class="package-editor-list">
+          @for (item of template.items; track item.id; let index = $index) {
+            <div class="package-editor-item">
+              <div class="package-editor-item-head">
+                <span class="sequence-number">{{ index + 1 }}</span>
+                <strong>{{ item.timeLabel }}</strong>
+
+                <div class="package-editor-order">
+                  <button type="button" (click)="moveItem(item.id, -1)" [disabled]="index === 0" aria-label="Fel">↑</button>
+                  <button type="button" (click)="moveItem(item.id, 1)" [disabled]="index === template.items.length - 1" aria-label="Le">↓</button>
+                  <button type="button" (click)="removeItem(item.id)" [disabled]="template.items.length <= 1" aria-label="Törlés">×</button>
+                </div>
               </div>
+
+              <div class="creator-form-grid">
+                <label>
+                  Időpont
+                  <select [value]="item.timeLabel" (change)="updateItemTime(item.id, $event)">
+                    @for (time of programs.packageTimeOptions; track time) {
+                      <option [value]="time">{{ time }}</option>
+                    }
+                  </select>
+                </label>
+
+                <label>
+                  Kurzus
+                  <select [value]="item.courseId" (change)="updateItemCourse(item.id, $event)">
+                    @for (course of programs.courses(); track course.id) {
+                      <option [value]="course.id">{{ course.title }} · {{ programs.instructorNameForCourse(course) }}</option>
+                    }
+                  </select>
+                </label>
+              </div>
+
+              @if (programs.courseById(item.courseId); as course) {
+                <div class="package-course-preview">
+                  <strong>{{ course.title }}</strong>
+                  <span>{{ programs.instructorNameForCourse(course) }} · {{ course.category }}</span>
+                  <small>{{ course.units.length }} tartalom · {{ course.requiresSequentialOrder === false ? 'moduláris' : 'kötött sorrend' }}</small>
+                </div>
+              }
             </div>
           }
         </div>
 
         <p class="creator-help mt-4">
-          Az egyes sorozatok belső sorrendje rögzített. A programcsomag teljes reggeli vagy esti sorozatot választ.
+          A csomag az összes feltöltött kurzusból építhető. Egy kurzus belső sorrendje attól még megmarad,
+          ha a kurzusnál kötelező sorrend van beállítva.
         </p>
       </div>
     }
