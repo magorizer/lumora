@@ -11,7 +11,6 @@ interface CreatorDraft {
   goals: string;
   problems: string;
   level: string;
-  totalDuration: string;
   bestTime: string;
   format: string;
   requiresSequentialOrder: 'yes' | 'no';
@@ -37,6 +36,20 @@ export class CreatorCatalogService {
   readonly saveMessage = signal('');
   readonly fakeUploadName = signal('');
 
+  readonly levelOptions = ['nincs', 'kezdő', 'középhaladó', 'haladó'];
+  readonly bestTimeOptions = [
+    'nincs',
+    'közvetlenül ébredés után',
+    'reggel',
+    'délelőtt',
+    'napközben',
+    'délután',
+    'este',
+    'közvetlenül lefekvés előtt',
+    'bármikor',
+  ];
+  readonly formatOptions = ['videó', 'hanganyag', 'meditáció', 'gyakorlat'];
+
   readonly draft = signal<CreatorDraft>({
     title: 'Új fejlődési mini-kurzus',
     category: 'NLP · önismeret',
@@ -45,7 +58,6 @@ export class CreatorCatalogService {
     goals: 'önbizalom, fókusz, kapcsolati rugalmasság',
     problems: 'halogatás, belső feszültség, bizonytalanság',
     level: 'kezdő',
-    totalDuration: '45 perc',
     bestTime: 'napközben',
     format: 'videó, hanganyag, gyakorlat',
     requiresSequentialOrder: 'yes',
@@ -66,6 +78,7 @@ export class CreatorCatalogService {
       ...course,
       status: course.status ?? 'published',
       requiresSequentialOrder: course.requiresSequentialOrder ?? true,
+      totalDuration: this.calculateDuration(course.units),
     })));
 
     this.selectedInstructorId.set(catalog.instructors[0]?.id ?? '');
@@ -139,7 +152,7 @@ export class CreatorCatalogService {
   }
 
   updateCourse(
-    field: 'title' | 'category' | 'description' | 'level' | 'totalDuration' | 'bestTime' | 'topics' | 'format',
+    field: 'title' | 'category' | 'description' | 'level' | 'bestTime' | 'topics',
     event: Event,
   ): void {
     const value = (event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value;
@@ -148,8 +161,19 @@ export class CreatorCatalogService {
     this.courses.update((courses) =>
       courses.map((course) => {
         if (course.id !== selectedId) return course;
-        if (field === 'topics' || field === 'format') {
-          return { ...course, [field]: value.split(',').map((item) => item.trim()).filter(Boolean) };
+        if (field === 'topics') {
+          return { ...course, topics: value.split(',').map((item) => item.trim()).filter(Boolean) };
+        }
+
+        if (field === 'bestTime') {
+          return {
+            ...course,
+            bestTime: value,
+            recommendation: {
+              ...(course.recommendation ?? {}),
+              preferredTimes: value === 'nincs' ? [] : [value],
+            },
+          };
         }
 
         return { ...course, [field]: value };
@@ -157,6 +181,48 @@ export class CreatorCatalogService {
     );
 
     this.saveMessage.set('Kurzus módosítva a demóban.');
+  }
+
+  toggleCourseFormat(format: string): void {
+    const selectedId = this.selectedCourseId();
+
+    this.courses.update((courses) =>
+      courses.map((course) => {
+        if (course.id !== selectedId) return course;
+        const selected = course.format.includes(format);
+        return {
+          ...course,
+          format: selected
+            ? course.format.filter((item) => item !== format)
+            : [...course.format, format],
+        };
+      }),
+    );
+
+    this.saveMessage.set('Formátumok módosítva.');
+  }
+
+  toggleDraftFormat(format: string): void {
+    const current = this.draft().format
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+    const selected = current.includes(format);
+    const next = selected ? current.filter((item) => item !== format) : [...current, format];
+    this.draft.update((draft) => ({ ...draft, format: next.join(', ') }));
+  }
+
+  draftHasFormat(format: string): boolean {
+    return this.draft().format
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .includes(format);
+  }
+
+  setDraftSequentialOrder(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.draft.update((current) => ({ ...current, requiresSequentialOrder: checked ? 'yes' : 'no' }));
   }
 
   setSequentialOrder(required: boolean): void {
@@ -209,20 +275,23 @@ export class CreatorCatalogService {
       courses.map((course) => {
         if (course.id !== this.selectedCourseId()) return course;
 
+        const units = course.units.map((unit) => {
+          if (unit.id !== unitId) return unit;
+
+          if (field === 'type') return { ...unit, type: value as CourseUnit['type'] };
+          if (field === 'sourceMode') return { ...unit, sourceMode: value as 'upload' | 'url' };
+          if (field === 'coverMode') return { ...unit, coverMode: value as 'upload' | 'url' };
+          if (field === 'title') return { ...unit, title: value };
+          if (field === 'duration') return { ...unit, duration: value };
+          if (field === 'summary') return { ...unit, summary: value };
+          if (field === 'mediaUrl') return { ...unit, mediaUrl: value };
+          return { ...unit, coverUrl: value };
+        });
+
         return {
           ...course,
-          units: course.units.map((unit) => {
-            if (unit.id !== unitId) return unit;
-
-            if (field === 'type') return { ...unit, type: value as CourseUnit['type'] };
-            if (field === 'sourceMode') return { ...unit, sourceMode: value as 'upload' | 'url' };
-            if (field === 'coverMode') return { ...unit, coverMode: value as 'upload' | 'url' };
-            if (field === 'title') return { ...unit, title: value };
-            if (field === 'duration') return { ...unit, duration: value };
-            if (field === 'summary') return { ...unit, summary: value };
-            if (field === 'mediaUrl') return { ...unit, mediaUrl: value };
-            return { ...unit, coverUrl: value };
-          }),
+          units,
+          totalDuration: this.calculateDuration(units),
         };
       }),
     );
@@ -292,7 +361,7 @@ export class CreatorCatalogService {
       topics: d.topics.split(',').map((x) => x.trim()).filter(Boolean),
       format: d.format.split(',').map((x) => x.trim()).filter(Boolean),
       level: d.level,
-      totalDuration: d.totalDuration,
+      totalDuration: '0 perc',
       bestTime: d.bestTime,
       requiresSequentialOrder: d.requiresSequentialOrder === 'yes',
       status: 'draft',
@@ -327,11 +396,35 @@ export class CreatorCatalogService {
       ],
     };
 
+    course.totalDuration = this.calculateDuration(course.units);
+
     const saved = await this.creatorRepository.saveDraft(course);
     this.courses.update((items) => [saved, ...items]);
     this.selectedCourseId.set(saved.id);
     this.saveMessage.set('Demo kurzus létrehozva.');
     return saved;
+  }
+
+  courseDuration(course: Course): string {
+    return this.calculateDuration(course.units);
+  }
+
+  private calculateDuration(units: CourseUnit[]): string {
+    const totalMinutes = units.reduce((sum, unit) => {
+      const match = unit.duration.match(/(\d+(?:[.,]\d+)?)/);
+      if (!match) return sum;
+      return sum + Number.parseFloat(match[1].replace(',', '.'));
+    }, 0);
+
+    if (!totalMinutes) return '0 perc';
+
+    if (totalMinutes < 60) {
+      return Number.isInteger(totalMinutes) ? `${totalMinutes} perc` : `${totalMinutes.toFixed(1)} perc`;
+    }
+
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.round(totalMinutes % 60);
+    return minutes ? `${hours} óra ${minutes} perc` : `${hours} óra`;
   }
 
   async publishSelected(): Promise<void> {
