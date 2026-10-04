@@ -60,7 +60,8 @@ export const routes: Routes = [
       { path: 'profile', loadComponent: () => import('./profile/profile.page').then((m) => m.ProfilePage), data: { layout: 'profile' } },
 
       { path: 'creator/dashboard', loadComponent: () => import('./creator/pages/creator-dashboard.page').then((m) => m.CreatorDashboardPage), data: { layout: 'creator' } },
-      { path: 'creator/programs', loadComponent: () => import('./creator/pages/creator-programs.page').then((m) => m.CreatorProgramsPage), data: { layout: 'creator' } },
+      { path: 'creator/programs', redirectTo: 'creator/packages', pathMatch: 'full' },
+      { path: 'creator/packages', loadComponent: () => import('./creator/pages/creator-programs.page').then((m) => m.CreatorProgramsPage), data: { layout: 'creator' } },
       { path: 'creator/courses', loadComponent: () => import('./creator/pages/creator-courses.page').then((m) => m.CreatorCoursesPage), data: { layout: 'creator' } },
       { path: 'creator/courses/new', loadComponent: () => import('./creator/pages/creator-course-new.page').then((m) => m.CreatorCourseNewPage), data: { layout: 'creator' } },
       { path: 'creator/courses/:id', loadComponent: () => import('./creator/pages/creator-course-detail.page').then((m) => m.CreatorCourseDetailPage), data: { layout: 'creator' } },
