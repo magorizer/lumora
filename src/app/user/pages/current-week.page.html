@@ -3,7 +3,7 @@
 
   @if (programs.selectedTemplate(); as template) {
     <h1>{{ template.title }}</h1>
-    <p class="lead">A {{ programs.currentPosition() }}. programlépés aktív. A sorrend a kész programon belül rögzített.</p>
+    <p class="lead">A {{ programs.currentPosition() }}. programlépés aktív.</p>
 
     <div class="hero-card">
       <span class="hero-kicker">{{ programs.currentPosition() }} / 12</span>
@@ -12,7 +12,7 @@
 
       <div class="tag-row">
         <span class="tag">{{ programs.selectedDays().length }} kiválasztott nap</span>
-        <span class="tag">reggel + este</span>
+        <span class="tag">{{ programs.selectedItems().length }} napi blokk</span>
       </div>
     </div>
 
@@ -20,33 +20,26 @@
       <h2>Mai feladatok</h2>
 
       <div class="lesson-list">
-        @if (programs.morningSequence(); as morning) {
-          @if (morning.sessions[programs.currentPosition() - 1]; as session) {
-            <button class="lesson-row today-task-row" type="button" (click)="ui.openTemplateSession(session, 'morning')">
-              <span class="lesson-index">☀</span>
-              <span class="lesson-body">
-                <span class="day-time">Reggeli gyakorlat</span>
-                <strong>{{ session.title }}</strong>
-                <small>{{ session.duration }} · {{ morning.creatorName }}</small>
-                <span class="course-source">{{ morning.title }}</span>
-              </span>
-              <span class="lesson-state">→</span>
-            </button>
-          }
-        }
-
-        @if (programs.eveningSequence(); as evening) {
-          @if (evening.sessions[programs.currentPosition() - 1]; as session) {
-            <button class="lesson-row today-task-row" type="button" (click)="ui.openTemplateSession(session, 'evening')">
-              <span class="lesson-index">☾</span>
-              <span class="lesson-body">
-                <span class="day-time">Esti gyakorlat</span>
-                <strong>{{ session.title }}</strong>
-                <small>{{ session.duration }} · {{ evening.creatorName }}</small>
-                <span class="course-source">{{ evening.title }}</span>
-              </span>
-              <span class="lesson-state">→</span>
-            </button>
+        @for (item of programs.selectedItems(); track item.id) {
+          @if (programs.courseById(item.courseId); as course) {
+            @if (programs.currentUnit(item); as unit) {
+              <button
+                class="lesson-row today-task-row"
+                type="button"
+                (click)="ui.openCourseUnit(course.id, unit, item.timeLabel)"
+              >
+                <span class="lesson-index">
+                  {{ item.timeLabel.includes('reggel') || item.timeLabel.includes('ébredés') ? '☀' : item.timeLabel.includes('este') || item.timeLabel.includes('lefekvés') ? '☾' : '◌' }}
+                </span>
+                <span class="lesson-body">
+                  <span class="day-time">{{ item.timeLabel }}</span>
+                  <strong>{{ unit.title }}</strong>
+                  <small>{{ unit.duration }} · {{ programs.instructorNameForCourse(course) }}</small>
+                  <span class="course-source">{{ course.title }}</span>
+                </span>
+                <span class="lesson-state">→</span>
+              </button>
+            }
           }
         }
       </div>
@@ -59,6 +52,7 @@
       </div>
       <div class="mini-progress"><span [style.width.%]="programs.currentPosition() / 12 * 100"></span></div>
     </div>
+
     <div class="card daily-feedback-callout">
       <span class="hero-kicker">Napi lezárás</span>
       <h2>Kész vagy a mai programmal?</h2>
