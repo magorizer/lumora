@@ -169,3 +169,116 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Compact course editor controls */
+
+.compact-setting {
+  padding-top: 8px;
+}
+
+.toggle-setting {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.toggle-setting > span:first-child strong,
+.toggle-setting > span:first-child small {
+  display: block;
+}
+
+.toggle-setting > span:first-child small {
+  margin-top: 3px;
+  color: var(--portalumi-muted-light);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.switch-control {
+  position: relative;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 26px;
+}
+
+.switch-control input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.switch-control > span {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #d9d2c7;
+  transition: 160ms ease;
+}
+
+.switch-control > span::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 7px rgba(48, 38, 26, 0.16);
+  transition: 160ms ease;
+}
+
+.switch-control input:checked + span {
+  background: var(--portalumi-gold-deep);
+}
+
+.switch-control input:checked + span::after {
+  transform: translateX(20px);
+}
+
+.format-option-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.format-option {
+  display: inline-flex;
+  min-height: 38px;
+  padding: 8px 12px;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 999px;
+  color: var(--portalumi-muted);
+  background: var(--portalumi-page-soft);
+  cursor: pointer;
+}
+
+.format-option.selected {
+  border-color: var(--portalumi-gold);
+  color: var(--portalumi-gold-deep);
+  background: var(--portalumi-gold-soft);
+}
+
+.format-option input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--portalumi-gold-deep);
+}
+
+
+.creator-form-grid > .full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 850px) {
+  .creator-form-grid > .full {
+    grid-column: auto;
+  }
+}

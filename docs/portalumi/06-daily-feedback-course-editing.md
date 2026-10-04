@@ -42,11 +42,12 @@ A szerkesztőben módosítható:
 - cím
 - kategória
 - leírás
-- szint
-- időtartam
+- szint, beleértve a "nincs" opciót
 - ajánlott napszak
 - témák
 - formátumok
+
+Az időtartam nem külön szerkeszthető kurzusmező. A rendszer automatikusan a leckék / gyakorlatok időtartamából számolja.
 
 Ajánlási metaadatok:
 - célok
@@ -61,9 +62,10 @@ A napi feedback jelenleg termékszintű szabály, ezért nem creator által áll
 
 Minden kurzusnál külön beállítás:
 
-Kötelező időrendi sorrendben hallgatás:
-- Igen
-- Nem
+A "Kötelező időrendi sorrend" beállítás egy egyszerű switch toggle.
+
+- bekapcsolva: a leckék egymásra épülnek
+- kikapcsolva: Moduláris
 
 Ha Igen:
 - a leckék egymásra épülnek
@@ -78,3 +80,27 @@ Ha Nem:
 Technikai mező:
 
 requiresSequentialOrder: boolean
+
+
+## Ajánlott napszak opciók
+
+- nincs
+- közvetlenül ébredés után
+- reggel
+- délelőtt
+- napközben
+- délután
+- este
+- közvetlenül lefekvés előtt
+- bármikor
+
+A bestTime mező kiválasztása egyben a recommendation preferredTimes értékét is frissíti, így nincs két külön, egymással versengő beállítás.
+
+## Formátumok
+
+A formátumok nem szabad szöveges mezőként jelennek meg, hanem többválasztós opcióként:
+
+- videó
+- hanganyag
+- meditáció
+- gyakorlat

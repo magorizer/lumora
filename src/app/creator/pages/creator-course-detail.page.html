@@ -26,7 +26,7 @@
 
       <div class="creator-detail-grid">
         <div><small>Szint</small><strong>{{ course.level }}</strong></div>
-        <div><small>Időtartam</small><strong>{{ course.totalDuration }}</strong></div>
+        <div><small>Időtartam</small><strong>{{ creator.courseDuration(course) }}</strong></div>
         <div><small>Napszak</small><strong>{{ course.bestTime }}</strong></div>
         <div><small>Tartalmak</small><strong>{{ course.units.length }}</strong></div>
         <div>
@@ -139,58 +139,37 @@
           <label>
             Szint
             <select [value]="course.level" (change)="creator.updateCourse('level', $event)">
-              <option value="kezdő">kezdő</option>
-              <option value="középhaladó">középhaladó</option>
-              <option value="haladó">haladó</option>
+              @for (level of creator.levelOptions; track level) {
+                <option [value]="level">{{ level }}</option>
+              }
             </select>
           </label>
 
-          <label>
-            Időtartam
-            <input [value]="course.totalDuration" (input)="creator.updateCourse('totalDuration', $event)">
-          </label>
+          <div class="sheet-field-group compact-setting">
+            <label class="toggle-setting">
+              <span>
+                <strong>Kötelező időrendi sorrend</strong>
+                <small>{{ course.requiresSequentialOrder === false ? 'Moduláris' : 'A leckék egymásra épülnek' }}</small>
+              </span>
 
-          <div class="sheet-field-group">
-            <span class="sheet-section-label">Kötelező időrendi sorrendben hallgatás</span>
-
-            <div class="radio-grid">
-              <label class="radio-option" [class.selected]="course.requiresSequentialOrder !== false">
+              <span class="switch-control">
                 <input
-                  type="radio"
-                  name="course-sequential-order"
-                  value="yes"
+                  type="checkbox"
                   [checked]="course.requiresSequentialOrder !== false"
-                  (change)="creator.setSequentialOrder(true)"
+                  (change)="creator.setSequentialOrderFromEvent($event)"
+                  aria-label="Kötelező időrendi sorrend"
                 >
-                <span>Igen</span>
-              </label>
-
-              <label class="radio-option" [class.selected]="course.requiresSequentialOrder === false">
-                <input
-                  type="radio"
-                  name="course-sequential-order"
-                  value="no"
-                  [checked]="course.requiresSequentialOrder === false"
-                  (change)="creator.setSequentialOrder(false)"
-                >
-                <span>Nem</span>
-              </label>
-            </div>
-
-            <p class="sheet-note">
-              Felépítés:
-              <strong>{{ course.requiresSequentialOrder === false ? 'Moduláris' : 'Kötelező sorrend' }}</strong>
-            </p>
+                <span></span>
+              </span>
+            </label>
           </div>
 
           <label>
             Ajánlott napszak
             <select [value]="course.bestTime" (change)="creator.updateCourse('bestTime', $event)">
-              <option value="reggel">reggel</option>
-              <option value="napközben">napközben</option>
-              <option value="este">este</option>
-              <option value="lefekvés előtt">lefekvés előtt</option>
-              <option value="rugalmas">rugalmas</option>
+              @for (time of creator.bestTimeOptions; track time) {
+                <option [value]="time">{{ time }}</option>
+              }
             </select>
           </label>
 
@@ -203,14 +182,21 @@
             >
           </label>
 
-          <label>
-            Formátumok
-            <input
-              [value]="course.format.join(', ')"
-              (input)="creator.updateCourse('format', $event)"
-              placeholder="videó, hanganyag, gyakorlat"
-            >
-          </label>
+          <div class="sheet-field-group">
+            <span class="sheet-section-label">Formátumok</span>
+            <div class="format-option-grid">
+              @for (format of creator.formatOptions; track format) {
+                <label class="format-option" [class.selected]="course.format.includes(format)">
+                  <input
+                    type="checkbox"
+                    [checked]="course.format.includes(format)"
+                    (change)="creator.toggleCourseFormat(format)"
+                  >
+                  <span>{{ format }}</span>
+                </label>
+              }
+            </div>
+          </div>
 
           <div class="sheet-field-group">
             <span class="sheet-section-label">Ajánlási metaadatok</span>
@@ -230,15 +216,6 @@
                 [value]="course.recommendation?.problems?.join(', ') || ''"
                 (input)="creator.updateRecommendation('problems', $event)"
                 placeholder="halogatás, stressz, bizonytalanság"
-              >
-            </label>
-
-            <label>
-              Ajánlott időpontok
-              <input
-                [value]="course.recommendation?.preferredTimes?.join(', ') || course.bestTime"
-                (input)="creator.updateRecommendation('preferredTimes', $event)"
-                placeholder="reggel, este"
               >
             </label>
 

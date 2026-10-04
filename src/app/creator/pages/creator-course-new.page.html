@@ -22,9 +22,9 @@
           <label>
             Szint
             <select [value]="creator.draft().level" (change)="creator.updateDraft('level',$event)">
-              <option>kezdő</option>
-              <option>középhaladó</option>
-              <option>haladó</option>
+              @for (level of creator.levelOptions; track level) {
+                <option [value]="level">{{ level }}</option>
+              }
             </select>
           </label>
           <label class="full">
@@ -32,38 +32,27 @@
             <textarea rows="3" [value]="creator.draft().description" (input)="creator.updateDraft('description',$event)"></textarea>
           </label>
 
-          <div class="full sheet-field-group">
-            <span class="sheet-section-label">Kötelező időrendi sorrendben hallgatás</span>
+          <div class="full sheet-field-group compact-setting">
+            <label class="toggle-setting">
+              <span>
+                <strong>Kötelező időrendi sorrend</strong>
+                <small>
+                  {{ creator.draft().requiresSequentialOrder === 'no'
+                    ? 'Moduláris'
+                    : 'A leckék egymásra épülnek' }}
+                </small>
+              </span>
 
-            <div class="radio-grid">
-              <label class="radio-option" [class.selected]="creator.draft().requiresSequentialOrder === 'yes'">
+              <span class="switch-control">
                 <input
-                  type="radio"
-                  name="new-course-sequential-order"
-                  value="yes"
+                  type="checkbox"
                   [checked]="creator.draft().requiresSequentialOrder === 'yes'"
-                  (change)="creator.updateDraft('requiresSequentialOrder',$event)"
+                  (change)="creator.setDraftSequentialOrder($event)"
+                  aria-label="Kötelező időrendi sorrend"
                 >
-                <span>Igen</span>
-              </label>
-
-              <label class="radio-option" [class.selected]="creator.draft().requiresSequentialOrder === 'no'">
-                <input
-                  type="radio"
-                  name="new-course-sequential-order"
-                  value="no"
-                  [checked]="creator.draft().requiresSequentialOrder === 'no'"
-                  (change)="creator.updateDraft('requiresSequentialOrder',$event)"
-                >
-                <span>Nem</span>
-              </label>
-            </div>
-
-            <p class="creator-help">
-              {{ creator.draft().requiresSequentialOrder === 'no'
-                ? 'Moduláris: a leckék önállóan is hallgathatók.'
-                : 'Kötelező sorrend: a leckék egymásra épülnek.' }}
-            </p>
+                <span></span>
+              </span>
+            </label>
           </div>
         </div>
       </div>
@@ -86,24 +75,34 @@
             Milyen problémákhoz?
             <input [value]="creator.draft().problems" (input)="creator.updateDraft('problems',$event)">
           </label>
-          <label>
-            Időtartam
-            <input [value]="creator.draft().totalDuration" (input)="creator.updateDraft('totalDuration',$event)">
-          </label>
-          <label>
-            Napszak
+          <label class="full">
+            Ajánlott napszak
             <select [value]="creator.draft().bestTime" (change)="creator.updateDraft('bestTime',$event)">
-              <option>reggel</option>
-              <option>napközben</option>
-              <option>este</option>
-              <option>lefekvés előtt</option>
-              <option>rugalmas</option>
+              @for (time of creator.bestTimeOptions; track time) {
+                <option [value]="time">{{ time }}</option>
+              }
             </select>
           </label>
-          <label class="full">
-            Formátum
-            <input [value]="creator.draft().format" (input)="creator.updateDraft('format',$event)">
-          </label>
+
+          <div class="full sheet-field-group">
+            <span class="sheet-section-label">Formátumok</span>
+            <div class="format-option-grid">
+              @for (format of creator.formatOptions; track format) {
+                <label class="format-option" [class.selected]="creator.draftHasFormat(format)">
+                  <input
+                    type="checkbox"
+                    [checked]="creator.draftHasFormat(format)"
+                    (change)="creator.toggleDraftFormat(format)"
+                  >
+                  <span>{{ format }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+          <p class="creator-help full">
+            Az összesített időtartamot a leckék és gyakorlatok időtartamából számoljuk ki automatikusan.
+          </p>
         </div>
       </div>
     </div>
