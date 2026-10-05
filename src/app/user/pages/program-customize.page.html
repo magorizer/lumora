@@ -33,8 +33,8 @@
       </div>
 
       <p class="hint">
-        A blokkok áthúzhatók. Ha a csomag engedi a személyre szabást, minden tartalom-slot külön lecserélhető
-        bármelyik feltöltött kurzus tartalmára, átrendezhető, hozzáadható vagy törölhető.
+        A blokkok áthúzhatók. MODULÁRIS kurzus esetén minden tartalom-slot külön cserélhető,
+        átrendezhető, hozzáadható vagy törölhető. Kötött sorrendű kurzus tartalmai nem bonthatók meg.
       </p>
 
       <div class="package-user-items">
@@ -71,7 +71,9 @@
               <select [value]="item.courseId ?? ''" (change)="changeCourse(item.id, $event)">
                 <option value="">Személyre szabott · üres</option>
                 @for (option of programs.courses(); track option.id) {
-                  <option [value]="option.id">{{ option.title }} · {{ programs.instructorNameForCourse(option) }}</option>
+                  <option [value]="option.id">
+                    {{ option.title }} · {{ programs.instructorNameForCourse(option) }} · {{ option.requiresSequentialOrder === false ? 'MODULÁRIS' : 'kötött' }}
+                  </option>
                 }
               </select>
             </label>
@@ -80,7 +82,11 @@
               <div class="package-course-preview">
                 <strong>{{ course.title }}</strong>
                 <span>{{ programs.instructorNameForCourse(course) }}</span>
-                <small>{{ course.requiresSequentialOrder === false ? 'Eredetileg moduláris' : 'A kurzusban kötött sorrend' }} · a csomagban személyre szabható</small>
+                <small>
+                  {{ course.requiresSequentialOrder === false
+                    ? 'MODULÁRIS · a tartalom-slotok külön cserélhetők'
+                    : 'KÖTÖTT SORREND · a tartalom-slotok nem módosíthatók' }}
+                </small>
               </div>
             }
 
@@ -91,8 +97,10 @@
                   <small>
                     @if (programs.canEditItemContents(template, item)) {
                       A slotokat külön cserélheted, hozzáadhatod, törölheted és áthúzhatod.
-                    } @else {
+                    } @else if (template.allowContentReplacement === false) {
                       A csomag ennél a blokknál nem enged tartalomszintű módosítást.
+                    } @else {
+                      Ez a kurzus kötött sorrendű. Válassz egy MODULÁRIS kurzust, vagy a Személyre szabott · üres opciót.
                     }
                   </small>
                 </div>
