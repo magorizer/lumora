@@ -218,10 +218,8 @@ export class ProgramTemplateService {
     this.persistEditorData();
   }
 
-  canEditItemContents(template: ProgramTemplate, item: ProgramPackageItem): boolean {
-    if (template.allowContentReplacement === false) return false;
-    if (!item.courseId) return true;
-    return this.courseById(item.courseId)?.requiresSequentialOrder === false;
+  canEditItemContents(template: ProgramTemplate, _item: ProgramPackageItem): boolean {
+    return template.allowContentReplacement !== false;
   }
 
   addTemplateContentSlot(templateId: string, itemId: string): void {
@@ -427,9 +425,8 @@ export class ProgramTemplateService {
     return this.instructors().find((instructor) => instructor.id === course.instructorId)?.name ?? 'Előadó';
   }
 
-  canUseSpecificContent(template: ProgramTemplate, course: Course, unit: CourseUnit): boolean {
-    if (template.allowContentReplacement === false) return false;
-    return course.requiresSequentialOrder === false || unit.standaloneAllowed === true;
+  canUseSpecificContent(template: ProgramTemplate, _course: Course, _unit: CourseUnit): boolean {
+    return template.allowContentReplacement !== false;
   }
 
   searchContent(query: string, template: ProgramTemplate, limit = 40): ProgramContentOption[] {
