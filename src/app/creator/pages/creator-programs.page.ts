@@ -15,6 +15,7 @@ export class CreatorProgramsPage implements OnInit {
   readonly selectedId = signal<string | null>(null);
   readonly searchQueries = signal<Record<string, string>>({});
   readonly draggedItemId = signal<string | null>(null);
+  readonly draggedContentSlotKey = signal<string | null>(null);
 
   async ngOnInit(): Promise<void> {
     await this.programs.load();
@@ -67,35 +68,43 @@ export class CreatorProgramsPage implements OnInit {
     this.programs.updateTemplateItemCourse(selected.id, itemId, (event.target as HTMLSelectElement).value);
   }
 
-  useFullCourse(itemId: string, courseId: string): void {
-    const selected = this.selected();
-    if (!selected) return;
-    this.programs.updateTemplateItemCourse(selected.id, itemId, courseId);
-  }
-
   updateItemTime(itemId: string, event: Event): void {
     const selected = this.selected();
     if (!selected) return;
     this.programs.updateTemplateItemTime(selected.id, itemId, (event.target as HTMLSelectElement).value);
   }
 
-  selectItemUnit(itemId: string, courseId: string, unitId: string): void {
+  addContentSlot(itemId: string): void {
+    const selected = this.selected();
+    if (selected) this.programs.addTemplateContentSlot(selected.id, itemId);
+  }
+
+  removeContentSlot(itemId: string, slotId: string): void {
+    const selected = this.selected();
+    if (selected) this.programs.removeTemplateContentSlot(selected.id, itemId, slotId);
+  }
+
+  selectContentSlot(itemId: string, slotId: string, courseId: string, unitId: string): void {
     const selected = this.selected();
     if (!selected) return;
-    this.programs.updateTemplateItemUnit(selected.id, itemId, courseId, unitId);
+    this.programs.updateTemplateContentSlot(selected.id, itemId, slotId, courseId, unitId);
   }
 
-  setSearch(itemId: string, event: Event): void {
+  searchKey(itemId: string, slotId: string): string {
+    return itemId + ':' + slotId;
+  }
+
+  setSearch(key: string, event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    this.searchQueries.update((queries) => ({ ...queries, [itemId]: value }));
+    this.searchQueries.update((queries) => ({ ...queries, [key]: value }));
   }
 
-  searchQuery(itemId: string): string {
-    return this.searchQueries()[itemId] ?? '';
+  searchQuery(key: string): string {
+    return this.searchQueries()[key] ?? '';
   }
 
-  searchResults(template: ProgramTemplate, itemId: string): ProgramContentOption[] {
-    const query = this.searchQuery(itemId);
+  searchResults(template: ProgramTemplate, key: string): ProgramContentOption[] {
+    const query = this.searchQuery(key);
     if (!query.trim()) return [];
     return this.programs.searchContent(query, template);
   }
@@ -117,13 +126,44 @@ export class CreatorProgramsPage implements OnInit {
     event.preventDefault();
     const selected = this.selected();
     const sourceItemId = this.draggedItemId() ?? event.dataTransfer?.getData('text/plain') ?? null;
-    if (selected && sourceItemId) {
-      this.programs.moveTemplateItemTo(selected.id, sourceItemId, targetItemId);
-    }
+    if (selected && sourceItemId) this.programs.moveTemplateItemTo(selected.id, sourceItemId, targetItemId);
     this.draggedItemId.set(null);
   }
 
   dragEnd(): void {
     this.draggedItemId.set(null);
+  }
+
+  contentDragStart(itemId: string, slotId: string, event: DragEvent): void {
+    const key = this.searchKey(itemId, slotId);
+    this.draggedContentSlotKey.set(key);
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', key);
+    }
+    event.stopPropagation();
+  }
+
+  contentDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+  }
+
+  contentDrop(itemId: string, targetSlotId: string, event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const selected = this.selected();
+    const key = this.draggedContentSlotKey() ?? event.dataTransfer?.getData('text/plain') ?? '';
+    const [sourceItemId, sourceSlotId] = key.split(':');
+    if (selected && sourceItemId === itemId && sourceSlotId) {
+      this.programs.moveTemplateContentSlotTo(selected.id, itemId, sourceSlotId, targetSlotId);
+    }
+    this.draggedContentSlotKey.set(null);
+  }
+
+  contentDragEnd(event: DragEvent): void {
+    event.stopPropagation();
+    this.draggedContentSlotKey.set(null);
   }
 }
