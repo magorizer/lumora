@@ -21,25 +21,23 @@
 
       <div class="lesson-list">
         @for (item of programs.selectedItems(); track item.id) {
-          @if (programs.courseById(item.courseId); as course) {
-            @if (programs.currentUnit(item); as unit) {
-              <button
-                class="lesson-row today-task-row"
-                type="button"
-                (click)="ui.openCourseUnit(course.id, unit, item.timeLabel)"
-              >
-                <span class="lesson-index">
-                  {{ item.timeLabel.includes('reggel') || item.timeLabel.includes('ébredés') ? '☀' : item.timeLabel.includes('este') || item.timeLabel.includes('lefekvés') ? '☾' : '◌' }}
-                </span>
-                <span class="lesson-body">
-                  <span class="day-time">{{ item.timeLabel }}</span>
-                  <strong>{{ unit.title }}</strong>
-                  <small>{{ unit.duration }} · {{ programs.instructorNameForCourse(course) }}</small>
-                  <span class="course-source">{{ course.title }}</span>
-                </span>
-                <span class="lesson-state">→</span>
-              </button>
-            }
+          @if (programs.currentContent(item); as content) {
+            <button
+              class="lesson-row today-task-row"
+              type="button"
+              (click)="ui.openCourseUnit(content.course.id, content.unit, item.timeLabel)"
+            >
+              <span class="lesson-index">
+                {{ item.timeLabel.includes('reggel') || item.timeLabel.includes('ébredés') ? '☀' : item.timeLabel.includes('este') || item.timeLabel.includes('lefekvés') ? '☾' : '◌' }}
+              </span>
+              <span class="lesson-body">
+                <span class="day-time">{{ item.timeLabel }}</span>
+                <strong>{{ content.unit.title }}</strong>
+                <small>{{ content.unit.duration }} · {{ programs.instructorNameForCourse(content.course) }}</small>
+                <span class="course-source">{{ content.course.title }}</span>
+              </span>
+              <span class="lesson-state">→</span>
+            </button>
           }
         }
       </div>
