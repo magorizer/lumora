@@ -33,49 +33,141 @@
       </div>
 
       <p class="hint">
-        Teljes kurzust cserélhetsz. A kurzuson belüli sorrendet csak akkor lehet szabadon használni,
-        ha az adott kurzus moduláris.
+        A blokkok áthúzhatók. Ahol a csomag engedi, moduláris vagy önállóan hallgatható tartalmat is választhatsz
+        bármelyik kurzusból. Kötött sorrendű kurzus belső rendje nem bontható meg.
       </p>
 
       <div class="package-user-items">
         @for (item of programs.selectedItems(); track item.id; let index = $index) {
-          @if (programs.courseById(item.courseId); as course) {
-            <div class="program-track-editor package-user-item">
-              <div class="program-track-heading">
-                <div>
-                  <span class="routine-period">{{ item.timeLabel }}</span>
-                  <h2>{{ course.title }}</h2>
-                  <p>{{ programs.instructorNameForCourse(course) }} · {{ course.category }}</p>
-                </div>
-                <span class="locked-order">
-                  {{ course.requiresSequentialOrder === false ? 'Moduláris' : 'Sorrend rögzített' }}
-                </span>
+          <div
+            class="program-track-editor package-user-item"
+            [class.dragging]="draggedItemId() === item.id"
+            (dragover)="dragOver($event)"
+            (drop)="drop(item.id, $event)"
+          >
+            <div class="program-track-heading">
+              <div>
+                <span class="routine-period">{{ item.timeLabel }}</span>
+                @if (programs.courseById(item.courseId); as course) {
+                  <h2>{{ programs.unitForItem(item)?.title ?? course.title }}</h2>
+                  <p>
+                    {{ course.title }} · {{ programs.instructorNameForCourse(course) }}
+                  </p>
+                } @else {
+                  <h2>Személyre szabott slot</h2>
+                  <p>Még nincs tartalom kiválasztva.</p>
+                }
               </div>
 
-              <label class="program-track-switch">
-                Másik teljes kurzus
-                <select [value]="course.id" (change)="changeCourse(item.id, $event)">
-                  @for (option of programs.courses(); track option.id) {
-                    <option [value]="option.id">
-                      {{ option.title }} · {{ programs.instructorNameForCourse(option) }}
-                    </option>
-                  }
-                </select>
-              </label>
+              <button
+                class="package-drag-handle"
+                type="button"
+                draggable="true"
+                (dragstart)="dragStart(item.id, $event)"
+                (dragend)="dragEnd()"
+                aria-label="Blokk áthúzása"
+                title="Fogd meg és húzd át"
+              >⠿</button>
+            </div>
 
-              <div class="sequence-list">
-                @for (unit of course.units; track unit.id; let unitIndex = $index) {
-                  <div class="sequence-row">
-                    <span class="sequence-number">{{ unitIndex + 1 }}</span>
-                    <div>
-                      <strong>{{ unit.title }}</strong>
-                      <small>{{ unit.duration }} · {{ unit.type }}</small>
-                    </div>
+            <label class="program-track-switch">
+              Kurzus
+              <select [value]="item.courseId ?? ''" (change)="changeCourse(item.id, $event)">
+                <option value="">Személyre szabott · üres slot</option>
+                @for (option of programs.courses(); track option.id) {
+                  <option [value]="option.id">
+                    {{ option.title }} · {{ programs.instructorNameForCourse(option) }}
+                  </option>
+                }
+              </select>
+            </label>
+
+            @if (programs.courseById(item.courseId); as course) {
+              <div class="package-course-preview">
+                <strong>{{ course.title }}</strong>
+                <span>{{ programs.instructorNameForCourse(course) }} · {{ course.category }}</span>
+                <small>
+                  {{ course.requiresSequentialOrder === false ? 'Moduláris kurzus' : 'Sorrend rögzített' }}
+                </small>
+              </div>
+
+              @if (programs.unitForItem(item); as selectedUnit) {
+                <div class="package-selected-content">
+                  <span class="hero-kicker">Ebben a slotban</span>
+                  <strong>{{ selectedUnit.title }}</strong>
+                  <small>{{ selectedUnit.duration }} · {{ selectedUnit.type }}</small>
+                  <button type="button" class="secondary-action" (click)="useFullCourse(item.id, course.id)">
+                    Teljes kurzus használata
+                  </button>
+                </div>
+              }
+
+              <div class="package-content-section">
+                <div class="package-content-heading">
+                  <strong>A kurzus tartalmai</strong>
+                  <small>
+                    {{ template.allowContentReplacement === false ? 'Ez a csomag nem enged tartalomszintű cserét.' : 'Választható tartalmakra kattinthatsz.' }}
+                  </small>
+                </div>
+
+                <div class="package-content-list">
+                  @for (unit of course.units; track unit.id; let unitIndex = $index) {
+                    <button
+                      type="button"
+                      [class.selected]="item.unitId === unit.id"
+                      [disabled]="!programs.canUseSpecificContent(template, course, unit)"
+                      (click)="selectUnit(item.id, course.id, unit.id)"
+                    >
+                      <span class="sequence-number">{{ unitIndex + 1 }}</span>
+                      <span>
+                        <strong>{{ unit.title }}</strong>
+                        <small>{{ unit.duration }} · {{ unit.type }}</small>
+                      </span>
+                      <span class="content-availability">
+                        {{ programs.canUseSpecificContent(template, course, unit) ? 'választható' : 'kötött' }}
+                      </span>
+                    </button>
+                  }
+                </div>
+              </div>
+            } @else {
+              <div class="package-empty-slot">
+                <span class="hero-kicker">Személyre szabott</span>
+                <strong>Keress egy tartalmat bármelyik kurzusból.</strong>
+                <small>Vagy válassz fent egy teljes kurzust.</small>
+              </div>
+            }
+
+            @if (template.allowContentReplacement !== false) {
+              <div class="package-content-search">
+                <label>
+                  Keresés kurzus › tartalomból
+                  <input
+                    type="search"
+                    [value]="searchQuery(item.id)"
+                    (input)="setSearch(item.id, $event)"
+                    placeholder="pl. meditáció, stressz, légzés..."
+                  >
+                </label>
+
+                @if (searchQuery(item.id).trim()) {
+                  <div class="package-search-results">
+                    @for (result of searchResults(template, item.id); track result.course.id + ':' + result.unit.id) {
+                      <button type="button" (click)="selectUnit(item.id, result.course.id, result.unit.id)">
+                        <span>
+                          <strong>{{ result.unit.title }}</strong>
+                          <small>{{ result.course.title }} › {{ programs.instructorNameForCourse(result.course) }} · {{ result.unit.duration }}</small>
+                        </span>
+                        <span>+</span>
+                      </button>
+                    } @empty {
+                      <div class="package-search-empty">Nincs választható találat.</div>
+                    }
                   </div>
                 }
               </div>
-            </div>
-          }
+            }
+          </div>
         }
       </div>
     </div>
