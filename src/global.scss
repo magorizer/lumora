@@ -269,15 +269,23 @@ button {
   background: var(--portalumi-surface);
 }
 
+/* Read-only slots only render number + copy. Editable slots additionally render drag + remove controls. */
 .package-content-slot-head {
   display: grid;
-  grid-template-columns: 32px 28px minmax(0, 1fr) auto;
+  grid-template-columns: 32px minmax(0, 1fr);
   gap: 8px;
   align-items: center;
 }
 
+.package-content-slot-head:has(.package-drag-handle) {
+  grid-template-columns: 32px 28px minmax(0, 1fr) auto;
+}
+
 .package-content-slot-copy {
   min-width: 0;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .package-content-slot-copy strong,
@@ -332,6 +340,10 @@ button {
   }
 
   .package-content-slot-head {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .package-content-slot-head:has(.package-drag-handle) {
     grid-template-columns: 30px 28px minmax(0, 1fr) auto;
   }
 }
