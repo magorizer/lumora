@@ -119,7 +119,6 @@ export interface Catalog {
 
 export interface UsersData { users: PortalumiUser[]; }
 
-
 export type ProgramDay =
   | 'monday'
   | 'tuesday'
@@ -157,7 +156,8 @@ export interface ProgramSequence {
 
 export interface ProgramPackageItem {
   id: string;
-  courseId: string;
+  courseId?: string;
+  unitId?: string;
   timeLabel: string;
 }
 
@@ -168,6 +168,7 @@ export interface ProgramTemplate {
   description: string;
   accent: 'amber' | 'blue' | 'sage';
   items: ProgramPackageItem[];
+  allowContentReplacement?: boolean;
   morningSequenceId?: string;
   eveningSequenceId?: string;
 }
