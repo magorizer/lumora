@@ -5,6 +5,7 @@ import {
   Course,
   CourseUnit,
   Instructor,
+  ProgramContentSlot,
   ProgramDay,
   ProgramPackageItem,
   ProgramSequence,
@@ -84,7 +85,7 @@ export class ProgramTemplateService {
     if (!template) return;
 
     this.selectedTemplateId.set(template.id);
-    this.selectedItems.set(template.items.map((item) => ({ ...item })));
+    this.selectedItems.set(template.items.map((item) => this.clonePackageItem(item)));
     this.started.set(false);
     this.currentPosition.set(1);
     this.persistSelection();
@@ -95,9 +96,7 @@ export class ProgramTemplateService {
     const next = current.includes(day)
       ? current.filter((item) => item !== day)
       : [...current, day];
-
     if (!next.length) return;
-
     this.selectedDays.set(next);
     this.persistSelection();
   }
@@ -115,16 +114,9 @@ export class ProgramTemplateService {
 
   setTemplateContentReplacement(templateId: string, enabled: boolean): void {
     this.templates.update((templates) =>
-      templates.map((template) => {
-        if (template.id !== templateId) return template;
-        return {
-          ...template,
-          allowContentReplacement: enabled,
-          items: enabled
-            ? template.items
-            : template.items.map(({ unitId: _unitId, ...item }) => item),
-        };
-      }),
+      templates.map((template) => template.id === templateId
+        ? { ...template, allowContentReplacement: enabled }
+        : template),
     );
     this.persistEditorData();
   }
@@ -142,12 +134,12 @@ export class ProgramTemplateService {
             {
               id: 'package-item-' + Date.now(),
               timeLabel,
+              contentSlots: [],
             },
           ],
         };
       }),
     );
-
     this.persistEditorData();
   }
 
@@ -158,7 +150,6 @@ export class ProgramTemplateService {
         return { ...template, items: template.items.filter((item) => item.id !== itemId) };
       }),
     );
-
     this.persistEditorData();
   }
 
@@ -169,104 +160,242 @@ export class ProgramTemplateService {
         const currentIndex = template.items.findIndex((item) => item.id === itemId);
         const targetIndex = currentIndex + direction;
         if (currentIndex < 0 || targetIndex < 0 || targetIndex >= template.items.length) return template;
-
         const items = [...template.items];
-        [items[currentIndex], items[targetIndex]] = [items[targetIndex], items[currentIndex]];
+        const current = items[currentIndex];
+        const target = items[targetIndex];
+        if (!current || !target) return template;
+        items[currentIndex] = target;
+        items[targetIndex] = current;
         return { ...template, items };
       }),
     );
-
     this.persistEditorData();
   }
 
   moveTemplateItemTo(templateId: string, itemId: string, targetItemId: string): void {
     if (itemId === targetItemId) return;
     this.templates.update((templates) =>
-      templates.map((template) => {
-        if (template.id !== templateId) return template;
-        return { ...template, items: this.reorderItems(template.items, itemId, targetItemId) };
-      }),
+      templates.map((template) => template.id === templateId
+        ? { ...template, items: this.reorderItems(template.items, itemId, targetItemId) }
+        : template),
     );
     this.persistEditorData();
   }
 
   updateTemplateItemCourse(templateId: string, itemId: string, courseId: string): void {
-    if (courseId && !this.courseById(courseId)) return;
+    const course = courseId ? this.courseById(courseId) : null;
+    if (courseId && !course) return;
 
     this.templates.update((templates) =>
-      templates.map((template) =>
-        template.id !== templateId
-          ? template
-          : {
-              ...template,
-              items: template.items.map((item) => {
-                if (item.id !== itemId) return item;
-                if (!courseId) return { id: item.id, timeLabel: item.timeLabel };
-                return { ...item, courseId, unitId: undefined };
-              }),
-            },
-      ),
-    );
-
-    this.persistEditorData();
-  }
-
-  updateTemplateItemUnit(templateId: string, itemId: string, courseId: string, unitId: string): void {
-    const template = this.templates().find((item) => item.id === templateId);
-    const course = this.courseById(courseId);
-    const unit = course?.units.find((item) => item.id === unitId);
-    if (!template || !course || !unit || !this.canUseSpecificContent(template, course, unit)) return;
-
-    this.templates.update((templates) =>
-      templates.map((candidate) =>
-        candidate.id !== templateId
-          ? candidate
-          : {
-              ...candidate,
-              items: candidate.items.map((item) =>
-                item.id === itemId ? { ...item, courseId, unitId } : item,
-              ),
-            },
-      ),
+      templates.map((template) => template.id !== templateId
+        ? template
+        : {
+            ...template,
+            items: template.items.map((item) => {
+              if (item.id !== itemId) return item;
+              if (!course) return { id: item.id, timeLabel: item.timeLabel, contentSlots: [] };
+              return {
+                ...item,
+                courseId: course.id,
+                unitId: undefined,
+                contentSlots: this.contentSlotsForCourse(item.id, course),
+              };
+            }),
+          }),
     );
     this.persistEditorData();
   }
 
   updateTemplateItemTime(templateId: string, itemId: string, timeLabel: string): void {
     this.templates.update((templates) =>
-      templates.map((template) =>
-        template.id !== templateId
-          ? template
-          : {
-              ...template,
-              items: template.items.map((item) => item.id === itemId ? { ...item, timeLabel } : item),
-            },
-      ),
+      templates.map((template) => template.id !== templateId
+        ? template
+        : {
+            ...template,
+            items: template.items.map((item) => item.id === itemId ? { ...item, timeLabel } : item),
+          }),
     );
+    this.persistEditorData();
+  }
 
+  canEditItemContents(template: ProgramTemplate, item: ProgramPackageItem): boolean {
+    if (template.allowContentReplacement === false) return false;
+    if (!item.courseId) return true;
+    return this.courseById(item.courseId)?.requiresSequentialOrder === false;
+  }
+
+  addTemplateContentSlot(templateId: string, itemId: string): void {
+    const template = this.templates().find((candidate) => candidate.id === templateId);
+    const item = template?.items.find((candidate) => candidate.id === itemId);
+    if (!template || !item || !this.canEditItemContents(template, item)) return;
+
+    this.templates.update((templates) =>
+      templates.map((candidate) => candidate.id !== templateId
+        ? candidate
+        : {
+            ...candidate,
+            items: candidate.items.map((packageItem) => packageItem.id !== itemId
+              ? packageItem
+              : {
+                  ...packageItem,
+                  contentSlots: [
+                    ...(packageItem.contentSlots ?? []),
+                    { id: 'content-slot-' + Date.now() },
+                  ],
+                }),
+          }),
+    );
+    this.persistEditorData();
+  }
+
+  removeTemplateContentSlot(templateId: string, itemId: string, slotId: string): void {
+    const template = this.templates().find((candidate) => candidate.id === templateId);
+    const item = template?.items.find((candidate) => candidate.id === itemId);
+    if (!template || !item || !this.canEditItemContents(template, item)) return;
+
+    this.templates.update((templates) =>
+      templates.map((candidate) => candidate.id !== templateId
+        ? candidate
+        : {
+            ...candidate,
+            items: candidate.items.map((packageItem) => packageItem.id !== itemId
+              ? packageItem
+              : {
+                  ...packageItem,
+                  contentSlots: (packageItem.contentSlots ?? []).filter((slot) => slot.id !== slotId),
+                }),
+          }),
+    );
+    this.persistEditorData();
+  }
+
+  updateTemplateContentSlot(templateId: string, itemId: string, slotId: string, courseId: string, unitId: string): void {
+    const template = this.templates().find((candidate) => candidate.id === templateId);
+    const item = template?.items.find((candidate) => candidate.id === itemId);
+    const course = this.courseById(courseId);
+    const unit = course?.units.find((candidate) => candidate.id === unitId);
+    if (!template || !item || !course || !unit) return;
+    if (!this.canEditItemContents(template, item) || !this.canUseSpecificContent(template, course, unit)) return;
+
+    this.templates.update((templates) =>
+      templates.map((candidate) => candidate.id !== templateId
+        ? candidate
+        : {
+            ...candidate,
+            items: candidate.items.map((packageItem) => packageItem.id !== itemId
+              ? packageItem
+              : {
+                  ...packageItem,
+                  contentSlots: (packageItem.contentSlots ?? []).map((slot) =>
+                    slot.id === slotId ? { ...slot, courseId, unitId } : slot),
+                }),
+          }),
+    );
+    this.persistEditorData();
+  }
+
+  moveTemplateContentSlotTo(templateId: string, itemId: string, slotId: string, targetSlotId: string): void {
+    if (slotId === targetSlotId) return;
+    const template = this.templates().find((candidate) => candidate.id === templateId);
+    const item = template?.items.find((candidate) => candidate.id === itemId);
+    if (!template || !item || !this.canEditItemContents(template, item)) return;
+
+    this.templates.update((templates) =>
+      templates.map((candidate) => candidate.id !== templateId
+        ? candidate
+        : {
+            ...candidate,
+            items: candidate.items.map((packageItem) => packageItem.id !== itemId
+              ? packageItem
+              : {
+                  ...packageItem,
+                  contentSlots: this.reorderContentSlots(packageItem.contentSlots ?? [], slotId, targetSlotId),
+                }),
+          }),
+    );
     this.persistEditorData();
   }
 
   setSelectedItemCourse(itemId: string, courseId: string): void {
-    if (courseId && !this.courseById(courseId)) return;
+    const course = courseId ? this.courseById(courseId) : null;
+    if (courseId && !course) return;
     this.selectedItems.update((items) =>
       items.map((item) => {
         if (item.id !== itemId) return item;
-        if (!courseId) return { id: item.id, timeLabel: item.timeLabel };
-        return { ...item, courseId, unitId: undefined };
+        if (!course) return { id: item.id, timeLabel: item.timeLabel, contentSlots: [] };
+        return {
+          ...item,
+          courseId: course.id,
+          unitId: undefined,
+          contentSlots: this.contentSlotsForCourse(item.id, course),
+        };
       }),
     );
     this.persistSelection();
   }
 
-  setSelectedItemUnit(itemId: string, courseId: string, unitId: string): void {
+  addSelectedContentSlot(itemId: string): void {
     const template = this.selectedTemplate();
+    const item = this.selectedItems().find((candidate) => candidate.id === itemId);
+    if (!template || !item || !this.canEditItemContents(template, item)) return;
+    this.selectedItems.update((items) =>
+      items.map((candidate) => candidate.id !== itemId
+        ? candidate
+        : {
+            ...candidate,
+            contentSlots: [...(candidate.contentSlots ?? []), { id: 'content-slot-' + Date.now() }],
+          }),
+    );
+    this.persistSelection();
+  }
+
+  removeSelectedContentSlot(itemId: string, slotId: string): void {
+    const template = this.selectedTemplate();
+    const item = this.selectedItems().find((candidate) => candidate.id === itemId);
+    if (!template || !item || !this.canEditItemContents(template, item)) return;
+    this.selectedItems.update((items) =>
+      items.map((candidate) => candidate.id !== itemId
+        ? candidate
+        : {
+            ...candidate,
+            contentSlots: (candidate.contentSlots ?? []).filter((slot) => slot.id !== slotId),
+          }),
+    );
+    this.persistSelection();
+  }
+
+  setSelectedContentSlot(itemId: string, slotId: string, courseId: string, unitId: string): void {
+    const template = this.selectedTemplate();
+    const item = this.selectedItems().find((candidate) => candidate.id === itemId);
     const course = this.courseById(courseId);
-    const unit = course?.units.find((item) => item.id === unitId);
-    if (!template || !course || !unit || !this.canUseSpecificContent(template, course, unit)) return;
+    const unit = course?.units.find((candidate) => candidate.id === unitId);
+    if (!template || !item || !course || !unit) return;
+    if (!this.canEditItemContents(template, item) || !this.canUseSpecificContent(template, course, unit)) return;
 
     this.selectedItems.update((items) =>
-      items.map((item) => item.id === itemId ? { ...item, courseId, unitId } : item),
+      items.map((candidate) => candidate.id !== itemId
+        ? candidate
+        : {
+            ...candidate,
+            contentSlots: (candidate.contentSlots ?? []).map((slot) =>
+              slot.id === slotId ? { ...slot, courseId, unitId } : slot),
+          }),
+    );
+    this.persistSelection();
+  }
+
+  moveSelectedContentSlotTo(itemId: string, slotId: string, targetSlotId: string): void {
+    if (slotId === targetSlotId) return;
+    const template = this.selectedTemplate();
+    const item = this.selectedItems().find((candidate) => candidate.id === itemId);
+    if (!template || !item || !this.canEditItemContents(template, item)) return;
+    this.selectedItems.update((items) =>
+      items.map((candidate) => candidate.id !== itemId
+        ? candidate
+        : {
+            ...candidate,
+            contentSlots: this.reorderContentSlots(candidate.contentSlots ?? [], slotId, targetSlotId),
+          }),
     );
     this.persistSelection();
   }
@@ -280,6 +409,12 @@ export class ProgramTemplateService {
   courseById(id?: string): Course | null {
     if (!id) return null;
     return this.courses().find((course) => course.id === id) ?? null;
+  }
+
+  contentForSlot(slot: ProgramContentSlot): ProgramContentOption | null {
+    const course = this.courseById(slot.courseId);
+    const unit = course?.units.find((candidate) => candidate.id === slot.unitId);
+    return course && unit ? { course, unit } : null;
   }
 
   unitForItem(item: ProgramPackageItem): CourseUnit | null {
@@ -299,7 +434,6 @@ export class ProgramTemplateService {
 
   searchContent(query: string, template: ProgramTemplate, limit = 40): ProgramContentOption[] {
     if (template.allowContentReplacement === false) return [];
-
     const needle = query.trim().toLocaleLowerCase('hu-HU');
     const results: ProgramContentOption[] = [];
 
@@ -315,24 +449,39 @@ export class ProgramTemplateService {
         if (results.length >= limit) return results;
       }
     }
-
     return results;
   }
 
-  currentUnit(item: ProgramPackageItem): CourseUnit | null {
+  currentContent(item: ProgramPackageItem): ProgramContentOption | null {
+    const slots = (item.contentSlots ?? [])
+      .map((slot) => this.contentForSlot(slot))
+      .filter((content): content is ProgramContentOption => content !== null);
+
+    if (slots.length) {
+      const rawIndex = Math.max(0, this.currentPosition() - 1);
+      const sourceCourse = this.courseById(item.courseId);
+      const isSequential = Boolean(sourceCourse?.requiresSequentialOrder);
+      const index = isSequential ? Math.min(rawIndex, slots.length - 1) : rawIndex % slots.length;
+      return slots[index] ?? null;
+    }
+
     const course = this.courseById(item.courseId);
     if (!course?.units.length) return null;
-
     if (item.unitId) {
-      return course.units.find((unit) => unit.id === item.unitId) ?? null;
+      const unit = course.units.find((candidate) => candidate.id === item.unitId);
+      return unit ? { course, unit } : null;
     }
 
     const rawIndex = Math.max(0, this.currentPosition() - 1);
     const index = course.requiresSequentialOrder === false
       ? rawIndex % course.units.length
       : Math.min(rawIndex, course.units.length - 1);
+    const unit = course.units[index];
+    return unit ? { course, unit } : null;
+  }
 
-    return course.units[index] ?? null;
+  currentUnit(item: ProgramPackageItem): CourseUnit | null {
+    return this.currentContent(item)?.unit ?? null;
   }
 
   sequenceById(id: string): ProgramSequence | null {
@@ -362,7 +511,7 @@ export class ProgramTemplateService {
   createTemplate(): ProgramTemplate | null {
     const firstCourse = this.courses()[0];
     if (!firstCourse) return null;
-
+    const itemId = 'package-item-' + Date.now();
     const template: ProgramTemplate = {
       id: 'package-' + Date.now(),
       title: 'Új csomag',
@@ -372,13 +521,13 @@ export class ProgramTemplateService {
       allowContentReplacement: true,
       items: [
         {
-          id: 'package-item-' + Date.now(),
+          id: itemId,
           courseId: firstCourse.id,
           timeLabel: 'reggel',
+          contentSlots: this.contentSlotsForCourse(itemId, firstCourse),
         },
       ],
     };
-
     this.templates.update((items) => [template, ...items]);
     this.persistEditorData();
     return template;
@@ -391,7 +540,6 @@ export class ProgramTemplateService {
     try {
       const saved = JSON.parse(raw) as SavedProgramSelection;
       const template = this.templates().find((item) => item.id === saved.selectedTemplateId);
-
       if (template) {
         this.selectedTemplateId.set(template.id);
         const validSavedItems = Array.isArray(saved.selectedItems)
@@ -400,14 +548,13 @@ export class ProgramTemplateService {
         this.selectedItems.set(
           validSavedItems.length
             ? validSavedItems.map((item) => this.normalizePackageItem(item))
-            : template.items.map((item) => ({ ...item })),
+            : template.items.map((item) => this.clonePackageItem(item)),
         );
       }
 
       if (Array.isArray(saved.selectedDays) && saved.selectedDays.length) {
         this.selectedDays.set(saved.selectedDays);
       }
-
       this.started.set(Boolean(saved.started));
       if (Number.isFinite(saved.currentPosition)) {
         this.currentPosition.set(Math.min(12, Math.max(1, Number(saved.currentPosition))));
@@ -455,48 +602,105 @@ export class ProgramTemplateService {
     };
 
     const items: ProgramPackageItem[] = [];
+    const addLegacyItem = (suffix: string, courseId: string, timeLabel: string): void => {
+      const course = this.courseById(courseId);
+      if (!course) return;
+      const id = template.id + '-' + suffix;
+      items.push({ id, courseId, timeLabel, contentSlots: this.contentSlotsForCourse(id, course) });
+    };
+
     if (template.morningSequenceId && legacyCourseMap[template.morningSequenceId]) {
-      items.push({
-        id: template.id + '-morning',
-        courseId: legacyCourseMap[template.morningSequenceId],
-        timeLabel: 'reggel',
-      });
+      addLegacyItem('morning', legacyCourseMap[template.morningSequenceId], 'reggel');
     }
     if (template.eveningSequenceId && legacyCourseMap[template.eveningSequenceId]) {
-      items.push({
-        id: template.id + '-evening',
-        courseId: legacyCourseMap[template.eveningSequenceId],
-        timeLabel: 'este',
-      });
+      addLegacyItem('evening', legacyCourseMap[template.eveningSequenceId], 'este');
     }
 
-    if (!items.length && this.courses()[0]) {
+    const firstCourse = this.courses()[0];
+    if (!items.length && firstCourse) {
+      const id = template.id + '-default';
       items.push({
-        id: template.id + '-default',
-        courseId: this.courses()[0].id,
+        id,
+        courseId: firstCourse.id,
         timeLabel: 'reggel',
+        contentSlots: this.contentSlotsForCourse(id, firstCourse),
       });
     }
-
     return { ...template, allowContentReplacement: true, items };
   }
 
   private normalizePackageItem(item: ProgramPackageItem): ProgramPackageItem {
-    if (!item.courseId) return { id: item.id, timeLabel: item.timeLabel };
     const course = this.courseById(item.courseId);
-    if (!course) return { id: item.id, timeLabel: item.timeLabel };
-    if (!item.unitId || course.units.some((unit) => unit.id === item.unitId)) return { ...item };
-    return { ...item, unitId: undefined };
+    if (!course) {
+      return {
+        id: item.id,
+        timeLabel: item.timeLabel,
+        contentSlots: (item.contentSlots ?? []).map((slot) => this.normalizeContentSlot(slot)),
+      };
+    }
+
+    if (Array.isArray(item.contentSlots)) {
+      return {
+        ...item,
+        contentSlots: item.contentSlots.map((slot) => this.normalizeContentSlot(slot)),
+      };
+    }
+
+    if (item.unitId) {
+      return {
+        ...item,
+        contentSlots: [{ id: item.id + '-content-0', courseId: course.id, unitId: item.unitId }],
+      };
+    }
+
+    return { ...item, contentSlots: this.contentSlotsForCourse(item.id, course) };
+  }
+
+  private normalizeContentSlot(slot: ProgramContentSlot): ProgramContentSlot {
+    const course = this.courseById(slot.courseId);
+    if (!course || !slot.unitId || !course.units.some((unit) => unit.id === slot.unitId)) {
+      return { id: slot.id };
+    }
+    return { ...slot };
+  }
+
+  private clonePackageItem(item: ProgramPackageItem): ProgramPackageItem {
+    return {
+      ...item,
+      contentSlots: item.contentSlots?.map((slot) => ({ ...slot })),
+    };
+  }
+
+  private contentSlotsForCourse(itemId: string, course: Course): ProgramContentSlot[] {
+    return course.units.map((unit, index) => ({
+      id: itemId + '-content-' + index + '-' + unit.id,
+      courseId: course.id,
+      unitId: unit.id,
+    }));
   }
 
   private reorderItems(items: ProgramPackageItem[], itemId: string, targetItemId: string): ProgramPackageItem[] {
     const sourceIndex = items.findIndex((item) => item.id === itemId);
     const targetIndex = items.findIndex((item) => item.id === targetItemId);
     if (sourceIndex < 0 || targetIndex < 0) return items;
-
     const next = [...items];
-    const [moved] = next.splice(sourceIndex, 1);
+    const moved = next[sourceIndex];
+    if (!moved) return items;
+    next.splice(sourceIndex, 1);
     const insertionIndex = next.findIndex((item) => item.id === targetItemId);
+    next.splice(insertionIndex < 0 ? next.length : insertionIndex, 0, moved);
+    return next;
+  }
+
+  private reorderContentSlots(slots: ProgramContentSlot[], slotId: string, targetSlotId: string): ProgramContentSlot[] {
+    const sourceIndex = slots.findIndex((slot) => slot.id === slotId);
+    const targetIndex = slots.findIndex((slot) => slot.id === targetSlotId);
+    if (sourceIndex < 0 || targetIndex < 0) return slots;
+    const next = [...slots];
+    const moved = next[sourceIndex];
+    if (!moved) return slots;
+    next.splice(sourceIndex, 1);
+    const insertionIndex = next.findIndex((slot) => slot.id === targetSlotId);
     next.splice(insertionIndex < 0 ? next.length : insertionIndex, 0, moved);
     return next;
   }
@@ -510,7 +714,6 @@ export class ProgramTemplateService {
     } catch {
       // fall back to bundled demo JSON
     }
-
     sessionStorage.removeItem(this.editorStorageKey);
     return null;
   }
