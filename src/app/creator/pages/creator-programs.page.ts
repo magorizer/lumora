@@ -67,6 +67,12 @@ export class CreatorProgramsPage implements OnInit {
     this.programs.updateTemplateItemCourse(selected.id, itemId, (event.target as HTMLSelectElement).value);
   }
 
+  useFullCourse(itemId: string, courseId: string): void {
+    const selected = this.selected();
+    if (!selected) return;
+    this.programs.updateTemplateItemCourse(selected.id, itemId, courseId);
+  }
+
   updateItemTime(itemId: string, event: Event): void {
     const selected = this.selected();
     if (!selected) return;
