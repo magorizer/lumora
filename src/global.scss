@@ -49,3 +49,211 @@ select {
 button {
   cursor: pointer;
 }
+
+/* Flexible package content slots */
+.package-policy-toggle {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px;
+  align-items: flex-start;
+  border: 1px solid var(--portalumi-border);
+  border-radius: 16px;
+  background: var(--portalumi-page-soft);
+}
+
+.package-policy-toggle input {
+  margin-top: 3px;
+}
+
+.package-policy-toggle strong,
+.package-policy-toggle small {
+  display: block;
+}
+
+.package-policy-toggle small {
+  margin-top: 4px;
+  color: var(--portalumi-muted);
+  line-height: 1.45;
+}
+
+.optional-field {
+  color: var(--portalumi-muted-light);
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.package-editor-item.dragging,
+.package-user-item.dragging {
+  opacity: 0.55;
+  outline: 2px dashed var(--portalumi-gold);
+  outline-offset: 3px;
+}
+
+.package-drag-handle {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 9px;
+  color: var(--portalumi-muted);
+  background: var(--portalumi-surface);
+  cursor: grab;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.package-drag-handle:active {
+  cursor: grabbing;
+}
+
+.package-editor-item-head {
+  grid-template-columns: 34px 32px minmax(0, 1fr) auto;
+}
+
+.package-empty-slot,
+.package-selected-content {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px dashed var(--portalumi-border-strong);
+  border-radius: 14px;
+  background: var(--portalumi-surface);
+}
+
+.package-selected-content {
+  border-style: solid;
+}
+
+.package-empty-slot small,
+.package-selected-content small {
+  color: var(--portalumi-muted);
+}
+
+.package-selected-content button {
+  width: fit-content;
+  margin-top: 6px;
+}
+
+.package-content-section,
+.package-content-search {
+  margin-top: 14px;
+}
+
+.package-content-heading {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.package-content-heading small {
+  color: var(--portalumi-muted);
+}
+
+.package-content-list,
+.package-search-results {
+  display: grid;
+  gap: 7px;
+}
+
+.package-content-list button,
+.package-search-results button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  align-items: center;
+  border: 1px solid var(--portalumi-border);
+  border-radius: 12px;
+  color: var(--portalumi-ink);
+  background: var(--portalumi-surface);
+  text-align: left;
+}
+
+.package-user-item .package-content-list button {
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+}
+
+.package-content-list button.selected {
+  border-color: var(--portalumi-gold);
+  background: var(--portalumi-gold-soft);
+}
+
+.package-content-list button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.package-content-list strong,
+.package-content-list small,
+.package-search-results strong,
+.package-search-results small {
+  display: block;
+}
+
+.package-content-list small,
+.package-search-results small {
+  margin-top: 3px;
+  color: var(--portalumi-muted-light);
+  font-size: 10px;
+}
+
+.content-availability {
+  color: var(--portalumi-muted-light);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.package-content-search label {
+  display: grid;
+  gap: 7px;
+  color: var(--portalumi-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.package-content-search input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 12px;
+  color: var(--portalumi-ink);
+  background: var(--portalumi-surface);
+  font: inherit;
+  text-transform: none;
+}
+
+.package-search-results {
+  max-height: 280px;
+  margin-top: 8px;
+  overflow: auto;
+}
+
+.package-search-empty {
+  padding: 10px 12px;
+  color: var(--portalumi-muted);
+  border-radius: 12px;
+  background: var(--portalumi-page-soft);
+  font-size: 11px;
+}
+
+@media (max-width: 560px) {
+  .package-editor-item-head {
+    grid-template-columns: 32px 32px minmax(0, 1fr);
+  }
+
+  .package-editor-order {
+    grid-column: 3;
+  }
+
+  .content-availability {
+    display: none;
+  }
+}
