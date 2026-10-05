@@ -154,11 +154,18 @@ export interface ProgramSequence {
   sessions: ProgramSequenceSession[];
 }
 
+export interface ProgramContentSlot {
+  id: string;
+  courseId?: string;
+  unitId?: string;
+}
+
 export interface ProgramPackageItem {
   id: string;
   courseId?: string;
   unitId?: string;
   timeLabel: string;
+  contentSlots?: ProgramContentSlot[];
 }
 
 export interface ProgramTemplate {
