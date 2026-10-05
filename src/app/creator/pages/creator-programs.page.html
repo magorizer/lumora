@@ -3,8 +3,8 @@
     <span class="eyebrow">Csomagok</span>
     <h1>Előre definiált programcsomagok</h1>
     <p>
-      Bármelyik képző összeállíthat új csomagot az összes már feltöltött kurzusból és az önállóan használható tartalmakból.
-      Egy csomag lehet csak reggeli, csak esti, több blokkos vagy teljesen személyre szabható.
+      Bármelyik képző összeállíthat új csomagot az összes már feltöltött kurzusból és tartalomból.
+      Egy blokk lehet teljes kurzus vagy teljesen személyre szabott tartalomsor.
     </p>
   </div>
 
@@ -20,11 +20,7 @@
 
       <div class="creator-program-template-list">
         @for (template of programs.templates(); track template.id) {
-          <button
-            type="button"
-            [class.active]="selectedId() === template.id"
-            (click)="select(template.id)"
-          >
+          <button type="button" [class.active]="selectedId() === template.id" (click)="select(template.id)">
             <span class="program-admin-dot" [class]="'program-admin-dot program-template-' + template.accent"></span>
             <span>
               <strong>{{ template.title }}</strong>
@@ -50,12 +46,10 @@
             Csomag neve
             <input [value]="template.title" (input)="updateField('title', $event)">
           </label>
-
           <label class="full">
             Rövid alcím
             <input [value]="template.subtitle" (input)="updateField('subtitle', $event)">
           </label>
-
           <label class="full">
             Leírás
             <textarea rows="4" [value]="template.description" (input)="updateField('description', $event)"></textarea>
@@ -63,15 +57,12 @@
         </div>
 
         <label class="package-policy-toggle">
-          <input
-            type="checkbox"
-            [checked]="template.allowContentReplacement !== false"
-            (change)="updateContentReplacement($event)"
-          >
+          <input type="checkbox" [checked]="template.allowContentReplacement !== false" (change)="updateContentReplacement($event)">
           <span>
             <strong>Tartalomszintű személyre szabás engedélyezése</strong>
             <small>
-              Bekapcsolva a moduláris kurzusok tartalmai, illetve az önállóan hallgatható elemek külön is betehetők és cserélhetők.
+              Bekapcsolva a nem kötött sorrendű kurzusok tartalom-slotjai külön cserélhetők és átrendezhetők.
+              Más kurzusból csak moduláris vagy önállóan hallgatható tartalom választható.
             </small>
           </span>
         </label>
@@ -79,9 +70,9 @@
         <div class="creator-heading package-items-heading">
           <div>
             <span class="eyebrow">Napi blokkok</span>
-            <h2>Kurzusok és tartalmak a csomagban</h2>
+            <h2>Kurzusok a csomagban</h2>
           </div>
-          <button class="creator-secondary" type="button" (click)="addItem()">+ Üres slot hozzáadása</button>
+          <button class="creator-secondary" type="button" (click)="addItem()">+ Üres blokk</button>
         </div>
 
         <div class="package-editor-list">
@@ -100,11 +91,10 @@
                   draggable="true"
                   (dragstart)="dragStart(item.id, $event)"
                   (dragend)="dragEnd()"
-                  aria-label="Slot áthúzása"
+                  aria-label="Blokk áthúzása"
                   title="Fogd meg és húzd át"
                 >⠿</button>
                 <strong>{{ item.timeLabel }}</strong>
-
                 <div class="package-editor-order">
                   <button type="button" (click)="moveItem(item.id, -1)" [disabled]="index === 0" aria-label="Fel">↑</button>
                   <button type="button" (click)="moveItem(item.id, 1)" [disabled]="index === template.items.length - 1" aria-label="Le">↓</button>
@@ -125,7 +115,7 @@
                 <label>
                   Kurzus <span class="optional-field">opcionális</span>
                   <select [value]="item.courseId ?? ''" (change)="updateItemCourse(item.id, $event)">
-                    <option value="">Személyre szabott · üres slot</option>
+                    <option value="">Személyre szabott · üres</option>
                     @for (course of programs.courses(); track course.id) {
                       <option [value]="course.id">{{ course.title }} · {{ programs.instructorNameForCourse(course) }}</option>
                     }
@@ -138,96 +128,119 @@
                   <strong>{{ course.title }}</strong>
                   <span>{{ programs.instructorNameForCourse(course) }} · {{ course.category }}</span>
                   <small>
-                    {{ course.units.length }} tartalom · {{ course.requiresSequentialOrder === false ? 'moduláris' : 'kötött sorrend' }}
+                    {{ course.units.length }} tartalom · {{ course.requiresSequentialOrder === false ? 'moduláris, szerkeszthető' : 'kötött sorrend, nem bontható' }}
                   </small>
                 </div>
-
-                @if (programs.unitForItem(item); as selectedUnit) {
-                  <div class="package-selected-content">
-                    <span class="hero-kicker">Kiválasztott tartalom</span>
-                    <strong>{{ selectedUnit.title }}</strong>
-                    <small>{{ course.title }} › {{ selectedUnit.duration }} · {{ selectedUnit.type }}</small>
-                    <button type="button" class="creator-secondary" (click)="useFullCourse(item.id, course.id)">
-                      Teljes kurzus használata
-                    </button>
-                  </div>
-                }
-
-                @if (template.allowContentReplacement !== false) {
-                  <div class="package-content-section">
-                    <div class="package-content-heading">
-                      <strong>A kurzus tartalmai</strong>
-                      <small>
-                        Kattints arra, amit külön szeretnél ebbe a slotba tenni. A lezárt sorrendű elemek nem bonthatók ki.
-                      </small>
-                    </div>
-
-                    <div class="package-content-list">
-                      @for (unit of course.units; track unit.id) {
-                        <button
-                          type="button"
-                          [class.selected]="item.unitId === unit.id"
-                          [disabled]="!programs.canUseSpecificContent(template, course, unit)"
-                          (click)="selectItemUnit(item.id, course.id, unit.id)"
-                        >
-                          <span>
-                            <strong>{{ unit.title }}</strong>
-                            <small>{{ unit.duration }} · {{ unit.type }}</small>
-                          </span>
-                          <span class="content-availability">
-                            {{ programs.canUseSpecificContent(template, course, unit) ? 'kiválasztható' : 'sorrendhez kötött' }}
-                          </span>
-                        </button>
-                      }
-                    </div>
-                  </div>
-                }
               } @else {
                 <div class="package-empty-slot">
                   <span class="hero-kicker">Személyre szabott</span>
-                  <strong>Ez a slot még üres.</strong>
-                  <small>Válassz teljes kurzust fent, vagy keress közvetlenül egy használható tartalmat lent.</small>
+                  <strong>Nincs alapkurzus.</strong>
+                  <small>Adj hozzá üres tartalom-slotokat, majd minden slotba keress kurzus › tartalmat.</small>
                 </div>
               }
 
-              @if (template.allowContentReplacement !== false) {
-                <div class="package-content-search">
-                  <label>
-                    Keresés másik kurzus › tartalomból
-                    <input
-                      type="search"
-                      [value]="searchQuery(item.id)"
-                      (input)="setSearch(item.id, $event)"
-                      placeholder="pl. meditáció, légzés, önbizalom..."
-                    >
-                  </label>
-
-                  @if (searchQuery(item.id).trim()) {
-                    <div class="package-search-results">
-                      @for (result of searchResults(template, item.id); track result.course.id + ':' + result.unit.id) {
-                        <button type="button" (click)="selectItemUnit(item.id, result.course.id, result.unit.id)">
-                          <span>
-                            <strong>{{ result.unit.title }}</strong>
-                            <small>
-                              {{ result.course.title }} › {{ programs.instructorNameForCourse(result.course) }} · {{ result.unit.duration }}
-                            </small>
-                          </span>
-                          <span>+</span>
-                        </button>
-                      } @empty {
-                        <div class="package-search-empty">Nincs választható találat erre a keresésre.</div>
+              <div class="package-content-section">
+                <div class="package-content-heading package-content-heading-row">
+                  <div>
+                    <strong>Tartalom-slotok</strong>
+                    <small>
+                      @if (programs.canEditItemContents(template, item)) {
+                        Egyenként cserélhetők, törölhetők és drag & droppal átrendezhetők.
+                      } @else {
+                        Ez a kurzus kötött sorrendű vagy a csomag nem enged tartalomszintű módosítást.
                       }
+                    </small>
+                  </div>
+                  @if (programs.canEditItemContents(template, item)) {
+                    <button class="creator-secondary" type="button" (click)="addContentSlot(item.id)">+ Tartalom slot</button>
+                  }
+                </div>
+
+                <div class="package-content-slots">
+                  @for (slot of item.contentSlots || []; track slot.id; let slotIndex = $index) {
+                    <div
+                      class="package-content-slot"
+                      [class.dragging]="draggedContentSlotKey() === searchKey(item.id, slot.id)"
+                      (dragover)="contentDragOver($event)"
+                      (drop)="contentDrop(item.id, slot.id, $event)"
+                    >
+                      <div class="package-content-slot-head">
+                        <span class="sequence-number">{{ slotIndex + 1 }}</span>
+
+                        @if (programs.canEditItemContents(template, item)) {
+                          <button
+                            class="package-drag-handle compact"
+                            type="button"
+                            draggable="true"
+                            (dragstart)="contentDragStart(item.id, slot.id, $event)"
+                            (dragend)="contentDragEnd($event)"
+                            aria-label="Tartalom-slot áthúzása"
+                          >⠿</button>
+                        }
+
+                        @if (programs.contentForSlot(slot); as content) {
+                          <div class="package-content-slot-copy">
+                            <strong>{{ content.unit.title }}</strong>
+                            <small>
+                              {{ content.course.title }} › {{ programs.instructorNameForCourse(content.course) }} · {{ content.unit.duration }} · {{ content.unit.type }}
+                            </small>
+                          </div>
+                        } @else {
+                          <div class="package-content-slot-copy">
+                            <strong>Üres tartalom-slot</strong>
+                            <small>Keress egy tartalmat ehhez a helyhez.</small>
+                          </div>
+                        }
+
+                        @if (programs.canEditItemContents(template, item)) {
+                          <button class="package-slot-remove" type="button" (click)="removeContentSlot(item.id, slot.id)" aria-label="Slot törlése">×</button>
+                        }
+                      </div>
+
+                      @if (programs.canEditItemContents(template, item)) {
+                        @let key = searchKey(item.id, slot.id);
+                        <div class="package-content-search compact-search">
+                          <label>
+                            Csere kereséssel: kurzus › tartalom
+                            <input
+                              type="search"
+                              [value]="searchQuery(key)"
+                              (input)="setSearch(key, $event)"
+                              placeholder="pl. meditáció, légzés, önbizalom..."
+                            >
+                          </label>
+
+                          @if (searchQuery(key).trim()) {
+                            <div class="package-search-results">
+                              @for (result of searchResults(template, key); track result.course.id + ':' + result.unit.id) {
+                                <button type="button" (click)="selectContentSlot(item.id, slot.id, result.course.id, result.unit.id)">
+                                  <span>
+                                    <strong>{{ result.unit.title }}</strong>
+                                    <small>{{ result.course.title }} › {{ programs.instructorNameForCourse(result.course) }} · {{ result.unit.duration }}</small>
+                                  </span>
+                                  <span>+</span>
+                                </button>
+                              } @empty {
+                                <div class="package-search-empty">Nincs választható találat erre a keresésre.</div>
+                              }
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                  } @empty {
+                    <div class="package-search-empty">
+                      Még nincs tartalom-slot. Adj hozzá egyet, majd keress bele tartalmat.
                     </div>
                   }
                 </div>
-              }
+              </div>
             </div>
           }
         </div>
 
         <p class="creator-help mt-4">
-          A blokkok fogd és húzd módszerrel átrendezhetők. A kötött sorrendű kurzusok belső leckesorrendje változatlan marad;
-          külön csak moduláris vagy önállóan engedélyezett tartalom választható.
+          A napi blokkok és az engedélyezett tartalom-slotok is drag & droppal rendezhetők. Kötött sorrendű kurzus tartalmai csak olvashatók.
         </p>
       </div>
     }
