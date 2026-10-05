@@ -85,7 +85,8 @@ button {
 }
 
 .package-editor-item.dragging,
-.package-user-item.dragging {
+.package-user-item.dragging,
+.package-content-slot.dragging {
   opacity: 0.55;
   outline: 2px dashed var(--portalumi-gold);
   outline-offset: 3px;
@@ -104,6 +105,12 @@ button {
   cursor: grab;
   font-size: 18px;
   line-height: 1;
+}
+
+.package-drag-handle.compact {
+  width: 28px;
+  height: 28px;
+  font-size: 15px;
 }
 
 .package-drag-handle:active {
@@ -150,12 +157,19 @@ button {
   margin-bottom: 8px;
 }
 
+.package-content-heading-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
 .package-content-heading small {
   color: var(--portalumi-muted);
 }
 
 .package-content-list,
-.package-search-results {
+.package-search-results,
+.package-content-slots {
   display: grid;
   gap: 7px;
 }
@@ -230,6 +244,10 @@ button {
   text-transform: none;
 }
 
+.compact-search {
+  margin-top: 10px;
+}
+
 .package-search-results {
   max-height: 280px;
   margin-top: 8px;
@@ -244,6 +262,58 @@ button {
   font-size: 11px;
 }
 
+.package-content-slot {
+  padding: 10px;
+  border: 1px solid var(--portalumi-border);
+  border-radius: 14px;
+  background: var(--portalumi-surface);
+}
+
+.package-content-slot-head {
+  display: grid;
+  grid-template-columns: 32px 28px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.package-content-slot-copy {
+  min-width: 0;
+}
+
+.package-content-slot-copy strong,
+.package-content-slot-copy small {
+  display: block;
+}
+
+.package-content-slot-copy strong {
+  color: var(--portalumi-ink-soft);
+  font-size: 12px;
+}
+
+.package-content-slot-copy small {
+  margin-top: 3px;
+  color: var(--portalumi-muted-light);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.package-slot-remove {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 8px;
+  color: var(--portalumi-muted);
+  background: var(--portalumi-page-soft);
+}
+
+.compact-action {
+  min-height: 32px;
+  padding: 7px 10px;
+}
+
 @media (max-width: 560px) {
   .package-editor-item-head {
     grid-template-columns: 32px 32px minmax(0, 1fr);
@@ -255,5 +325,13 @@ button {
 
   .content-availability {
     display: none;
+  }
+
+  .package-content-heading-row {
+    grid-template-columns: 1fr;
+  }
+
+  .package-content-slot-head {
+    grid-template-columns: 30px 28px minmax(0, 1fr) auto;
   }
 }
