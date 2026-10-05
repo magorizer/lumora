@@ -22,6 +22,7 @@ export class ProgramCustomizePage implements OnInit {
   private readonly router = inject(Router);
   readonly searchQueries = signal<Record<string, string>>({});
   readonly draggedItemId = signal<string | null>(null);
+  readonly draggedContentSlotKey = signal<string | null>(null);
 
   readonly days: DayOption[] = [
     { id: 'monday', short: 'H', label: 'Hétfő' },
@@ -41,25 +42,33 @@ export class ProgramCustomizePage implements OnInit {
     this.programs.setSelectedItemCourse(itemId, (event.target as HTMLSelectElement).value);
   }
 
-  useFullCourse(itemId: string, courseId: string): void {
-    this.programs.setSelectedItemCourse(itemId, courseId);
+  addContentSlot(itemId: string): void {
+    this.programs.addSelectedContentSlot(itemId);
   }
 
-  selectUnit(itemId: string, courseId: string, unitId: string): void {
-    this.programs.setSelectedItemUnit(itemId, courseId, unitId);
+  removeContentSlot(itemId: string, slotId: string): void {
+    this.programs.removeSelectedContentSlot(itemId, slotId);
   }
 
-  setSearch(itemId: string, event: Event): void {
+  selectContentSlot(itemId: string, slotId: string, courseId: string, unitId: string): void {
+    this.programs.setSelectedContentSlot(itemId, slotId, courseId, unitId);
+  }
+
+  searchKey(itemId: string, slotId: string): string {
+    return itemId + ':' + slotId;
+  }
+
+  setSearch(key: string, event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    this.searchQueries.update((queries) => ({ ...queries, [itemId]: value }));
+    this.searchQueries.update((queries) => ({ ...queries, [key]: value }));
   }
 
-  searchQuery(itemId: string): string {
-    return this.searchQueries()[itemId] ?? '';
+  searchQuery(key: string): string {
+    return this.searchQueries()[key] ?? '';
   }
 
-  searchResults(template: ProgramTemplate, itemId: string): ProgramContentOption[] {
-    const query = this.searchQuery(itemId);
+  searchResults(template: ProgramTemplate, key: string): ProgramContentOption[] {
+    const query = this.searchQuery(key);
     if (!query.trim()) return [];
     return this.programs.searchContent(query, template);
   }
@@ -86,6 +95,38 @@ export class ProgramCustomizePage implements OnInit {
 
   dragEnd(): void {
     this.draggedItemId.set(null);
+  }
+
+  contentDragStart(itemId: string, slotId: string, event: DragEvent): void {
+    const key = this.searchKey(itemId, slotId);
+    this.draggedContentSlotKey.set(key);
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', key);
+    }
+    event.stopPropagation();
+  }
+
+  contentDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+  }
+
+  contentDrop(itemId: string, targetSlotId: string, event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const key = this.draggedContentSlotKey() ?? event.dataTransfer?.getData('text/plain') ?? '';
+    const [sourceItemId, sourceSlotId] = key.split(':');
+    if (sourceItemId === itemId && sourceSlotId) {
+      this.programs.moveSelectedContentSlotTo(itemId, sourceSlotId, targetSlotId);
+    }
+    this.draggedContentSlotKey.set(null);
+  }
+
+  contentDragEnd(event: DragEvent): void {
+    event.stopPropagation();
+    this.draggedContentSlotKey.set(null);
   }
 
   back(): void {
