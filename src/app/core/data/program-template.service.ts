@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { CourseRepository, ProgramTemplateRepository } from './repositories';
 import {
   Course,
+  CourseUnit,
   Instructor,
   ProgramDay,
   ProgramPackageItem,
@@ -17,6 +18,11 @@ interface SavedProgramSelection {
   selectedDays: ProgramDay[];
   started: boolean;
   currentPosition: number;
+}
+
+export interface ProgramContentOption {
+  course: Course;
+  unit: CourseUnit;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -107,10 +113,23 @@ export class ProgramTemplateService {
     this.persistEditorData();
   }
 
-  addTemplateItem(templateId: string): void {
-    const firstCourse = this.courses()[0];
-    if (!firstCourse) return;
+  setTemplateContentReplacement(templateId: string, enabled: boolean): void {
+    this.templates.update((templates) =>
+      templates.map((template) => {
+        if (template.id !== templateId) return template;
+        return {
+          ...template,
+          allowContentReplacement: enabled,
+          items: enabled
+            ? template.items
+            : template.items.map(({ unitId: _unitId, ...item }) => item),
+        };
+      }),
+    );
+    this.persistEditorData();
+  }
 
+  addTemplateItem(templateId: string): void {
     this.templates.update((templates) =>
       templates.map((template) => {
         if (template.id !== templateId) return template;
@@ -122,7 +141,6 @@ export class ProgramTemplateService {
             ...template.items,
             {
               id: 'package-item-' + Date.now(),
-              courseId: firstCourse.id,
               timeLabel,
             },
           ],
@@ -161,8 +179,19 @@ export class ProgramTemplateService {
     this.persistEditorData();
   }
 
+  moveTemplateItemTo(templateId: string, itemId: string, targetItemId: string): void {
+    if (itemId === targetItemId) return;
+    this.templates.update((templates) =>
+      templates.map((template) => {
+        if (template.id !== templateId) return template;
+        return { ...template, items: this.reorderItems(template.items, itemId, targetItemId) };
+      }),
+    );
+    this.persistEditorData();
+  }
+
   updateTemplateItemCourse(templateId: string, itemId: string, courseId: string): void {
-    if (!this.courseById(courseId)) return;
+    if (courseId && !this.courseById(courseId)) return;
 
     this.templates.update((templates) =>
       templates.map((template) =>
@@ -170,11 +199,36 @@ export class ProgramTemplateService {
           ? template
           : {
               ...template,
-              items: template.items.map((item) => item.id === itemId ? { ...item, courseId } : item),
+              items: template.items.map((item) => {
+                if (item.id !== itemId) return item;
+                if (!courseId) return { id: item.id, timeLabel: item.timeLabel };
+                return { ...item, courseId, unitId: undefined };
+              }),
             },
       ),
     );
 
+    this.persistEditorData();
+  }
+
+  updateTemplateItemUnit(templateId: string, itemId: string, courseId: string, unitId: string): void {
+    const template = this.templates().find((item) => item.id === templateId);
+    const course = this.courseById(courseId);
+    const unit = course?.units.find((item) => item.id === unitId);
+    if (!template || !course || !unit || !this.canUseSpecificContent(template, course, unit)) return;
+
+    this.templates.update((templates) =>
+      templates.map((candidate) =>
+        candidate.id !== templateId
+          ? candidate
+          : {
+              ...candidate,
+              items: candidate.items.map((item) =>
+                item.id === itemId ? { ...item, courseId, unitId } : item,
+              ),
+            },
+      ),
+    );
     this.persistEditorData();
   }
 
@@ -194,24 +248,84 @@ export class ProgramTemplateService {
   }
 
   setSelectedItemCourse(itemId: string, courseId: string): void {
-    if (!this.courseById(courseId)) return;
+    if (courseId && !this.courseById(courseId)) return;
     this.selectedItems.update((items) =>
-      items.map((item) => item.id === itemId ? { ...item, courseId } : item),
+      items.map((item) => {
+        if (item.id !== itemId) return item;
+        if (!courseId) return { id: item.id, timeLabel: item.timeLabel };
+        return { ...item, courseId, unitId: undefined };
+      }),
     );
     this.persistSelection();
   }
 
-  courseById(id: string): Course | null {
+  setSelectedItemUnit(itemId: string, courseId: string, unitId: string): void {
+    const template = this.selectedTemplate();
+    const course = this.courseById(courseId);
+    const unit = course?.units.find((item) => item.id === unitId);
+    if (!template || !course || !unit || !this.canUseSpecificContent(template, course, unit)) return;
+
+    this.selectedItems.update((items) =>
+      items.map((item) => item.id === itemId ? { ...item, courseId, unitId } : item),
+    );
+    this.persistSelection();
+  }
+
+  moveSelectedItemTo(itemId: string, targetItemId: string): void {
+    if (itemId === targetItemId) return;
+    this.selectedItems.update((items) => this.reorderItems(items, itemId, targetItemId));
+    this.persistSelection();
+  }
+
+  courseById(id?: string): Course | null {
+    if (!id) return null;
     return this.courses().find((course) => course.id === id) ?? null;
+  }
+
+  unitForItem(item: ProgramPackageItem): CourseUnit | null {
+    const course = this.courseById(item.courseId);
+    if (!course || !item.unitId) return null;
+    return course.units.find((unit) => unit.id === item.unitId) ?? null;
   }
 
   instructorNameForCourse(course: Course): string {
     return this.instructors().find((instructor) => instructor.id === course.instructorId)?.name ?? 'Előadó';
   }
 
-  currentUnit(item: ProgramPackageItem) {
+  canUseSpecificContent(template: ProgramTemplate, course: Course, unit: CourseUnit): boolean {
+    if (template.allowContentReplacement === false) return false;
+    return course.requiresSequentialOrder === false || unit.standaloneAllowed === true;
+  }
+
+  searchContent(query: string, template: ProgramTemplate, limit = 40): ProgramContentOption[] {
+    if (template.allowContentReplacement === false) return [];
+
+    const needle = query.trim().toLocaleLowerCase('hu-HU');
+    const results: ProgramContentOption[] = [];
+
+    for (const course of this.courses()) {
+      const instructor = this.instructorNameForCourse(course);
+      for (const unit of course.units) {
+        if (!this.canUseSpecificContent(template, course, unit)) continue;
+        const searchable = [course.title, course.category, instructor, unit.title, unit.type]
+          .join(' ')
+          .toLocaleLowerCase('hu-HU');
+        if (needle && !searchable.includes(needle)) continue;
+        results.push({ course, unit });
+        if (results.length >= limit) return results;
+      }
+    }
+
+    return results;
+  }
+
+  currentUnit(item: ProgramPackageItem): CourseUnit | null {
     const course = this.courseById(item.courseId);
     if (!course?.units.length) return null;
+
+    if (item.unitId) {
+      return course.units.find((unit) => unit.id === item.unitId) ?? null;
+    }
 
     const rawIndex = Math.max(0, this.currentPosition() - 1);
     const index = course.requiresSequentialOrder === false
@@ -255,6 +369,7 @@ export class ProgramTemplateService {
       subtitle: 'Saját összeállítás feltöltött kurzusokból',
       description: 'A képző által összeállított, szerkeszthető programcsomag.',
       accent: 'amber',
+      allowContentReplacement: true,
       items: [
         {
           id: 'package-item-' + Date.now(),
@@ -280,11 +395,11 @@ export class ProgramTemplateService {
       if (template) {
         this.selectedTemplateId.set(template.id);
         const validSavedItems = Array.isArray(saved.selectedItems)
-          ? saved.selectedItems.filter((item) => this.courseById(item.courseId))
+          ? saved.selectedItems.filter((item) => !item.courseId || this.courseById(item.courseId))
           : [];
         this.selectedItems.set(
           validSavedItems.length
-            ? validSavedItems.map((item) => ({ ...item }))
+            ? validSavedItems.map((item) => this.normalizePackageItem(item))
             : template.items.map((item) => ({ ...item })),
         );
       }
@@ -322,7 +437,13 @@ export class ProgramTemplateService {
   }
 
   private normalizeTemplate(template: ProgramTemplate): ProgramTemplate {
-    if (Array.isArray(template.items) && template.items.length) return template;
+    if (Array.isArray(template.items) && template.items.length) {
+      return {
+        ...template,
+        allowContentReplacement: template.allowContentReplacement !== false,
+        items: template.items.map((item) => this.normalizePackageItem(item)),
+      };
+    }
 
     const legacyCourseMap: Record<string, string> = {
       'energy-breathwork-morning': 'morning-focus-5',
@@ -357,7 +478,27 @@ export class ProgramTemplateService {
       });
     }
 
-    return { ...template, items };
+    return { ...template, allowContentReplacement: true, items };
+  }
+
+  private normalizePackageItem(item: ProgramPackageItem): ProgramPackageItem {
+    if (!item.courseId) return { id: item.id, timeLabel: item.timeLabel };
+    const course = this.courseById(item.courseId);
+    if (!course) return { id: item.id, timeLabel: item.timeLabel };
+    if (!item.unitId || course.units.some((unit) => unit.id === item.unitId)) return { ...item };
+    return { ...item, unitId: undefined };
+  }
+
+  private reorderItems(items: ProgramPackageItem[], itemId: string, targetItemId: string): ProgramPackageItem[] {
+    const sourceIndex = items.findIndex((item) => item.id === itemId);
+    const targetIndex = items.findIndex((item) => item.id === targetItemId);
+    if (sourceIndex < 0 || targetIndex < 0) return items;
+
+    const next = [...items];
+    const [moved] = next.splice(sourceIndex, 1);
+    const insertionIndex = next.findIndex((item) => item.id === targetItemId);
+    next.splice(insertionIndex < 0 ? next.length : insertionIndex, 0, moved);
+    return next;
   }
 
   private safeParseData(raw: string): ProgramTemplatesData | null {
