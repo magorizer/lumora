@@ -33,8 +33,8 @@
       </div>
 
       <p class="hint">
-        A blokkok áthúzhatók. Ha a csomag és a kurzus engedi, az egyes tartalom-slotokat külön is lecserélheted
-        másik kurzus tartalmára, illetve át is rendezheted őket.
+        A blokkok áthúzhatók. Ha a csomag engedi a személyre szabást, minden tartalom-slot külön lecserélhető
+        bármelyik feltöltött kurzus tartalmára, átrendezhető, hozzáadható vagy törölhető.
       </p>
 
       <div class="package-user-items">
@@ -80,7 +80,7 @@
               <div class="package-course-preview">
                 <strong>{{ course.title }}</strong>
                 <span>{{ programs.instructorNameForCourse(course) }}</span>
-                <small>{{ course.requiresSequentialOrder === false ? 'Moduláris, személyre szabható' : 'Kötött sorrend' }}</small>
+                <small>{{ course.requiresSequentialOrder === false ? 'Eredetileg moduláris' : 'A kurzusban kötött sorrend' }} · a csomagban személyre szabható</small>
               </div>
             }
 
@@ -90,9 +90,9 @@
                   <strong>Tartalmak</strong>
                   <small>
                     @if (programs.canEditItemContents(template, item)) {
-                      A slotokat külön cserélheted és áthúzhatod.
+                      A slotokat külön cserélheted, hozzáadhatod, törölheted és áthúzhatod.
                     } @else {
-                      A tartalmi sorrend ennél a blokknál rögzített.
+                      A csomag ennél a blokknál nem enged tartalomszintű módosítást.
                     }
                   </small>
                 </div>
