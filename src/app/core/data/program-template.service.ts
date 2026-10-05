@@ -30,8 +30,8 @@ export interface ProgramContentOption {
 export class ProgramTemplateService {
   private readonly repository = inject(ProgramTemplateRepository);
   private readonly courseRepository = inject(CourseRepository);
-  private readonly storageKey = 'portalumi-demo-program-selection';
-  private readonly editorStorageKey = 'portalumi-demo-program-templates';
+  private readonly storageKey = 'portalumi-demo-program-selection-v2';
+  private readonly editorStorageKey = 'portalumi-demo-program-templates-v2';
 
   readonly sequences = signal<ProgramSequence[]>([]);
   readonly templates = signal<ProgramTemplate[]>([]);
@@ -218,8 +218,10 @@ export class ProgramTemplateService {
     this.persistEditorData();
   }
 
-  canEditItemContents(template: ProgramTemplate, _item: ProgramPackageItem): boolean {
-    return template.allowContentReplacement !== false;
+  canEditItemContents(template: ProgramTemplate, item: ProgramPackageItem): boolean {
+    if (template.allowContentReplacement === false) return false;
+    if (!item.courseId) return true;
+    return this.courseById(item.courseId)?.requiresSequentialOrder === false;
   }
 
   addTemplateContentSlot(templateId: string, itemId: string): void {
@@ -425,8 +427,9 @@ export class ProgramTemplateService {
     return this.instructors().find((instructor) => instructor.id === course.instructorId)?.name ?? 'Előadó';
   }
 
-  canUseSpecificContent(template: ProgramTemplate, _course: Course, _unit: CourseUnit): boolean {
-    return template.allowContentReplacement !== false;
+  canUseSpecificContent(template: ProgramTemplate, course: Course, unit: CourseUnit): boolean {
+    if (template.allowContentReplacement === false) return false;
+    return course.requiresSequentialOrder === false || unit.standaloneAllowed === true;
   }
 
   searchContent(query: string, template: ProgramTemplate, limit = 40): ProgramContentOption[] {
@@ -506,7 +509,7 @@ export class ProgramTemplateService {
   }
 
   createTemplate(): ProgramTemplate | null {
-    const firstCourse = this.courses()[0];
+    const firstCourse = this.courses().find((course) => course.requiresSequentialOrder === false) ?? this.courses()[0];
     if (!firstCourse) return null;
     const itemId = 'package-item-' + Date.now();
     const template: ProgramTemplate = {
