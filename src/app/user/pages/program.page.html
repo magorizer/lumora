@@ -30,8 +30,17 @@
             @if (programs.courseById(item.courseId); as course) {
               <div>
                 <span class="routine-period">{{ item.timeLabel }}</span>
-                <strong>{{ course.title }}</strong>
-                <small>{{ programs.instructorNameForCourse(course) }} · {{ course.units.length }} tartalom</small>
+                <strong>{{ programs.unitForItem(item)?.title ?? course.title }}</strong>
+                <small>
+                  {{ course.title }} · {{ programs.instructorNameForCourse(course) }}
+                  @if (!item.unitId) { · {{ course.units.length }} tartalom }
+                </small>
+              </div>
+            } @else {
+              <div>
+                <span class="routine-period">{{ item.timeLabel }}</span>
+                <strong>Személyre szabott slot</strong>
+                <small>A csomag finomhangolásakor tölthető ki</small>
               </div>
             }
           }
@@ -47,8 +56,8 @@
   <div class="card program-order-note">
     <strong>Mit lehet módosítani?</strong>
     <p>
-      A csomagban teljes kurzusokat cserélhetsz másik kurzusra. Ha egy kurzus kötött sorrendű,
-      annak belső leckesorrendje változatlan marad.
+      A teljes kurzus mindig cserélhető. Ahol a csomag engedi, moduláris kurzusok egyes tartalmai vagy
+      önállóan hallgatható elemek is kiválaszthatók másik kurzusból. A kötött sorrendű kurzus belső rendje megmarad.
     </p>
   </div>
 </section>
