@@ -61,8 +61,8 @@
           <span>
             <strong>Tartalomszintű személyre szabás engedélyezése</strong>
             <small>
-              Bekapcsolva a nem kötött sorrendű kurzusok tartalom-slotjai külön cserélhetők és átrendezhetők.
-              Más kurzusból csak moduláris vagy önállóan hallgatható tartalom választható.
+              Bekapcsolva bármelyik kurzus tartalom-slotjai külön cserélhetők, törölhetők, bővíthetők és átrendezhetők.
+              Más képző bármely feltöltött tartalma betehető.
             </small>
           </span>
         </label>
@@ -128,7 +128,7 @@
                   <strong>{{ course.title }}</strong>
                   <span>{{ programs.instructorNameForCourse(course) }} · {{ course.category }}</span>
                   <small>
-                    {{ course.units.length }} tartalom · {{ course.requiresSequentialOrder === false ? 'moduláris, szerkeszthető' : 'kötött sorrend, nem bontható' }}
+                    {{ course.units.length }} tartalom · {{ course.requiresSequentialOrder === false ? 'eredetileg moduláris' : 'a kurzusban kötött sorrend' }} · a csomagban szerkeszthető
                   </small>
                 </div>
               } @else {
@@ -147,7 +147,7 @@
                       @if (programs.canEditItemContents(template, item)) {
                         Egyenként cserélhetők, törölhetők és drag & droppal átrendezhetők.
                       } @else {
-                        Ez a kurzus kötött sorrendű vagy a csomag nem enged tartalomszintű módosítást.
+                        A csomag nem enged tartalomszintű módosítást.
                       }
                     </small>
                   </div>
@@ -240,7 +240,7 @@
         </div>
 
         <p class="creator-help mt-4">
-          A napi blokkok és az engedélyezett tartalom-slotok is drag & droppal rendezhetők. Kötött sorrendű kurzus tartalmai csak olvashatók.
+          A napi blokkok és a tartalom-slotok is drag & droppal rendezhetők. A kurzus eredeti sorrendje csak kiindulópont; a csomagban a slotok cserélhetők, bővíthetők és törölhetők.
         </p>
       </div>
     }
