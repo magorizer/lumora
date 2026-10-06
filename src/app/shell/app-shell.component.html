@@ -5,7 +5,7 @@
         <header class="brand-header" [class.brand-header-first]="isFirstOnboarding()">
           <div class="brand-copy">
             <a class="brand-home-link" routerLink="/home" aria-label="Főoldal">
-              <img class="brand-logo-image" src="assets/demo/portalumi-logo.png?v=4" alt="portaLumi">
+              <img class="brand-logo-image" src="assets/demo/portalumi-logo.png" alt="portaLumi">
             </a>
 
             @if (progressMode() !== 'none') {
@@ -40,7 +40,7 @@
         <header class="wide-topbar">
           <div class="wide-brand">
             <a class="brand-home-link" routerLink="/home" aria-label="Főoldal">
-              <img src="assets/demo/portalumi-logo.png?v=4" alt="portaLumi">
+              <img src="assets/demo/portalumi-logo.png" alt="portaLumi">
             </a>
             <span>{{ layout() === 'creator' ? 'Képzői tér' : 'Profil' }}</span>
           </div>
@@ -69,7 +69,7 @@
       <aside class="app-menu" (click)="$event.stopPropagation()">
         <div class="menu-head">
           <a class="brand-home-link" routerLink="/home" (click)="closeMenu()" aria-label="Főoldal">
-            <img src="assets/demo/portalumi-logo.png?v=4" alt="portaLumi">
+            <img src="assets/demo/portalumi-logo.png" alt="portaLumi">
           </a>
           <button type="button" (click)="closeMenu()">×</button>
         </div>
