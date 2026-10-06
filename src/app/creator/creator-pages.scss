@@ -1,1 +1,33 @@
 :host { display: block; }
+
+.package-content-slot-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.package-slot-edit {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--portalumi-border-strong);
+  border-radius: 8px;
+  color: var(--portalumi-muted);
+  background: var(--portalumi-page-soft);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.package-slot-edit:hover,
+.package-slot-edit.active {
+  border-color: var(--portalumi-gold);
+  color: var(--portalumi-gold-deep);
+  background: var(--portalumi-gold-soft);
+}
+
+.package-content-search-editing {
+  padding-top: 4px;
+}
