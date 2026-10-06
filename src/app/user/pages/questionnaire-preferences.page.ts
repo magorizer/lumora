@@ -33,7 +33,46 @@ export class QuestionnairePreferencesPage implements OnInit {
     { id: 'sunday', short: 'V', label: 'Vasárnap' },
   ];
 
+  private readonly recommendedDayCounts: Record<string, number> = {
+    '15–30 perc': 2,
+    '1 óra': 3,
+    '2–3 óra': 5,
+    'rugalmas': 7,
+  };
+
   async ngOnInit(): Promise<void> {
     await Promise.all([this.flow.load(), this.programs.load()]);
+  }
+
+  selectWeeklyTime(value: string): void {
+    this.flow.patch({ weeklyTime: value });
+    this.syncRecommendedDays(this.recommendedDayCounts[value] ?? 3);
+  }
+
+  recommendedDayCount(): number {
+    return this.recommendedDayCounts[this.flow.answers().weeklyTime] ?? this.programs.selectedDays().length;
+  }
+
+  private syncRecommendedDays(targetCount: number): void {
+    const orderedSelected = this.days
+      .filter((day) => this.programs.isDaySelected(day.id))
+      .map((day) => day.id);
+
+    if (orderedSelected.length > targetCount) {
+      for (const day of orderedSelected.slice(targetCount)) {
+        this.programs.toggleDay(day);
+      }
+      return;
+    }
+
+    if (orderedSelected.length < targetCount) {
+      const missing = this.days
+        .filter((day) => !this.programs.isDaySelected(day.id))
+        .slice(0, targetCount - orderedSelected.length);
+
+      for (const day of missing) {
+        this.programs.toggleDay(day.id);
+      }
+    }
   }
 }

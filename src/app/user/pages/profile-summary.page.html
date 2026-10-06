@@ -1,50 +1,72 @@
 <section class="screen screen-step-4">
-            <div class="eyebrow">Személyes profil</div>
-            <h1>Ezt értettük meg rólad.</h1>
-            <p class="lead">Ellenőrizd, mielőtt összeállítjuk az utadat.</p>
+  <div class="eyebrow">Személyes profil</div>
+  <h1>Ezt értettük meg rólad.</h1>
+  <p class="lead">Ellenőrizd, mielőtt összeállítjuk az utadat.</p>
 
-            <div class="summary-grid">
-              <div class="metric-card"><span>Fő cél</span><strong>{{ flow.answers().mainGoal }}</strong></div>
-              <div class="metric-card"><span>Időkeret</span><strong>{{ flow.answers().weeklyTime }}</strong></div>
-              <div class="metric-card wide">
-                <span>Kapcsolódó témák</span>
-                <div class="tag-row">
-                  @for (item of flow.answers().obstacles; track item) { <span class="tag">{{ item }}</span> }
-                </div>
-              </div>
-              <div class="metric-card wide">
-                <span>Preferált forma</span>
-                <strong>{{ flow.answers().formats.join(' + ') }}</strong>
-                <small>{{ flow.answers().pace }} tempó</small>
-              </div>
+  <div class="summary-grid">
+    <div class="metric-card wide">
+      <span>Fő célok</span>
+      <div class="tag-row">
+        @for (item of flow.answers().mainGoals; track item) { <span class="tag">{{ item }}</span> }
+        @if (flow.answers().customMainGoal) { <span class="tag">{{ flow.answers().customMainGoal }}</span> }
+      </div>
+    </div>
 
-              <div class="metric-card wide">
-                <span>Meditációs tapasztalat</span>
-                @if (flow.answers().meditatedBefore === 'no') {
-                  <strong>Még nem meditált</strong>
-                } @else if (flow.answers().meditatedBefore === 'yes') {
-                  <strong>
-                    {{ flow.answers().meditationExperience === 'beginner'
-                      ? 'Kezdő'
-                      : flow.answers().meditationExperience === 'advanced'
-                        ? 'Haladó'
-                        : flow.answers().meditationExperience === 'zen'
-                          ? 'Zen'
-                          : 'Nincs megadva' }}
-                  </strong>
-                } @else {
-                  <strong>Nincs megadva</strong>
-                }
-              </div>
-            </div>
+    <div class="metric-card"><span>Időkeret</span><strong>{{ flow.answers().weeklyTime }}</strong></div>
 
-            <div class="card">
-              <h2>Kiinduló helyzet</h2>
-              <p>{{ flow.answers().situation }}. A fő fókuszod most a(z) {{ flow.answers().mainGoal.toLowerCase() }}.</p>
-            </div>
+    <div class="metric-card wide">
+      <span>1 éves fókuszok</span>
+      <div class="tag-row">
+        @for (item of flow.answers().longTermGoals; track item) { <span class="tag">{{ item }}</span> }
+        @if (flow.answers().customLongTermGoal) { <span class="tag">{{ flow.answers().customLongTermGoal }}</span> }
+      </div>
+    </div>
 
-            <div class="action-row">
-              <button class="secondary-action" (click)="ui.goStep(1)">Módosítom</button>
-              <button class="primary-action" (click)="ui.goStep(5)">Jóváhagyom <span>→</span></button>
-            </div>
-          </section>
+    <div class="metric-card wide">
+      <span>Kapcsolódó témák</span>
+      <div class="tag-row">
+        @for (item of flow.answers().obstacles; track item) { <span class="tag">{{ item }}</span> }
+      </div>
+    </div>
+
+    <div class="metric-card wide">
+      <span>Preferált forma</span>
+      <strong>{{ flow.answers().formats.join(' + ') }}</strong>
+      <small>{{ flow.answers().pace }} tempó</small>
+    </div>
+
+    <div class="metric-card wide">
+      <span>Meditációs tapasztalat</span>
+      @if (flow.answers().meditatedBefore === 'no') {
+        <strong>Még nem meditált</strong>
+      } @else if (flow.answers().meditatedBefore === 'yes') {
+        <strong>
+          {{ flow.answers().meditationExperience === 'beginner'
+            ? 'Kezdő'
+            : flow.answers().meditationExperience === 'advanced'
+              ? 'Haladó'
+              : flow.answers().meditationExperience === 'zen'
+                ? 'Zen'
+                : 'Nincs megadva' }}
+        </strong>
+      } @else {
+        <strong>Nincs megadva</strong>
+      }
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Kiinduló helyzet</h2>
+    <div class="tag-row">
+      @for (item of flow.answers().situations; track item) { <span class="tag">{{ item }}</span> }
+    </div>
+    @if (flow.answers().mainGoals.length || flow.answers().customMainGoal) {
+      <p>A program egyszerre több kijelölt célhoz is tud majd kapcsolódni.</p>
+    }
+  </div>
+
+  <div class="action-row">
+    <button class="secondary-action" (click)="ui.goStep(1)">Módosítom</button>
+    <button class="primary-action" (click)="ui.goStep(5)">Jóváhagyom <span>→</span></button>
+  </div>
+</section>

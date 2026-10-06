@@ -5,9 +5,14 @@ import { Course, Instructor, ProgramScenario } from '../../core/models/content.m
 
 export interface UserAnswers {
   mainGoal: string;
+  mainGoals: string[];
+  customMainGoal: string;
   scenarioId: string;
   longTermGoal: string;
+  longTermGoals: string[];
+  customLongTermGoal: string;
   situation: string;
+  situations: string[];
   obstacles: string[];
   meditatedBefore: '' | 'yes' | 'no';
   meditationExperience: '' | 'beginner' | 'advanced' | 'zen';
@@ -29,9 +34,14 @@ export interface UserAnswers {
 
 const initialAnswers: UserAnswers = {
   mainGoal: 'Önbizalom',
+  mainGoals: ['Önbizalom'],
+  customMainGoal: '',
   scenarioId: 'confidence',
   longTermGoal: 'belső egyensúly',
+  longTermGoals: ['belső egyensúly'],
+  customLongTermGoal: '',
   situation: 'már elindultam',
+  situations: ['már elindultam'],
   obstacles: ['halogatás'],
   meditatedBefore: '',
   meditationExperience: '',
@@ -86,7 +96,44 @@ export class UserFlowService {
   }
 
   setMainGoal(goal: string, scenarioId: string): void {
-    this.patch({ mainGoal: goal, scenarioId });
+    this.patch({ mainGoal: goal, mainGoals: [goal], scenarioId });
+  }
+
+  toggleMainGoal(goal: string, scenarioId: string): void {
+    const current = this.answers().mainGoals;
+    const next = current.includes(goal)
+      ? current.filter((item) => item !== goal)
+      : [...current, goal];
+
+    this.patch({
+      mainGoals: next,
+      mainGoal: next[0] ?? this.answers().customMainGoal,
+      scenarioId: current.includes(goal) ? this.answers().scenarioId : scenarioId,
+    });
+  }
+
+  toggleLongTermGoal(value: string): void {
+    const current = this.answers().longTermGoals;
+    const next = current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value];
+
+    this.patch({
+      longTermGoals: next,
+      longTermGoal: next[0] ?? this.answers().customLongTermGoal,
+    });
+  }
+
+  toggleSituation(value: string): void {
+    const current = this.answers().situations;
+    const next = current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value];
+
+    this.patch({
+      situations: next,
+      situation: next.join(', '),
+    });
   }
 
   patch(patch: Partial<UserAnswers>): void {
@@ -113,8 +160,22 @@ export class UserFlowService {
   private restoreAnswers(): UserAnswers {
     const raw = sessionStorage.getItem('portalumi-demo-answers');
     if (!raw) return { ...initialAnswers };
+
     try {
-      return { ...initialAnswers, ...JSON.parse(raw) as Partial<UserAnswers> };
+      const saved = JSON.parse(raw) as Partial<UserAnswers>;
+      return {
+        ...initialAnswers,
+        ...saved,
+        mainGoals: Array.isArray(saved.mainGoals)
+          ? saved.mainGoals
+          : saved.mainGoal ? [saved.mainGoal] : [...initialAnswers.mainGoals],
+        longTermGoals: Array.isArray(saved.longTermGoals)
+          ? saved.longTermGoals
+          : saved.longTermGoal ? [saved.longTermGoal] : [...initialAnswers.longTermGoals],
+        situations: Array.isArray(saved.situations)
+          ? saved.situations
+          : saved.situation ? [saved.situation] : [...initialAnswers.situations],
+      };
     } catch {
       return { ...initialAnswers };
     }
