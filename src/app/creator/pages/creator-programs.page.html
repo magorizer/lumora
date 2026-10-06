@@ -196,22 +196,34 @@
                         } @else {
                           <div class="package-content-slot-copy">
                             <strong>Üres tartalom-slot</strong>
-                            <small>Keress egy tartalmat ehhez a helyhez.</small>
+                            <small>Nyomd meg az Edit gombot, és keress egy tartalmat ehhez a helyhez.</small>
                           </div>
                         }
 
                         @if (programs.canEditItemContents(template, item)) {
-                          <button class="package-slot-remove" type="button" (click)="removeContentSlot(item.id, slot.id)" aria-label="Slot törlése">×</button>
+                          @let key = searchKey(item.id, slot.id);
+                          <div class="package-content-slot-actions">
+                            <button
+                              class="package-slot-edit"
+                              [class.active]="editingContentSlotKey() === key"
+                              type="button"
+                              (click)="toggleContentEdit(item.id, slot.id)"
+                              [attr.aria-label]="editingContentSlotKey() === key ? 'Szerkesztés bezárása' : 'Tartalom szerkesztése'"
+                              [title]="editingContentSlotKey() === key ? 'Bezárás' : 'Edit'"
+                            >{{ editingContentSlotKey() === key ? '✓' : '✎' }}</button>
+                            <button class="package-slot-remove" type="button" (click)="removeContentSlot(item.id, slot.id)" aria-label="Slot törlése">×</button>
+                          </div>
                         }
                       </div>
 
-                      @if (programs.canEditItemContents(template, item)) {
-                        @let key = searchKey(item.id, slot.id);
-                        <div class="package-content-search compact-search">
+                      @let key = searchKey(item.id, slot.id);
+                      @if (programs.canEditItemContents(template, item) && editingContentSlotKey() === key) {
+                        <div class="package-content-search compact-search package-content-search-editing">
                           <label>
-                            Csere kereséssel: kurzus › tartalom
+                            Tartalom cseréje: kurzus › tartalom
                             <input
                               type="search"
+                              autofocus
                               [value]="searchQuery(key)"
                               (input)="setSearch(key, $event)"
                               placeholder="pl. meditáció, légzés, önbizalom..."
@@ -226,7 +238,7 @@
                                     <strong>{{ result.unit.title }}</strong>
                                     <small>{{ result.course.title }} › {{ programs.instructorNameForCourse(result.course) }} · {{ result.unit.duration }}</small>
                                   </span>
-                                  <span>+</span>
+                                  <span>Csere</span>
                                 </button>
                               } @empty {
                                 <div class="package-search-empty">Nincs választható találat erre a keresésre.</div>
