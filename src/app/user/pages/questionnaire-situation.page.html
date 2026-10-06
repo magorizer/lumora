@@ -5,9 +5,16 @@
 
   <div class="card">
     <h2>Jelenlegi helyzet</h2>
+    <p class="hint">Több állítás is igaz lehet egyszerre.</p>
     <div class="option-grid">
       @for (item of ui.situationOptions; track item) {
-        <button class="option" [class.selected]="flow.answers().situation === item" (click)="flow.patch({ situation: item })">{{ item }}</button>
+        <button
+          class="option"
+          [class.selected]="flow.answers().situations.includes(item)"
+          (click)="flow.toggleSituation(item)"
+        >
+          {{ item }}
+        </button>
       }
     </div>
   </div>
