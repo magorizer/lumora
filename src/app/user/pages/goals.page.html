@@ -1,73 +1,77 @@
 <section class="screen screen-first">
-            <div class="first-heading">
-              <h1>Célmegadás</h1>
-              <p class="lead">Mondd el, miben szeretnél fejlődni.</p>
-            </div>
+  <div class="first-heading">
+    <h1>Célmegadás</h1>
+    <p class="lead">Mondd el, miben szeretnél fejlődni.</p>
+  </div>
 
-            <div class="card onboarding-card goal-card">
-              <div class="card-heading-row">
-                <span class="card-heading-icon">✦</span>
-                <div>
-                  <h2>Mit szeretnél elérni 2–3 hónap alatt?</h2>
-                  <p class="card-subtitle">Válassz egy vagy több területet.</p>
-                </div>
-              </div>
+  <div class="card onboarding-card goal-card">
+    <div class="card-heading-row">
+      <span class="card-heading-icon">✦</span>
+      <div>
+        <h2>Mit szeretnél elérni 2–3 hónap alatt?</h2>
+        <p class="card-subtitle">Többet is kijelölhetsz.</p>
+      </div>
+    </div>
 
-              <div class="option-grid first-option-grid">
-                @for (option of ui.goalOptions; track option.label) {
-                  <button
-                    class="option first-option"
-                    [class.selected]="flow.answers().mainGoal === option.label"
-                    (click)="ui.chooseGoal(option)"
-                  >
-                    <span>{{ option.label }}</span>
-                    @if (flow.answers().mainGoal === option.label) {
-                      <span class="selected-check">✓</span>
-                    }
-                  </button>
-                }
-              </div>
+    <div class="option-grid first-option-grid">
+      @for (option of ui.goalOptions; track option.label) {
+        <button
+          class="option first-option"
+          [class.selected]="flow.answers().mainGoals.includes(option.label)"
+          (click)="ui.chooseGoal(option)"
+        >
+          <span>{{ option.label }}</span>
+          @if (flow.answers().mainGoals.includes(option.label)) {
+            <span class="selected-check">✓</span>
+          }
+        </button>
+      }
+    </div>
 
-              <textarea
-                class="text-field single-line-field"
-                rows="1"
-                [value]="flow.answers().mainGoal"
-                (input)="ui.setMainGoalText($event)" placeholder="Saját cél megadása..."
-              ></textarea>
-            </div>
+    <textarea
+      class="text-field single-line-field"
+      rows="1"
+      [value]="flow.answers().customMainGoal"
+      (input)="ui.setMainGoalText($event)"
+      placeholder="Saját cél megadása..."
+    ></textarea>
+  </div>
 
-            <div class="card onboarding-card future-card">
-              <div class="card-heading-row">
-                <span class="card-heading-icon sprout-icon">⌁</span>
-                <div>
-                  <h2>Mi fontos 1 év távlatában?</h2>
-                  <p class="card-subtitle">Válassz egy vagy több példát, vagy írd le a sajátodat.</p>
-                </div>
-              </div>
+  <div class="card onboarding-card future-card">
+    <div class="card-heading-row">
+      <span class="card-heading-icon sprout-icon">⌁</span>
+      <div>
+        <h2>Mi fontos 1 év távlatában?</h2>
+        <p class="card-subtitle">Itt is több irányt választhatsz.</p>
+      </div>
+    </div>
 
-              <div class="option-grid first-option-grid future-options">
-                @for (item of ['stabilitás','belső egyensúly','jobb kapcsolatok']; track item) {
-                  <button
-                    class="option first-option"
-                    [class.selected]="flow.answers().longTermGoal === item"
-                    (click)="flow.patch({ longTermGoal: item })"
-                  >
-                    {{ item }}
-                  </button>
-                }
-              </div>
+    <div class="option-grid first-option-grid future-options">
+      @for (item of ['stabilitás','belső egyensúly','jobb kapcsolatok']; track item) {
+        <button
+          class="option first-option"
+          [class.selected]="flow.answers().longTermGoals.includes(item)"
+          (click)="flow.toggleLongTermGoal(item)"
+        >
+          <span>{{ item }}</span>
+          @if (flow.answers().longTermGoals.includes(item)) {
+            <span class="selected-check">✓</span>
+          }
+        </button>
+      }
+    </div>
 
-              <textarea
-                class="text-field single-line-field"
-                rows="1"
-                [value]="flow.answers().longTermGoal"
-                (input)="ui.setLongTermGoal($event)"
-                placeholder="Írd le, neked mi a legfontosabb 1 év múlva..."
-              ></textarea>
-            </div>
+    <textarea
+      class="text-field single-line-field"
+      rows="1"
+      [value]="flow.answers().customLongTermGoal"
+      (input)="ui.setLongTermGoal($event)"
+      placeholder="Írd le, neked mi a legfontosabb 1 év múlva..."
+    ></textarea>
+  </div>
 
-            <button class="primary-action first-cta" (click)="ui.goStep(2)">
-              <span>Tovább</span><span class="cta-arrow">→</span>
-            </button>
-            <button class="later-link" type="button" (click)="ui.goStep(2)">Később töltöm ki</button>
-          </section>
+  <button class="primary-action first-cta" (click)="ui.goStep(2)">
+    <span>Tovább</span><span class="cta-arrow">→</span>
+  </button>
+  <button class="later-link" type="button" (click)="ui.goStep(2)">Később töltöm ki</button>
+</section>
