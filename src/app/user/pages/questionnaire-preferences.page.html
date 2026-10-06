@@ -1,11 +1,32 @@
 <section class="screen screen-step-3">
   <div class="eyebrow">Adaptív kérdőív</div>
   <h1>Mi illik hozzád?</h1>
-  <p class="lead">Állítsuk be a napokat, az időt és a formát.</p>
+  <p class="lead">Állítsuk be az időt, a napokat és a formát.</p>
 
   <div class="card">
-    <h2>Mely napokon szeretnél foglalkozni a programmal?</h2>
-    <p class="hint">A hétvége is ugyanolyan választható, mint bármelyik másik nap.</p>
+    <h2>Hetente mennyi időt tudsz rászánni?</h2>
+    <p class="hint">Ez alapján ajánlunk egy reális heti ritmust, amit utána szabadon módosíthatsz.</p>
+    <div class="option-grid">
+      @for (item of ui.timeOptions; track item) {
+        <button
+          class="option"
+          [class.selected]="flow.answers().weeklyTime === item"
+          (click)="selectWeeklyTime(item)"
+        >
+          {{ item }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title-inline">
+      <h2>Mely napokon szeretnél foglalkozni a programmal?</h2>
+      <span class="optional-pill">{{ programs.selectedDays().length }} nap</span>
+    </div>
+    <p class="hint">
+      A {{ flow.answers().weeklyTime }} időkerethez {{ recommendedDayCount() }} napot ajánlunk. A kijelölést bármikor átírhatod, a hétvége is választható.
+    </p>
 
     <div class="program-day-grid">
       @for (day of days; track day.id) {
@@ -23,16 +44,8 @@
   </div>
 
   <div class="card">
-    <h2>Hetente mennyi időt tudsz rászánni?</h2>
-    <div class="option-grid">
-      @for (item of ui.timeOptions; track item) {
-        <button class="option" [class.selected]="flow.answers().weeklyTime === item" (click)="flow.patch({ weeklyTime: item })">{{ item }}</button>
-      }
-    </div>
-  </div>
-
-  <div class="card">
     <h2>Milyen formában tanulnál szívesen?</h2>
+    <p class="hint">Többet is kijelölhetsz.</p>
     <div class="option-grid">
       @for (item of ui.formatOptions; track item) {
         <button class="option" [class.selected]="flow.answers().formats.includes(item)" (click)="flow.toggleFormat(item)">{{ item }}</button>
