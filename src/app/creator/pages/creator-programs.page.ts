@@ -14,6 +14,7 @@ export class CreatorProgramsPage implements OnInit {
   readonly programs = inject(ProgramTemplateService);
   readonly selectedId = signal<string | null>(null);
   readonly searchQueries = signal<Record<string, string>>({});
+  readonly editingContentSlotKey = signal<string | null>(null);
   readonly draggedItemId = signal<string | null>(null);
   readonly draggedContentSlotKey = signal<string | null>(null);
 
@@ -28,11 +29,15 @@ export class CreatorProgramsPage implements OnInit {
 
   select(id: string): void {
     this.selectedId.set(id);
+    this.editingContentSlotKey.set(null);
   }
 
   create(): void {
     const created = this.programs.createTemplate();
-    if (created) this.selectedId.set(created.id);
+    if (created) {
+      this.selectedId.set(created.id);
+      this.editingContentSlotKey.set(null);
+    }
   }
 
   updateField(field: 'title' | 'subtitle' | 'description', event: Event): void {
@@ -45,6 +50,7 @@ export class CreatorProgramsPage implements OnInit {
     const selected = this.selected();
     if (!selected) return;
     this.programs.setTemplateContentReplacement(selected.id, (event.target as HTMLInputElement).checked);
+    this.editingContentSlotKey.set(null);
   }
 
   addItem(): void {
@@ -55,6 +61,7 @@ export class CreatorProgramsPage implements OnInit {
   removeItem(itemId: string): void {
     const selected = this.selected();
     if (selected) this.programs.removeTemplateItem(selected.id, itemId);
+    this.editingContentSlotKey.set(null);
   }
 
   moveItem(itemId: string, direction: -1 | 1): void {
@@ -66,6 +73,7 @@ export class CreatorProgramsPage implements OnInit {
     const selected = this.selected();
     if (!selected) return;
     this.programs.updateTemplateItemCourse(selected.id, itemId, (event.target as HTMLSelectElement).value);
+    this.editingContentSlotKey.set(null);
   }
 
   updateItemTime(itemId: string, event: Event): void {
@@ -82,16 +90,29 @@ export class CreatorProgramsPage implements OnInit {
   removeContentSlot(itemId: string, slotId: string): void {
     const selected = this.selected();
     if (selected) this.programs.removeTemplateContentSlot(selected.id, itemId, slotId);
+    this.clearContentEdit(this.searchKey(itemId, slotId));
   }
 
   selectContentSlot(itemId: string, slotId: string, courseId: string, unitId: string): void {
     const selected = this.selected();
     if (!selected) return;
     this.programs.updateTemplateContentSlot(selected.id, itemId, slotId, courseId, unitId);
+    this.clearContentEdit(this.searchKey(itemId, slotId));
   }
 
   searchKey(itemId: string, slotId: string): string {
     return itemId + ':' + slotId;
+  }
+
+  toggleContentEdit(itemId: string, slotId: string): void {
+    const key = this.searchKey(itemId, slotId);
+    if (this.editingContentSlotKey() === key) {
+      this.clearContentEdit(key);
+      return;
+    }
+
+    this.editingContentSlotKey.set(key);
+    this.searchQueries.update((queries) => ({ ...queries, [key]: '' }));
   }
 
   setSearch(key: string, event: Event): void {
@@ -165,5 +186,14 @@ export class CreatorProgramsPage implements OnInit {
   contentDragEnd(event: DragEvent): void {
     event.stopPropagation();
     this.draggedContentSlotKey.set(null);
+  }
+
+  private clearContentEdit(key: string): void {
+    if (this.editingContentSlotKey() === key) this.editingContentSlotKey.set(null);
+    this.searchQueries.update((queries) => {
+      const next = { ...queries };
+      delete next[key];
+      return next;
+    });
   }
 }
