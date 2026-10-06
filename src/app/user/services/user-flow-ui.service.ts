@@ -121,9 +121,26 @@ export class UserFlowUiService {
     void this.router.navigateByUrl('/lesson');
   }
 
-  chooseGoal(option: GoalOption): void { this.flow.setMainGoal(option.label, option.scenarioId); }
-  setLongTermGoal(event: Event): void { this.flow.patch({ longTermGoal: (event.target as HTMLTextAreaElement).value }); }
-  setMainGoalText(event: Event): void { this.flow.patch({ mainGoal: (event.target as HTMLTextAreaElement).value }); }
+  chooseGoal(option: GoalOption): void {
+    this.flow.toggleMainGoal(option.label, option.scenarioId);
+  }
+
+  setLongTermGoal(event: Event): void {
+    const value = (event.target as HTMLTextAreaElement).value;
+    this.flow.patch({
+      customLongTermGoal: value,
+      longTermGoal: this.flow.answers().longTermGoals[0] ?? value,
+    });
+  }
+
+  setMainGoalText(event: Event): void {
+    const value = (event.target as HTMLTextAreaElement).value;
+    this.flow.patch({
+      customMainGoal: value,
+      mainGoal: this.flow.answers().mainGoals[0] ?? value,
+    });
+  }
+
   setNote(event: Event): void { this.flow.patch({ note: (event.target as HTMLTextAreaElement).value }); }
   setTaskResponse(event: Event): void { this.flow.patch({ taskResponse: (event.target as HTMLTextAreaElement).value }); }
   setLessonReflection(event: Event): void { this.flow.patch({ lessonReflection: (event.target as HTMLTextAreaElement).value }); }
